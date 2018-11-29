@@ -3,36 +3,17 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://ljc.space/2018/first-post/</loc>
-    <lastmod>2018-08-30T22:16:53+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/archives/2018/</loc>
-    <lastmod>2018-08-30T22:16:53+08:00</lastmod>
+    <loc>http://www.ljc.space/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/archives/</loc>
-    <lastmod>2018-08-30T22:16:53+08:00</lastmod>
+    <loc>http://www.ljc.space/tags/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/post/</loc>
-    <lastmod>2018-08-30T22:16:53+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/</loc>
-    <lastmod>2018-08-30T22:16:53+08:00</lastmod>
+    <loc>http://www.ljc.space/</loc>
     <priority>0</priority>
   </url>
   
