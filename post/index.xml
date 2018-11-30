@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 风竹的个人网站</title>
-    <link>http://www.ljc.space/post/</link>
+    <link>https://www.ljc.space/post/</link>
     <description>Recent content in Posts on 风竹的个人网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Fri, 30 Nov 2018 14:50:56 +0800</lastBuildDate>
     
-	<atom:link href="http://www.ljc.space/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.ljc.space/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>go get添加进度</title>
-      <link>http://www.ljc.space/post/go-get-progress/</link>
+      <link>https://www.ljc.space/post/go-get-progress/</link>
       <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
       
-      <guid>http://www.ljc.space/post/go-get-progress/</guid>
+      <guid>https://www.ljc.space/post/go-get-progress/</guid>
       <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
  修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &amp;ndash;progress {repo} {dir} 其它命令 hg, svn&amp;hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;amp;vcsCmd{ name: &amp;quot;Git&amp;quot;, cmd: &amp;quot;git&amp;quot;, createCmd: &amp;quot;clone {repo} {dir}&amp;quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &amp;quot;pull --ff-only&amp;quot; }   修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;amp;buf 下添加两行, 如:</description>
     </item>
     
     <item>
       <title>Markdown 基本语法</title>
-      <link>http://www.ljc.space/post/markdown/</link>
+      <link>https://www.ljc.space/post/markdown/</link>
       <pubDate>Thu, 29 Nov 2018 18:15:07 +0800</pubDate>
       
-      <guid>http://www.ljc.space/post/markdown/</guid>
+      <guid>https://www.ljc.space/post/markdown/</guid>
       <description>Welcome to Leanote! 欢迎来到 Leanote! 1. 排版 粗体 斜体
 这是一段错误的文本。
 引用:
