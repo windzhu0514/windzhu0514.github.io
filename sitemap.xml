@@ -35,7 +35,19 @@
   </url>
   
   <url>
+    <loc>https://ljc.space/categories/golang/</loc>
+    <lastmod>2018-11-30T14:50:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ljc.space/tags/markdown/</loc>
+    <lastmod>2018-11-29T18:15:07+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ljc.space/categories/markdown/</loc>
     <lastmod>2018-11-29T18:15:07+08:00</lastmod>
     <priority>0</priority>
   </url>

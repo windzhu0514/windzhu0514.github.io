@@ -10,5 +10,23 @@
 	<atom:link href="https://ljc.space/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
+    <item>
+      <title>Golang</title>
+      <link>https://ljc.space/categories/golang/</link>
+      <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
+      
+      <guid>https://ljc.space/categories/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Markdown</title>
+      <link>https://ljc.space/categories/markdown/</link>
+      <pubDate>Thu, 29 Nov 2018 18:15:07 +0800</pubDate>
+      
+      <guid>https://ljc.space/categories/markdown/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
