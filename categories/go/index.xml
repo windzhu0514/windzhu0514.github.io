@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on 风竹的个人网站</title>
-    <link>https://ljc.space/tags/go/</link>
+    <link>https://ljc.space/categories/go/</link>
     <description>Recent content in Go on 风竹的个人网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Fri, 07 Dec 2018 10:05:37 +0800</lastBuildDate>
     
-	<atom:link href="https://ljc.space/tags/go/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ljc.space/categories/go/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>https://ljc.space/post/go-goroutine-concurrent-control/</guid>
       <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
 channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.</description>
-    </item>
-    
-    <item>
-      <title>go get添加进度</title>
-      <link>https://ljc.space/post/go-get-progress/</link>
-      <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
-      
-      <guid>https://ljc.space/post/go-get-progress/</guid>
-      <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
- 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &amp;ndash;progress {repo} {dir} 其它命令 hg, svn&amp;hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;amp;vcsCmd{ name: &amp;quot;Git&amp;quot;, cmd: &amp;quot;git&amp;quot;, createCmd: &amp;quot;clone {repo} {dir}&amp;quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &amp;quot;pull --ff-only&amp;quot; }   修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;amp;buf 下添加两行, 如:</description>
     </item>
     
   </channel>
