@@ -23,6 +23,10 @@
   </url>
   
   <url>
+    <loc>https://ljc.space/post/multiple-git-account/</loc>
+  </url>
+  
+  <url>
     <loc>https://ljc.space/categories/</loc>
     <priority>0</priority>
   </url>
@@ -34,13 +38,13 @@
   </url>
   
   <url>
-    <loc>https://ljc.space/categories/go/</loc>
+    <loc>https://ljc.space/tags/go/</loc>
     <lastmod>2018-12-07T10:05:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/tags/go/</loc>
+    <loc>https://ljc.space/categories/go/</loc>
     <lastmod>2018-12-07T10:05:37+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -58,13 +62,13 @@
   </url>
   
   <url>
-    <loc>https://ljc.space/categories/markdown/</loc>
+    <loc>https://ljc.space/tags/markdown/</loc>
     <lastmod>2018-11-29T18:15:07+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/tags/markdown/</loc>
+    <loc>https://ljc.space/categories/markdown/</loc>
     <lastmod>2018-11-29T18:15:07+08:00</lastmod>
     <priority>0</priority>
   </url>

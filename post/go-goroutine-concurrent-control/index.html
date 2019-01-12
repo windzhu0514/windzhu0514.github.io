@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.49-DEV" />
+    <meta name="generator" content="Hugo 0.48" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -76,10 +76,10 @@
                             2018年12月7日
                         </date>
                         
-                        <div class="post-meta meta-category">
-                            |
+                        <div class="post-meta">
+                            <span>|</span>
                             
-                                <a href="https://ljc.space/categories/go">go</a>
+                                <span class="meta-category"><a href="https://ljc.space/categories/go">go</a></span>
                             
                         </div>
                         
@@ -634,6 +634,8 @@ context canceled
         
         <li><a href="/about/">关于我</a></li>
         
+        <li><a href="/post/multiple-git-account/"></a></li>
+        
     </ul>
 </div>
 
@@ -693,6 +695,10 @@ context canceled
     
     <li>
         <a href="https://ljc.space/post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
+    </li>
+    
+    <li>
+        <a href="https://ljc.space/post/multiple-git-account/" title=""></a>
     </li>
     
 </ul>
@@ -758,8 +764,12 @@ context canceled
 </footer>
 
 
-    <script type="text/javascript" src="/js/prism.js" async="true"></script>
     <script type="text/javascript">
+    
+    (function(){
+        $("pre code").parent().addClass("line-numbers")
+    }())
+
     window.MathJax = {
         tex2jax: {
             inlineMath: [ ['$','$'] ],
@@ -767,6 +777,7 @@ context canceled
         }
     };
     </script>
+    <script type="text/javascript" src="/js/prism.js" async="true"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 <a id="rocket" href="#top"></a>
