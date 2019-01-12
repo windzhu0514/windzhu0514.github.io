@@ -66,6 +66,31 @@
                         <article class="post">
                             <header>
                                 <h1 class="post-title">
+                                    <a href="https://ljc.space/post/multiple-git-account/" title="git多账户共存" >git多账户共存</a>
+                                </h1>
+                            </header>
+                            <date class="post-meta meta-date">
+                                2019年1月12日
+                            </date>
+                            
+                            <div class="post-meta">
+                                <span>|</span>
+                                
+                                <span class="meta-category"><a href="https://ljc.space/categories/git">git</a></span>
+                                
+                            </div>
+                            
+                            <div class="post-content">
+                                问题 很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbucket 等。如果采用 https 方式获取仓库，多个 git 帐号间不会有冲突，但在每次 pull、push 的时候都要输入帐号密码，十分麻烦。而且当代码库十分庞大时，如果仍然采用 https 方式，在 git pull 时可能出现超时不响应的情况，此时只能采用 ssh 方式。ssh 在配置完 ssh key 后使用起来很方便，但是 git 帐号间可能出现冲突，这时候该如何解决呢？
+配置 ssh key 的方式此处不再赘述，假设在 .ssh 文件夹下有 id_rsa、id_rsa.pub、gitlab_id_rsa、gitlab_id_rsa.pub，分别对应个人 github 帐号私钥公钥以及公司 git 帐号私钥公钥。如果不进行设置，使用 github 账号时没有问题，但是使用公司账号时，由于默认情况下私钥存放在 id_rsa 文件中，因此 git 仍会尝试用 id_rsa 中而不是 gitlab_id_rsa 中的私钥去与服务器上添加的公钥进行比对，自然而然会报错。通常这种情况下 git 会让你输入密码，就算输入正确密码也会报错：Permission denied。
+解决方法 ssh 的 config 文件：该文件的主要作用是指明各个 git 帐号对应的 User 以及 IdentityFile 的文件位置。Window 系统中，该配置信息存放在名为 config 的文件中，位置在 USERPROFILE/.ssh/目录下，而在 Linux/Unix 系统中配置信息则保存在 ssh_config 文件中，至于位置不同系统有所区别。可以使用以下命令查看文件位置，第二行打印了配置文件的位置。……
+                            </div>
+                            <p class="readmore"><a href="https://ljc.space/post/multiple-git-account/">阅读全文</a></p>
+                        </article>
+                    
+                        <article class="post">
+                            <header>
+                                <h1 class="post-title">
                                     <a href="https://ljc.space/post/go-goroutine-concurrent-control/" title="goroutine并发控制" >goroutine并发控制</a>
                                 </h1>
                             </header>
@@ -144,24 +169,6 @@ function get(key) { return m[key]; }  代码高亮示例:……
                             <p class="readmore"><a href="https://ljc.space/post/markdown/">阅读全文</a></p>
                         </article>
                     
-                        <article class="post">
-                            <header>
-                                <h1 class="post-title">
-                                    <a href="https://ljc.space/post/multiple-git-account/" title="" ></a>
-                                </h1>
-                            </header>
-                            <date class="post-meta meta-date">
-                                1年1月1日
-                            </date>
-                            
-                            <div class="post-content">
-                                问题 很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbucket 等。如果采用 https 方式获取仓库，多个 git 帐号间不会有冲突，但在每次 pull、push 的时候都要输入帐号密码，十分麻烦。而且当代码库十分庞大时，如果仍然采用 https 方式，在 git pull 时可能出现超时不响应的情况，此时只能采用 ssh 方式。ssh 在配置完 ssh key 后使用起来很方便，但是 git 帐号间可能出现冲突，这时候该如何解决呢？
-配置 ssh key 的方式此处不再赘述，假设在 .ssh 文件夹下有 id_rsa、id_rsa.pub、gitlab_id_rsa、gitlab_id_rsa.pub，分别对应个人 github 帐号私钥公钥以及公司 git 帐号私钥公钥。如果不进行设置，使用 github 账号时没有问题，但是使用公司账号时，由于默认情况下私钥存放在 id_rsa 文件中，因此 git 仍会尝试用 id_rsa 中而不是 gitlab_id_rsa 中的私钥去与服务器上添加的公钥进行比对，自然而然会报错。通常这种情况下 git 会让你输入密码，就算输入正确密码也会报错：Permission denied。
-解决方法 ssh 的 config 文件：该文件的主要作用是指明各个 git 帐号对应的 User 以及 IdentityFile 的文件位置。Window 系统中，该配置信息存放在名为 config 的文件中，位置在 USERPROFILE/.ssh/目录下，而在 Linux/Unix 系统中配置信息则保存在 ssh_config 文件中，至于位置不同系统有所区别。可以使用以下命令查看文件位置，第二行打印了配置文件的位置。……
-                            </div>
-                            <p class="readmore"><a href="https://ljc.space/post/multiple-git-account/">阅读全文</a></p>
-                        </article>
-                    
 
                     
 
@@ -186,6 +193,10 @@ function get(key) { return m[key]; }  代码高亮示例:……
 <ul class="widget-list">
     
     <li>
+        <a href="https://ljc.space/post/multiple-git-account/" title="git多账户共存">git多账户共存</a>
+    </li>
+    
+    <li>
         <a href="https://ljc.space/post/go-goroutine-concurrent-control/" title="goroutine并发控制">goroutine并发控制</a>
     </li>
     
@@ -197,10 +208,6 @@ function get(key) { return m[key]; }  代码高亮示例:……
         <a href="https://ljc.space/post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
     </li>
     
-    <li>
-        <a href="https://ljc.space/post/multiple-git-account/" title=""></a>
-    </li>
-    
 </ul>
     </section>
 
@@ -209,6 +216,10 @@ function get(key) { return m[key]; }  代码高亮示例:……
     <section class="widget">
         <h3 class="widget-title">分类</h3>
 <ul class="widget-list">
+    
+    <li>
+        <a href="https://ljc.space/categories/git/">git(1)</a>
+    </li>
     
     <li>
         <a href="https://ljc.space/categories/go/">go(1)</a>
