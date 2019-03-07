@@ -18,7 +18,7 @@
       
       <guid>https://ljc.space/post/go-type-convert/</guid>
       <description>golang 各种类型转换 int &amp;ndash;&amp;gt; string 转换函数： fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatInt：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatUint：格式化范围 0 -&amp;gt; math.MaxUint64
-fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MinInt64) // &amp;#34;-9223372036854775808&amp;#34; fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MaxInt64) // &amp;#34;9223372036854775807&amp;#34; fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MaxUint64) // constant 18446744073709551615 overflows int  strconv.Itoa(math.MinInt64) // &amp;#34;-9223372036854775808&amp;#34; strconv.Itoa(math.MaxInt64) // &amp;#34;9223372036854775807&amp;#34; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int  strconv.FormatInt(math.MinInt64, 10) // &amp;#34;-9223372036854775808&amp;#34; strconv.FormatInt(math.MaxInt64, 10) // &amp;#34;9223372036854775807&amp;#34; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64  strconv.FormatUint(math.MaxUint64, 10) // &amp;#34;18446744073709551615&amp;#34; string &amp;ndash;&amp;gt; int 转换函数： fmt.</description>
+fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; strconv.Itoa(math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &amp;quot;-9223372036854775808&amp;quot; strconv.FormatInt(math.MaxInt64, 10) // &amp;quot;9223372036854775807&amp;quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &amp;quot;18446744073709551615&amp;quot;  string &amp;ndash;&amp;gt; int 转换函数： fmt.</description>
     </item>
     
     <item>
@@ -38,7 +38,7 @@ fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MinInt64) // &amp;#34;-922337203685477580
       <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
       
       <guid>https://ljc.space/post/go-goroutine-concurrent-control/</guid>
-      <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine  var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() } 一般在简单的数据传递下使用
+      <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
 channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.</description>
     </item>
     
@@ -49,7 +49,7 @@ channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi 
       
       <guid>https://ljc.space/post/go-get-progress/</guid>
       <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
- 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &amp;ndash;progress {repo} {dir} 其它命令 hg, svn&amp;hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;amp;vcsCmd{ name: &amp;#34;Git&amp;#34;, cmd: &amp;#34;git&amp;#34;, createCmd: &amp;#34;clone {repo} {dir}&amp;#34;, // 此处修改为 clone --progress {repo} {dir}  downloadCmd: &amp;#34;pull --ff-only&amp;#34; }  修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;amp;buf 下添加两行, 如:</description>
+ 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &amp;ndash;progress {repo} {dir} 其它命令 hg, svn&amp;hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;amp;vcsCmd{ name: &amp;quot;Git&amp;quot;, cmd: &amp;quot;git&amp;quot;, createCmd: &amp;quot;clone {repo} {dir}&amp;quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &amp;quot;pull --ff-only&amp;quot; }   修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;amp;buf 下添加两行, 如:</description>
     </item>
     
     <item>

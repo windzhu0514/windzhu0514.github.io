@@ -100,13 +100,17 @@
 <h1 id="解决方法">解决方法</h1>
 
 <p>ssh 的 config 文件：该文件的主要作用是指明各个 git 帐号对应的 User 以及 IdentityFile 的文件位置。Window 系统中，该配置信息存放在名为 config 的文件中，位置在 USERPROFILE/.ssh/目录下，而在 Linux/Unix 系统中配置信息则保存在 ssh_config 文件中，至于位置不同系统有所区别。可以使用以下命令查看文件位置，第二行打印了配置文件的位置。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ssh -vT git@xxxx.com
-OpenSSH_7.9p1, OpenSSL <span style="color:#ae81ff">1</span>.1.1a  <span style="color:#ae81ff">20</span> Nov <span style="color:#ae81ff">2018</span>
+
+<pre><code class="language-bash">$ ssh -vT git@xxxx.com
+OpenSSH_7.9p1, OpenSSL 1.1.1a  20 Nov 2018
 debug1: Reading configuration data /c/Users/ljc01/.ssh/config
 debug1: Reading configuration data /etc/ssh/ssh_config
-debug1: Connecting to xxxx.com <span style="color:#f92672">[</span><span style="color:#ae81ff">52</span>.84.49.177<span style="color:#f92672">]</span> port <span style="color:#ae81ff">22</span>.</code></pre></div>
+debug1: Connecting to xxxx.com [52.84.49.177] port 22.
+</code></pre>
+
 <p>以 windows 为例，新建 config 文件，在文件里添加的以下字段</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github.com
+
+<pre><code class="language-bash">Host github.com
  hostname github.com
  User &lt;username&gt;
  IdentityFile ~/.ssh/github_rsa
@@ -114,15 +118,20 @@ debug1: Connecting to xxxx.com <span style="color:#f92672">[</span><span style="
 Host git.xxx.com
  hostname git.xxx.com
  User &lt;username&gt;
- IdentityFile ~/.ssh/gitlab_rsa</code></pre></div>
+ IdentityFile ~/.ssh/gitlab_rsa
+</code></pre>
+
 <p>配置完毕后，先取消全局用户名以及邮箱配置，再在各个项目 repo 中应用该项目的用户名以及邮箱：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ae81ff">1</span>.取消global
+
+<pre><code class="language-bash">1.取消global
 git config --global --unset user.name
 git config --global --unset user.email
 
-<span style="color:#ae81ff">2</span>.设置每个项目repo的自己的用户名以及邮箱
-git config user.email <span style="color:#e6db74">&#34;xxxx@xx.com&#34;</span>
-git config user.name <span style="color:#e6db74">&#34;xxxx&#34;</span></code></pre></div>
+2.设置每个项目repo的自己的用户名以及邮箱
+git config user.email &quot;xxxx@xx.com&quot;
+git config user.name &quot;xxxx&quot;
+</code></pre>
+
 <p>如此，各个 git 帐号间就可以“井水不犯河水”了。</p>
 
                         </div>
