@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on 风竹的个人网站</title>
+    <title>Tags on 一蓑烟雨任平生</title>
     <link>https://ljc.space/tags/</link>
-    <description>Recent content in Tags on 风竹的个人网站</description>
+    <description>Recent content in Tags on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Jan 2019 22:48:32 +0800</lastBuildDate>
@@ -23,9 +23,18 @@
     <item>
       <title>Go</title>
       <link>https://ljc.space/tags/go/</link>
-      <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
+      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
       
       <guid>https://ljc.space/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Golang</title>
+      <link>https://ljc.space/tags/golang/</link>
+      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
+      
+      <guid>https://ljc.space/tags/golang/</guid>
       <description></description>
     </item>
     
@@ -53,6 +62,15 @@
       <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
       
       <guid>https://ljc.space/tags/%E5%B9%B6%E5%8F%91/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>类型转换</title>
+      <link>https://ljc.space/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</link>
+      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
+      
+      <guid>https://ljc.space/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</guid>
       <description></description>
     </item>
     

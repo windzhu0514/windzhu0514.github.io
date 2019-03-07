@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on 风竹的个人网站</title>
+    <title>Categories on 一蓑烟雨任平生</title>
     <link>https://ljc.space/categories/</link>
-    <description>Recent content in Categories on 风竹的个人网站</description>
+    <description>Recent content in Categories on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     
@@ -20,18 +20,9 @@
     </item>
     
     <item>
-      <title>Go</title>
-      <link>https://ljc.space/categories/go/</link>
-      <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
-      
-      <guid>https://ljc.space/categories/go/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Golang</title>
       <link>https://ljc.space/categories/golang/</link>
-      <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
+      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
       
       <guid>https://ljc.space/categories/golang/</guid>
       <description></description>

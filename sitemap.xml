@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ljc.space/post/go-type-convert/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ljc.space/post/multiple-git-account/</loc>
     <lastmod>2019-01-12T22:48:32+08:00</lastmod>
   </url>
@@ -46,19 +51,19 @@
   
   <url>
     <loc>https://ljc.space/tags/go/</loc>
-    <lastmod>2018-12-07T10:05:37+08:00</lastmod>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/categories/go/</loc>
-    <lastmod>2018-12-07T10:05:37+08:00</lastmod>
+    <loc>https://ljc.space/tags/golang/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ljc.space/categories/golang/</loc>
-    <lastmod>2018-11-30T14:50:56+08:00</lastmod>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -82,7 +87,7 @@
   
   <url>
     <loc>https://ljc.space/post/</loc>
-    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -93,14 +98,20 @@
   </url>
   
   <url>
+    <loc>https://ljc.space/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ljc.space/tags/%E5%B9%B6%E5%8F%91/</loc>
     <lastmod>2018-12-07T10:05:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/</loc>
-    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
+    <loc>https://ljc.space/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
   

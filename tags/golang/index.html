@@ -7,22 +7,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Goroutine | 一蓑烟雨任平生</title>
-    <meta property="og:title" content="Goroutine - 一蓑烟雨任平生">
+    <title>Golang | 一蓑烟雨任平生</title>
+    <meta property="og:title" content="Golang - 一蓑烟雨任平生">
     <meta property="og:type" content="article">
         
         
     <meta name="Keywords" content="golang,go语言,go语言笔记,博客,C,C&#43;&#43;,mfc">
-    <meta name="description" content="Goroutine">
+    <meta name="description" content="Golang">
         
     <meta name="author" content="风竹">
-    <meta property="og:url" content="https://ljc.space/tags/goroutine/">
+    <meta property="og:url" content="https://ljc.space/tags/golang/">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="/css/normalize.css">
     
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="alternate" type="application/rss+xml+xml" href="https://ljc.space/tags/goroutine/index.xml" title="一蓑烟雨任平生" />
+    <link rel="alternate" type="application/rss+xml+xml" href="https://ljc.space/tags/golang/index.xml" title="一蓑烟雨任平生" />
     <script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 
     
@@ -67,7 +67,7 @@
                     
                     <h3 class="archive-title">
                         包含标签
-                        <span class="keyword">goroutine</span>
+                        <span class="keyword">golang</span>
                         的文章
                     </h3>
                     
@@ -76,11 +76,11 @@
                         <article class="post">
                             <header>
                                 <h1 class="post-title">
-                                    <a href="https://ljc.space/post/go-goroutine-concurrent-control/">goroutine并发控制</a>
+                                    <a href="https://ljc.space/post/go-type-convert/">Go Type Convert</a>
                                 </h1>
                             </header>
                             <date class="post-meta meta-date">
-                                2018年12月7日
+                                2019年3月7日
                             </date>
                             
                             <div class="post-meta meta-category">
@@ -91,16 +91,15 @@
                             </div>
                             
                             <div class="post-content">
-                                <h2 id="通信">通信</h2>
+                                <h1 id="golang-各种类型转换">golang 各种类型转换</h1>
 
-<h4 id="共享内存">共享内存</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span>  <span style="color:#a6e22e">Test</span>() {
-    <span style="color:#a6e22e">ordersInfoApp</span>  <span style="color:#f92672">:=</span>  make([]<span style="color:#a6e22e">orderInfoApp</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">totalCount</span>)
-    <span style="color:#66d9ef">var</span>  <span style="color:#a6e22e">mux</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
-    <span style="color:#a6e22e">wg</span>  <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
+<h2 id="int-string">int &ndash;&gt; string</h2>
 
-    <span style="color:#66d9ef">for</span>  <span style="color:#a6e22e">i</span>  <span style="color:#f92672">:=</span>  <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;=</span>  <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> { …</code></pre></div>
-                                <p class="readmore"><a href="https://ljc.space/post/go-goroutine-concurrent-control/">阅读全文</a></p>
+<p>转换函数：
+<a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64
+<a href="https://golang.google.cn/pkg/strconv/#Itoa" title="strconv.Itoa">strconv.Itoa</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64
+<a href="https://golang.google.cn/pkg/strconv/#FormatInt" title="strconv.FormatInt">strconv.FormatInt</a>： …</p>
+                                <p class="readmore"><a href="https://ljc.space/post/go-type-convert/">阅读全文</a></p>
                             </div>
                         </article>
                     

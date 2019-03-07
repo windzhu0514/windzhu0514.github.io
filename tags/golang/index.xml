@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on 一蓑烟雨任平生</title>
+    <link>https://ljc.space/tags/golang/</link>
+    <description>Recent content in Golang on 一蓑烟雨任平生</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 07 Mar 2019 17:45:27 +0800</lastBuildDate>
+    
+	<atom:link href="https://ljc.space/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go Type Convert</title>
+      <link>https://ljc.space/post/go-type-convert/</link>
+      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
+      
+      <guid>https://ljc.space/post/go-type-convert/</guid>
+      <description>golang 各种类型转换 int &amp;ndash;&amp;gt; string 转换函数： fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatInt：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatUint：格式化范围 0 -&amp;gt; math.MaxUint64
+fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MinInt64) // &amp;#34;-9223372036854775808&amp;#34; fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MaxInt64) // &amp;#34;9223372036854775807&amp;#34; fmt.Sprintf(&amp;#34;%d&amp;#34;, math.MaxUint64) // constant 18446744073709551615 overflows int  strconv.Itoa(math.MinInt64) // &amp;#34;-9223372036854775808&amp;#34; strconv.Itoa(math.MaxInt64) // &amp;#34;9223372036854775807&amp;#34; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int  strconv.FormatInt(math.MinInt64, 10) // &amp;#34;-9223372036854775808&amp;#34; strconv.FormatInt(math.MaxInt64, 10) // &amp;#34;9223372036854775807&amp;#34; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64  strconv.FormatUint(math.MaxUint64, 10) // &amp;#34;18446744073709551615&amp;#34; string &amp;ndash;&amp;gt; int 转换函数： fmt.</description>
+    </item>
+    
+  </channel>
+</rss>
