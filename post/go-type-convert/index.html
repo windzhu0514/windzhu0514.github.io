@@ -95,11 +95,15 @@
 
 <h2 id="int-string">int &ndash;&gt; string</h2>
 
-<p>转换函数：
-<a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64
-<a href="https://golang.google.cn/pkg/strconv/#Itoa" title="strconv.Itoa">strconv.Itoa</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64
-<a href="https://golang.google.cn/pkg/strconv/#FormatInt" title="strconv.FormatInt">strconv.FormatInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64
-<a href="https://golang.google.cn/pkg/strconv/#FormatUint" title="strconv.FormatUint">strconv.FormatUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
+<p>转换函数：</p>
+
+<p><a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
+
+<p><a href="https://golang.google.cn/pkg/strconv/#Itoa" title="strconv.Itoa">strconv.Itoa</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
+
+<p><a href="https://golang.google.cn/pkg/strconv/#FormatInt" title="strconv.FormatInt">strconv.FormatInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
+
+<p><a href="https://golang.google.cn/pkg/strconv/#FormatUint" title="strconv.FormatUint">strconv.FormatUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
 
 <pre><code class="language-go">fmt.Sprintf(&quot;%d&quot;, math.MinInt64)
 // &quot;-9223372036854775808&quot;
@@ -128,10 +132,13 @@ strconv.FormatUint(math.MaxUint64, 10)
 
 <h2 id="string-int">string &ndash;&gt; int</h2>
 
-<p>转换函数：
-<a href="https://golang.google.cn/pkg/fmt/#Sscanf" title="fmt.Sscanf">fmt.Sscanf</a>：格式化范围 math.MinInt64 -&gt; math.MaxUint64
-<a href="https://golang.google.cn/pkg/strconv/#ParseInt" title="strconv.ParseInt">strconv.ParseInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64
-<a href="https://golang.google.cn/pkg/strconv/#ParseUint" title="strconv.ParseUint">strconv.ParseUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
+<p>转换函数：</p>
+
+<p><a href="https://golang.google.cn/pkg/fmt/#Sscanf" title="fmt.Sscanf">fmt.Sscanf</a>：格式化范围 math.MinInt64 -&gt; math.MaxUint64</p>
+
+<p><a href="https://golang.google.cn/pkg/strconv/#ParseInt" title="strconv.ParseInt">strconv.ParseInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
+
+<p><a href="https://golang.google.cn/pkg/strconv/#ParseUint" title="strconv.ParseUint">strconv.ParseUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
 
 <pre><code class="language-go">var n int
 fmt.Sscanf(&quot;2147483647&quot;, &quot;%d&quot;, &amp;n)
@@ -194,7 +201,7 @@ System.out.println(price);
 294.94
 </code></pre>
 
-<pre><code class="language-go">// go 四舍五入
+<pre><code class="language-go">// go 四舍五入 转3位小数 *1000）/1000 依次类推
 var discoutAmount = 252.945
 var discoutTaxAmount = 41.989999999999995
 price := math.Round((discoutAmount+discoutTaxAmount)*100) / 100

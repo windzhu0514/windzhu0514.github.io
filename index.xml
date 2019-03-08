@@ -17,8 +17,12 @@
       <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
       
       <guid>https://ljc.space/post/go-type-convert/</guid>
-      <description>golang 各种类型转换 int &amp;ndash;&amp;gt; string 转换函数： fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatInt：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatUint：格式化范围 0 -&amp;gt; math.MaxUint64
-fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; strconv.Itoa(math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &amp;quot;-9223372036854775808&amp;quot; strconv.FormatInt(math.MaxInt64, 10) // &amp;quot;9223372036854775807&amp;quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &amp;quot;18446744073709551615&amp;quot;  string &amp;ndash;&amp;gt; int 转换函数： fmt.</description>
+      <description>golang 各种类型转换 int &amp;ndash;&amp;gt; string 转换函数：
+fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
+strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
+strconv.FormatInt：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
+strconv.FormatUint：格式化范围 0 -&amp;gt; math.MaxUint64
+fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; strconv.Itoa(math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &amp;quot;-9223372036854775808&amp;quot; strconv.FormatInt(math.MaxInt64, 10) // &amp;quot;9223372036854775807&amp;quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &amp;quot;18446744073709551615&amp;quot;  string &amp;ndash;&amp;gt; int 转换函数：</description>
     </item>
     
     <item>
