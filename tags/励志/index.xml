@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>一蓑烟雨任平生</title>
-    <link>https://ljc.space/</link>
-    <description>Recent content on 一蓑烟雨任平生</description>
+    <title>励志 on 一蓑烟雨任平生</title>
+    <link>https://ljc.space/tags/%E5%8A%B1%E5%BF%97/</link>
+    <description>Recent content in 励志 on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Mon, 11 Mar 2019 23:10:32 +0800</lastBuildDate>
     
-	<atom:link href="https://ljc.space/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ljc.space/tags/%E5%8A%B1%E5%BF%97/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -55,89 +55,6 @@
 第六个我得到的礼物就是平等，也就是老师跟同学之间是平等的。
 我做助教的时候有一个机会，给学生讲课，当时我就觉得讲得很好，因为我在很短的时间就让这些学生学了很深的计算机技术，我就觉得我知道自己是一个很好的工程师，我也是一个不错的研究员，因此我一定是很好的老师。
 但是很不幸的是学生发回来的给老师的评语，让我非常震惊，他们不但给我最低的分数，而且给我取了很多绰号，他们说开复的课叫做开复剧场，他一个人在上面演戏，我们全部都在下面睡觉，他们说来这儿的人什么目光接触也不会，每天眼睛看着黑板，也不看着我们，我们在打瞌睡，教的是最差的，没有见过这么差的老师。</description>
-    </item>
-    
-    <item>
-      <title>Go Type Convert</title>
-      <link>https://ljc.space/post/go-type-convert/</link>
-      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
-      
-      <guid>https://ljc.space/post/go-type-convert/</guid>
-      <description>golang 各种类型转换 int &amp;ndash;&amp;gt; string 转换函数：
-fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
-strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
-strconv.FormatInt：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
-strconv.FormatUint：格式化范围 0 -&amp;gt; math.MaxUint64
-fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; strconv.Itoa(math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &amp;quot;-9223372036854775808&amp;quot; strconv.FormatInt(math.MaxInt64, 10) // &amp;quot;9223372036854775807&amp;quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &amp;quot;18446744073709551615&amp;quot;  string &amp;ndash;&amp;gt; int 转换函数：</description>
-    </item>
-    
-    <item>
-      <title>git多账户共存</title>
-      <link>https://ljc.space/post/multiple-git-account/</link>
-      <pubDate>Sat, 12 Jan 2019 22:48:32 +0800</pubDate>
-      
-      <guid>https://ljc.space/post/multiple-git-account/</guid>
-      <description>问题 很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbucket 等。如果采用 https 方式获取仓库，多个 git 帐号间不会有冲突，但在每次 pull、push 的时候都要输入帐号密码，十分麻烦。而且当代码库十分庞大时，如果仍然采用 https 方式，在 git pull 时可能出现超时不响应的情况，此时只能采用 ssh 方式。ssh 在配置完 ssh key 后使用起来很方便，但是 git 帐号间可能出现冲突，这时候该如何解决呢？
-配置 ssh key 的方式此处不再赘述，假设在 .ssh 文件夹下有 id_rsa、id_rsa.pub、gitlab_id_rsa、gitlab_id_rsa.pub，分别对应个人 github 帐号私钥公钥以及公司 git 帐号私钥公钥。如果不进行设置，使用 github 账号时没有问题，但是使用公司账号时，由于默认情况下私钥存放在 id_rsa 文件中，因此 git 仍会尝试用 id_rsa 中而不是 gitlab_id_rsa 中的私钥去与服务器上添加的公钥进行比对，自然而然会报错。通常这种情况下 git 会让你输入密码，就算输入正确密码也会报错：Permission denied。
-解决方法 ssh 的 config 文件：该文件的主要作用是指明各个 git 帐号对应的 User 以及 IdentityFile 的文件位置。Window 系统中，该配置信息存放在名为 config 的文件中，位置在 USERPROFILE/.ssh/目录下，而在 Linux/Unix 系统中配置信息则保存在 ssh_config 文件中，至于位置不同系统有所区别。可以使用以下命令查看文件位置，第二行打印了配置文件的位置。</description>
-    </item>
-    
-    <item>
-      <title>goroutine并发控制</title>
-      <link>https://ljc.space/post/go-goroutine-concurrent-control/</link>
-      <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
-      
-      <guid>https://ljc.space/post/go-goroutine-concurrent-control/</guid>
-      <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
-channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.</description>
-    </item>
-    
-    <item>
-      <title>go get添加进度</title>
-      <link>https://ljc.space/post/go-get-progress/</link>
-      <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
-      
-      <guid>https://ljc.space/post/go-get-progress/</guid>
-      <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
- 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &amp;ndash;progress {repo} {dir} 其它命令 hg, svn&amp;hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;amp;vcsCmd{ name: &amp;quot;Git&amp;quot;, cmd: &amp;quot;git&amp;quot;, createCmd: &amp;quot;clone {repo} {dir}&amp;quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &amp;quot;pull --ff-only&amp;quot; }   修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;amp;buf 下添加两行, 如:</description>
-    </item>
-    
-    <item>
-      <title>Markdown 基本语法</title>
-      <link>https://ljc.space/post/markdown/</link>
-      <pubDate>Thu, 29 Nov 2018 18:15:07 +0800</pubDate>
-      
-      <guid>https://ljc.space/post/markdown/</guid>
-      <description>Welcome to Leanote! 欢迎来到 Leanote! 1. 排版 粗体 斜体
-这是一段错误的文本。
-引用:
- 引用 Leanote 官方的话, 为什么要做 Leanote, 原因是&amp;hellip;
- 有充列表:
- 支持 Vim 支持 Emacs  无序列表:
- 项目 1 项目 2  2. 图片与链接 图片: 链接:
-这是去往 Leanote 官方博客的链接
-3. 标题 以下是各级标题, 最多支持 5 级标题
-# h1 ## h2 ### h3 #### h4 ##### h4 ###### h5  4. 代码 示例:
-function get(key) { return m[key]; }  代码高亮示例:</description>
-    </item>
-    
-    <item>
-      <title>关于我</title>
-      <link>https://ljc.space/about/</link>
-      <pubDate>Thu, 29 Nov 2018 16:18:50 +0800</pubDate>
-      
-      <guid>https://ljc.space/about/</guid>
-      <description>C/C++、MFC、Go 语言(golang)开发者
- 原生的才是最好的，推荐对原生库增强，而不是重新实现。
- 邮箱：windzhu0514@163.com
-　Github 主页
-　Csdn 主页
-扫码关注公众号扫码领红包 生活小滋润 定风波·莫听穿林打叶声
-苏轼·宋
-三月七日，沙湖道中遇雨。雨具先去，同行皆狼狈，余独不觉，已而遂晴，故作此词。
-莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。
-料峭春风吹酒醒，微冷，山头斜照却相迎。回首向来萧瑟处，归去，也无风雨也无晴。
- </description>
     </item>
     
   </channel>
