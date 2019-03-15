@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.48" />
+    <meta name="generator" content="Hugo 0.49-DEV" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -91,9 +91,9 @@
                             </div>
                             
                             <div class="post-content">
-                                问题 很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbucket 等。如果采用 https 方式获取仓库，多个 git 帐号间不会有冲突，但在每次 pull、push 的时候都要输入帐号密码，十分麻烦。而且当代码库十分庞大时，如果仍然采用 https 方式，在 git pull 时可能出现超时不响应的情况，此时只能采用 ssh 方式。ssh 在配置完 ssh key 后使用起来很方便，但是 git 帐号间可能出现冲突，这时候该如何解决呢？
-配置 ssh key 的方式此处不再赘述，假设在 .ssh 文件夹下有 id_rsa、id_rsa.pub、gitlab_id_rsa、gitlab_id_rsa.pub，分别对应个人 github 帐号私钥公钥以及公司 git 帐号私钥公钥。如果不进行设置，使用 github 账号时没有问题，但是使用公司账号时，由于默认情况下私钥存放在 id_rsa 文件中，因此 git 仍会尝试用 id_rsa 中而不是 gitlab_id_rsa 中的私钥去与服务器上添加的公钥进行比对，自然而然会报错。通常这种情况下 git 会让你输入密码，就算输入正确密码也会报错：Permission denied。
-解决方法 ssh 的 config 文件：该文件的主要作用是指明各个 git 帐号对应的 User 以及 IdentityFile 的文件位置。Window 系统中，该配置信息存放在名为 config 的文件中，位置在 USERPROFILE/.ssh/目录下，而在 Linux/Unix 系统中配置信息则保存在 ssh_config 文件中，至于位置不同系统有所区别。可以使用以下命令查看文件位置，第二行打印了配置文件的位置。……
+                                <h1 id="问题">问题</h1>
+
+<p>很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbucket 等。如果采用 https 方式获取仓库，多个 git 帐号间不会有冲突，但在每次 pull、push 的时候都要输入帐号密码，十分麻烦。而且当代码库十分庞大时， …</p>
                                 <p class="readmore"><a href="https://ljc.space/post/multiple-git-account/">阅读全文</a></p>
                             </div>
                         </article>
@@ -116,8 +116,12 @@
                             </div>
                             
                             <div class="post-content">
-                                go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
- 修改 git clone 命令, 添加 &ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &ndash;progress {repo} {dir} 其它命令 hg, svn&hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;vcsCmd{ name: &quot;Git&quot;, cmd: &quot;git&quot;, createCmd: &quot;clone {repo} {dir}&quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &quot;pull --ff-only&quot; }   修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;buf 下添加两行, 如:……
+                                <p>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了.
+修改 go 源码包，让 go get 显示进度。</p>
+
+<ol>
+<li><strong>修改 git clone 命令, 添加 &ndash;progress 选项, 使其输出进度</strong>
+找到如下代码, createdCmd 字段值修改为 clone &ndash;progress {repo} {dir} …</li></ol>
                                 <p class="readmore"><a href="https://ljc.space/post/go-get-progress/">阅读全文</a></p>
                             </div>
                         </article>
@@ -238,7 +242,7 @@
     <div class="container">
         &copy; 2018 <a href="https://ljc.space/">一蓑烟雨任平生 By 风竹</a>.
         Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
-        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
+        <a href="http://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
         
     </div>
 </footer>

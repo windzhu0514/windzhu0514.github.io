@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.48" />
+    <meta name="generator" content="Hugo 0.49-DEV" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -91,8 +91,16 @@
                             </div>
                             
                             <div class="post-content">
-                                通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
-channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.……
+                                <h2 id="通信">通信</h2>
+
+<h4 id="共享内存">共享内存</h4>
+
+<pre><code class="language-go">func  Test() {
+    ordersInfoApp  :=  make([]orderInfoApp, 0, totalCount)
+    var  mux sync.Mutex
+    wg  := sync.WaitGroup{}
+
+    for  i  :=  0; i &lt;=  10; i++ { …</code></pre>
                                 <p class="readmore"><a href="https://ljc.space/post/go-goroutine-concurrent-control/">阅读全文</a></p>
                             </div>
                         </article>
@@ -213,7 +221,7 @@ channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi 
     <div class="container">
         &copy; 2018 <a href="https://ljc.space/">一蓑烟雨任平生 By 风竹</a>.
         Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
-        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
+        <a href="http://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
         
     </div>
 </footer>
