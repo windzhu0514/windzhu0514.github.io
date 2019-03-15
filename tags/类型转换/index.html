@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.55.0-DEV" />
+    <meta name="generator" content="Hugo 0.54.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -96,11 +96,7 @@ fmt.Sprintf：格式化范围 math.MinInt64 -&gt; math.MaxInt64
 strconv.Itoa：格式化范围 math.MinInt64 -&gt; math.MaxInt64
 strconv.FormatInt：格式化范围 math.MinInt64 -&gt; math.MaxInt64
 strconv.FormatUint：格式化范围 0 -&gt; math.MaxUint64
-fmt.Sprintf(&quot;%d&quot;, math.MinInt64) // &quot;-9223372036854775808&quot; fmt.Sprintf(&quot;%d&quot;, math.MaxInt64) // &quot;9223372036854775807&quot; fmt.Sprintf(&quot;%d&quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &quot;-9223372036854775808&quot; strconv.Itoa(math.MaxInt64) // &quot;9223372036854775807&quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &quot;-9223372036854775808&quot; strconv.FormatInt(math.MaxInt64, 10) // &quot;9223372036854775807&quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &quot;18446744073709551615&quot;  string &ndash;&gt; int 转换函数：
-fmt.Sscanf：格式化范围 math.MinInt64 -&gt; math.MaxUint64
-strconv.ParseInt：格式化范围 math.MinInt64 -&gt; math.MaxInt64
-strconv.ParseUint：格式化范围 0 -&gt; math.MaxUint64
-var n int fmt.Sscanf(&quot;2147483647&quot;, &quot;%d&quot;, &amp;n) // 2147483647 var n32 int32 fmt.Sscanf(&quot;2147483647&quot;, &quot;%d&quot;, &amp;n32) // 2147483647 var n64 int64 fmt.Sscanf(&quot;-9223372036854775808&quot;, &quot;%d&quot;, &amp;n64) // -9223372036854775808 var n64_2 int64 fmt.Sscanf(&quot;9223372036854775807&quot;, &quot;%d&quot;, &amp;n64_2) // 9223372036854775807 var un64 uint64 fmt.Sscanf(&quot;18446744073709551615&quot;, &quot;%d&quot;, &amp;un64) // 18446744073709551615 // bitSize 0, 8, 16, 32, 和 64分别对应int, int8, int16, int32, 和 int64 // math.MaxUint64 18446744073709551615 // math.……
+fmt.Sprintf(&quot;%d&quot;, math.MinInt64) // &quot;-9223372036854775808&quot; fmt.Sprintf(&quot;%d&quot;, math.MaxInt64) // &quot;9223372036854775807&quot; fmt.Sprintf(&quot;%d&quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &quot;-9223372036854775808&quot; strconv.Itoa(math.MaxInt64) // &quot;9223372036854775807&quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &quot;-9223372036854775808&quot; strconv.FormatInt(math.MaxInt64, 10) // &quot;9223372036854775807&quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &quot;18446744073709551615&quot;  string &ndash;&gt; int 转换函数：……
                                 <p class="readmore"><a href="https://ljc.space/post/go-type-convert/">阅读全文</a></p>
                             </div>
                         </article>

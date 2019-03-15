@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.55.0-DEV" />
+    <meta name="generator" content="Hugo 0.54.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -96,24 +96,24 @@
 <h4 id="共享内存">共享内存</h4>
 
 <pre><code class="language-go">func  Test() {
-	ordersInfoApp  :=  make([]orderInfoApp, 0, totalCount)
-	var  mux sync.Mutex
-	wg  := sync.WaitGroup{}
+    ordersInfoApp  :=  make([]orderInfoApp, 0, totalCount)
+    var  mux sync.Mutex
+    wg  := sync.WaitGroup{}
 
-	for  i  :=  0; i &lt;=  10; i++ {
-		wg.Add(1)
-		go  func(pageIndex int) {
-			// do somethine
-			var  ordersInfo orderInfoApp
-			mux.Lock()
-			ordersInfoApp  =  append(ordersInfoApp, ordersInfo)
-			mux.Unlock()
+    for  i  :=  0; i &lt;=  10; i++ {
+        wg.Add(1)
+        go  func(pageIndex int) {
+            // do somethine
+            var  ordersInfo orderInfoApp
+            mux.Lock()
+            ordersInfoApp  =  append(ordersInfoApp, ordersInfo)
+            mux.Unlock()
 
-			wg.Done()
-		}(i)
-	}
+            wg.Done()
+        }(i)
+    }
 
-	wg.Wait()
+    wg.Wait()
 }
 </code></pre>
 
@@ -122,29 +122,29 @@
 <h4 id="channel">channel</h4>
 
 <pre><code class="language-go">func  Test() {
-	ordersInfoApp  :=  make([]orderInfoApp, 0, totalCount)
-	choi  :=  make(chan orderInfoApp, 10)
-	wg  := sync.WaitGroup{}
+    ordersInfoApp  :=  make([]orderInfoApp, 0, totalCount)
+    choi  :=  make(chan orderInfoApp, 10)
+    wg  := sync.WaitGroup{}
 
-	for  i  :=  0; i &lt;=  10; i++ {
-		wg.Add(1)
-		go  func(pageIndex int) {
-			// do somethine
-			var  ordersInfo orderInfoApp
-			choi &lt;- ordersInfo
+    for  i  :=  0; i &lt;=  10; i++ {
+        wg.Add(1)
+        go  func(pageIndex int) {
+            // do somethine
+            var  ordersInfo orderInfoApp
+            choi &lt;- ordersInfo
 
-			wg.Done()
-		}(i)
-	}
+            wg.Done()
+        }(i)
+    }
 
-	go  func() {
-		wg.Wait()
-		close(choi)
-	}()
+    go  func() {
+        wg.Wait()
+        close(choi)
+    }()
 
-	for  v  :=  range choi {
-		ordersInfoApp  =  append(ordersInfoApp, v)
-	}
+    for  v  :=  range choi {
+        ordersInfoApp  =  append(ordersInfoApp, v)
+    }
 }
 </code></pre>
 
@@ -158,21 +158,21 @@
 <h4 id="共享变量控制结束">共享变量控制结束</h4>
 
 <pre><code class="language-go">func  main() {
-	running  :=  true
-	f  :=  func() {
-		for running {
-			fmt.Println(&quot;i am running&quot;)
-			time.Sleep(1  * time.Second)
-		}
-		fmt.Println(&quot;exit&quot;)
-	}
-	go  f()
-	go  f()
-	go  f()
-	time.Sleep(2  * time.Second)
-	running  =  false
-	time.Sleep(3  * time.Second)
-	fmt.Println(&quot;main exit&quot;)
+    running  :=  true
+    f  :=  func() {
+        for running {
+            fmt.Println(&quot;i am running&quot;)
+            time.Sleep(1  * time.Second)
+        }
+        fmt.Println(&quot;exit&quot;)
+    }
+    go  f()
+    go  f()
+    go  f()
+    time.Sleep(2  * time.Second)
+    running  =  false
+    time.Sleep(3  * time.Second)
+    fmt.Println(&quot;main exit&quot;)
 }
 </code></pre>
 
@@ -187,16 +187,16 @@
 <h4 id="sync-waitgroup-等待结束">sync.Waitgroup 等待结束</h4>
 
 <pre><code class="language-go">func  main() {
-	var  wg sync.WaitGroup
-	for  i  :=  0; i &lt;  3; i++ {
-		wg.Add(1)
-		go  func() {
-			defer wg.Done()
-			// do something
-		}()
-	}
+    var  wg sync.WaitGroup
+    for  i  :=  0; i &lt;  3; i++ {
+        wg.Add(1)
+        go  func() {
+            defer wg.Done()
+            // do something
+        }()
+    }
 
-	wg.Wait()
+    wg.Wait()
 }
 </code></pre>
 
@@ -204,21 +204,21 @@
 
 <pre><code class="language-go">// 可扩展到多个work
 func  main() {
-	chClose  :=  make(chan  struct{})
-	go  func() {
-		for {
-			select {
-				case  &lt;-chClose:
-					return
-				default:
-			}
+    chClose  :=  make(chan  struct{})
+    go  func() {
+        for {
+            select {
+                case  &lt;-chClose:
+                    return
+                default:
+            }
 
-		// do something
-		}
-	}()
+        // do something
+        }
+    }()
 
-	//chClose&lt;-struct{}
-	close(chClose)
+    //chClose&lt;-struct{}
+    close(chClose)
 }
 </code></pre>
 
@@ -236,19 +236,21 @@ func  main() {
 
 <li><p>从带缓冲的 channel 读出数据，如果 channel 中无数据，会导致该 goroutine 阻塞，直到其他 goroutine 向这个 channel 中写入数据</p></li>
 
-<li><p>从带缓冲的 channel 读出数据，如果 channel 中有数据，该 goroutine 不会阻塞</p>
+<li><p>从带缓冲的 channel 读出数据，如果 channel 中有数据，该 goroutine 不会阻塞</p></li>
+</ul>
 
-<pre><code class="language-go">// 读完结束
-for {
-	select {
-	case  &lt;-ch:
-		default:
-		goto finish
-	}
-}
-finish:
-</code></pre></li>
+<pre><code class="language-go">  // 读完结束
+  for {
+    select {
+    case  &lt;-ch:
+        default:
+        goto finish
+    }
+  }
+  finish:
+</code></pre>
 
+<ul>
 <li><p>如果多个 case 同时就绪时，select 会随机地选择一个执行</p></li>
 
 <li><p>case 标签里向 channel 发送或接收数据，case 后面的语句在发送接收成功后才会执行</p></li>
@@ -259,38 +261,38 @@ finish:
 <h4 id="limitwaitgroup">limitwaitgroup</h4>
 
 <pre><code class="language-go">type  limitwaitgroup  struct {
-	sem chan  struct{}
-	wg sync.WaitGroup
+    sem chan  struct{}
+    wg sync.WaitGroup
 }
 
 func  New(n int) *limitwaitgroup {
-	return  &amp;limitwaitgroup{
-		sem: make(chan  struct{}, n),
-	}
+    return  &amp;limitwaitgroup{
+        sem: make(chan  struct{}, n),
+    }
 }
 
 func  (l *limitwaitgroup) Add() {
-	l.sem &lt;-  struct{}{}
-	l.wg.Add(1)
+    l.sem &lt;-  struct{}{}
+    l.wg.Add(1)
 }
 
 func  (l *limitwaitgroup) Done() {
-	&lt;-l.sem
-	l.wg.Done()
+    &lt;-l.sem
+    l.wg.Done()
 }
 
 func  (l *limitwaitgroup) Wait() {
-	l.wg.Wait()
+    l.wg.Wait()
 }
 
 // 例子
 wg  := limitwaitgroup.New(6)
 for  i  :=  0; i &lt;=  10; i++ {
-	wg.Add()
-	go  func(index int){
-		defer wg.Done()
-		// do something
-	}(i)
+    wg.Add()
+    go  func(index int){
+        defer wg.Done()
+        // do something
+    }(i)
 }
 wg.Wait()
 </code></pre>
@@ -302,10 +304,10 @@ wg.Wait()
 <p>Context 的接口定义</p>
 
 <pre><code class="language-go">type  Context  interface {
-	Deadline() (deadline time.Time, ok bool)
-	Done() &lt;-chan  struct{}
-	Err() error
-	Value(key interface{}) interface{}
+    Deadline() (deadline time.Time, ok bool)
+    Done() &lt;-chan  struct{}
+    Err() error
+    Value(key interface{}) interface{}
 }
 </code></pre>
 
@@ -318,14 +320,14 @@ wg.Wait()
 <p><code>Value</code>方法通过一个 Key 获取该 Context 上绑定的值，访问这个值是线程安全的。key 一般定义当前包的一个新的未导出类型的变量（最好不要使用内置类型），避免和其他 goroutine 的 key 冲突。</p>
 
 <ul>
-<li><p>Context 衍生</p>
+<li>Context 衍生</li>
+</ul>
 
 <pre><code class="language-go">func  WithCancel(parent Context) (ctx Context, cancel CancelFunc)
 func  WithDeadline(parent Context, deadline time.Time) (Context, CancelFunc)
 func  WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
 func  WithValue(parent Context, key, val interface{}) Context
-</code></pre></li>
-</ul>
+</code></pre>
 
 <p>这四个<code>With</code>函数，接收的都有一个 partent 参数，就是父 Context，我们要基于这个父 Context 创建出子 Context 的意思，这种方式可以理解为子 Context 对父 Context 的继承，也可以理解为基于父 Context 的衍生。</p>
 
@@ -344,15 +346,15 @@ func  WithValue(parent Context, key, val interface{}) Context
 <p>WithCancel</p>
 
 <pre><code class="language-go">func  main() {
-	ctx, cancel  := context.WithCancel(context.Background())
-	go  watch(ctx, &quot;goroutine 1&quot;)
-	go  watch(ctx, &quot;goroutine 2&quot;)
-	go  watch(ctx, &quot;goroutine 3&quot;)
-	time.Sleep(10  * time.Second)
-	fmt.Println(&quot;开始结束goroutine&quot;)
-	cancel()
-	time.Sleep(5  * time.Second)
-	fmt.Println(ctx.Err())
+    ctx, cancel  := context.WithCancel(context.Background())
+    go  watch(ctx, &quot;goroutine 1&quot;)
+    go  watch(ctx, &quot;goroutine 2&quot;)
+    go  watch(ctx, &quot;goroutine 3&quot;)
+    time.Sleep(10  * time.Second)
+    fmt.Println(&quot;开始结束goroutine&quot;)
+    cancel()
+    time.Sleep(5  * time.Second)
+    fmt.Println(ctx.Err())
 }
 func  watch(ctx context.Context, name string) {
   for {
@@ -393,13 +395,13 @@ context canceled
 <p>WithDeadline</p>
 
 <pre><code class="language-go">func  main() {
-	ctx, cancel  := context.WithDeadline(context.Background(), time.Now().Add(5*time.Second))
-	go  watch(ctx, &quot;goroutine 1&quot;)
-	go  watch(ctx, &quot;goroutine 2&quot;)
-	go  watch(ctx, &quot;goroutine 3&quot;)
-	_  = cancel
-	time.Sleep(8  * time.Second)
-	fmt.Println(ctx.Err())
+    ctx, cancel  := context.WithDeadline(context.Background(), time.Now().Add(5*time.Second))
+    go  watch(ctx, &quot;goroutine 1&quot;)
+    go  watch(ctx, &quot;goroutine 2&quot;)
+    go  watch(ctx, &quot;goroutine 3&quot;)
+    _  = cancel
+    time.Sleep(8  * time.Second)
+    fmt.Println(ctx.Err())
 }
 
 func  watch(ctx context.Context, name string) {
@@ -434,13 +436,13 @@ context deadline exceeded
 <p>WithTimeout</p>
 
 <pre><code class="language-go">func  main() {
-	ctx, cancel  := context.WithTimeout(context.Background(), 5*time.Second)
-	go  watch(ctx, &quot;goroutine 1&quot;)
-	go  watch(ctx, &quot;goroutine 2&quot;)
-	go  watch(ctx, &quot;goroutine 3&quot;)
-	_  = cancel
-	time.Sleep(8  * time.Second)
-	fmt.Println(ctx.Err())
+    ctx, cancel  := context.WithTimeout(context.Background(), 5*time.Second)
+    go  watch(ctx, &quot;goroutine 1&quot;)
+    go  watch(ctx, &quot;goroutine 2&quot;)
+    go  watch(ctx, &quot;goroutine 3&quot;)
+    _  = cancel
+    time.Sleep(8  * time.Second)
+    fmt.Println(ctx.Err())
 }
 
 func  watch(ctx context.Context, name string) {
@@ -478,21 +480,21 @@ context deadline exceeded
 var  kkk key =  0
 
 func  main() {
-	ctx, cancel  := context.WithCancel(context.Background())
-	// WithValue是没有取消函数的
-	ctx  = context.WithValue(ctx, kkk, &quot;100W&quot;)
+    ctx, cancel  := context.WithCancel(context.Background())
+    // WithValue是没有取消函数的
+    ctx  = context.WithValue(ctx, kkk, &quot;100W&quot;)
 
-	go  watch(ctx, &quot;goroutine 1&quot;)
-	go  watch(ctx, &quot;goroutine 2&quot;)
-	go  watch(ctx, &quot;goroutine 3&quot;)
+    go  watch(ctx, &quot;goroutine 1&quot;)
+    go  watch(ctx, &quot;goroutine 2&quot;)
+    go  watch(ctx, &quot;goroutine 3&quot;)
 
-	time.Sleep(8  * time.Second)
+    time.Sleep(8  * time.Second)
 
-	fmt.Println(&quot;开始结束goroutine&quot;)
-	cancel()
+    fmt.Println(&quot;开始结束goroutine&quot;)
+    cancel()
 
-	time.Sleep(3  * time.Second)
-	fmt.Println(ctx.Err())
+    time.Sleep(3  * time.Second)
+    fmt.Println(ctx.Err())
 }
 
 func  watch(ctx context.Context, name string) {
@@ -531,46 +533,46 @@ context canceled
 <p>控制多个 goroutine</p>
 
 <pre><code class="language-go">func  main() {
-	http.HandleFunc(&quot;/&quot;, func(W http.ResponseWriter, r *http.Request) {
-	fmt.Println(&quot;收到请求&quot;)
+    http.HandleFunc(&quot;/&quot;, func(W http.ResponseWriter, r *http.Request) {
+    fmt.Println(&quot;收到请求&quot;)
 
-	ctx, cancel  := context.WithCancel(context.Background())
-	go  worker(ctx, 2)
-	go  worker(ctx, 3)
+    ctx, cancel  := context.WithCancel(context.Background())
+    go  worker(ctx, 2)
+    go  worker(ctx, 3)
 
-	time.Sleep(time.Second *  10)
-	cancel()
-	fmt.Println(ctx.Err())
-	})
-	http.ListenAndServe(&quot;:9290&quot;, nil)
+    time.Sleep(time.Second *  10)
+    cancel()
+    fmt.Println(ctx.Err())
+    })
+    http.ListenAndServe(&quot;:9290&quot;, nil)
 }
 func  worker(ctx context.Context, speed int) {
-	reader  :=  func(n int) {
-		for {
-			select {
-				case  &lt;-ctx.Done():
-				return
-				default:
-				break
-			}
-			fmt.Println(&quot;reader:&quot;, n)
-			time.Sleep(time.Duration(n) * time.Second)
-		}
-	}
+    reader  :=  func(n int) {
+        for {
+            select {
+                case  &lt;-ctx.Done():
+                return
+                default:
+                break
+            }
+            fmt.Println(&quot;reader:&quot;, n)
+            time.Sleep(time.Duration(n) * time.Second)
+        }
+    }
 
-	go  reader(2)
-	go  reader(1)
+    go  reader(2)
+    go  reader(1)
 
-	for {
-		select {
-			case  &lt;-ctx.Done():
-			return
-			default:
-			break
-		}
-		fmt.Println(&quot;worker:&quot;, speed)
-		time.Sleep(time.Duration(speed) * time.Second)
-	}
+    for {
+        select {
+            case  &lt;-ctx.Done():
+            return
+            default:
+            break
+        }
+        fmt.Println(&quot;worker:&quot;, speed)
+        time.Sleep(time.Duration(speed) * time.Second)
+    }
 }
 
 // output:
@@ -605,13 +607,15 @@ context canceled
 使用 Context 的程序应遵循以下这些规则来保持跨包接口的一致和方便静态分析工具(go vet)来检查上下文传播是否有潜在问题。</p>
 
 <ul>
-<li><p>不要将 Context 存储在结构类型中，而是显式的传递给每个需要的函数； Context 应该作为函数的第一个参数传递，通常命名为 ctx：</p>
+<li>不要将 Context 存储在结构类型中，而是显式的传递给每个需要的函数； Context 应该作为函数的第一个参数传递，通常命名为 ctx：</li>
+</ul>
 
-<pre><code class="language-go">func  DoSomething(ctx context.Context, arg Arg) error {
-// ... use ctx ...
+<pre><code class="language-go">    func  DoSomething(ctx context.Context, arg Arg) error {
+    // ... use ctx ...
 }
-</code></pre></li>
+</code></pre>
 
+<ul>
 <li><p>即使函数可以接受 nil 值，也不要传递 nil Context。如果不确定要使用哪个 Context，请传递 context.TODO。</p></li>
 
 <li><p>使用 context 的 Value 相关方法只应该用于在程序和接口中传递和请求相关的元数据，不要用它来传递一些可选的参数</p></li>

@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.55.0-DEV" />
+    <meta name="generator" content="Hugo 0.54.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -93,19 +93,21 @@
 修改 go 源码包，让 go get 显示进度。</p>
 
 <ol>
-<li><p><strong>修改 git clone 命令, 添加 &ndash;progress 选项, 使其输出进度</strong>
+<li><strong>修改 git clone 命令, 添加 &ndash;progress 选项, 使其输出进度</strong>
 找到如下代码, createdCmd 字段值修改为 clone &ndash;progress {repo} {dir}
-其它命令 hg, svn&hellip;添加进度方法类似</p>
+其它命令 hg, svn&hellip;添加进度方法类似</li>
+</ol>
 
 <pre><code class="language-go">// vcsGit describes how to use Git.
 var vcsGit = &amp;vcsCmd{
-	name: &quot;Git&quot;,
-	cmd:  &quot;git&quot;,
-	createCmd:   &quot;clone {repo} {dir}&quot;, // 此处修改为 clone --progress {repo} {dir}
-	downloadCmd: &quot;pull --ff-only&quot;
+    name: &quot;Git&quot;,
+    cmd:  &quot;git&quot;,
+    createCmd:   &quot;clone {repo} {dir}&quot;, // 此处修改为 clone --progress {repo} {dir}
+    downloadCmd: &quot;pull --ff-only&quot;
 }
-</code></pre></li>
+</code></pre>
 
+<ol>
 <li><p>修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上
 找到 run1()方法, 在 cmd.Stderr = &amp;buf 下添加两行, 如:</p>
 

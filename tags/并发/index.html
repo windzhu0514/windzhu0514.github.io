@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.55.0-DEV" />
+    <meta name="generator" content="Hugo 0.54.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -92,9 +92,7 @@
                             
                             <div class="post-content">
                                 通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
-channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp choi &lt;- ordersInfo wg.Done() }(i) } go func() { wg.Wait() close(choi) }() for v := range choi { ordersInfoApp = append(ordersInfoApp, v) } }  相对复杂的数据流动情况
-同步和控制 goroutine 退出只能由本身控制，不能从外部强制结束该 goroutine 两种例外情况：main 函数结束或者程序崩溃结束运行
-共享变量控制结束 func main() { running := true f := func() { for running { fmt.Println(&quot;i am running&quot;) time.Sleep(1 * time.Second) } fmt.……
+channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.……
                                 <p class="readmore"><a href="https://ljc.space/post/go-goroutine-concurrent-control/">阅读全文</a></p>
                             </div>
                         </article>
