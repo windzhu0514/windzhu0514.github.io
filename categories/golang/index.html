@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.49-DEV" />
+    <meta name="generator" content="Hugo 0.55.0-DEV" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -76,7 +76,7 @@
                         <article class="post">
                             <header>
                                 <h1 class="post-title">
-                                    <a href="https://ljc.space/post/go-type-convert/">Go Type Convert</a>
+                                    <a href="https://ljc.space/post/go-type-convert/">golang类型转换</a>
                                 </h1>
                             </header>
                             <date class="post-meta meta-date">
@@ -91,17 +91,16 @@
                             </div>
                             
                             <div class="post-content">
-                                <h1 id="golang-各种类型转换">golang 各种类型转换</h1>
-
-<h2 id="int-string">int &ndash;&gt; string</h2>
-
-<p>转换函数：</p>
-
-<p><a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
-
-<p><a href="https://golang.google.cn/pkg/strconv/#Itoa" title="strconv.Itoa">strconv.Itoa</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
-
-<p><a href="https://golang.google.cn/pkg/strconv/#FormatInt" title="strconv.FormatInt">strconv.FormatInt</a>： …</p>
+                                int &ndash;&gt; string 转换函数：
+fmt.Sprintf：格式化范围 math.MinInt64 -&gt; math.MaxInt64
+strconv.Itoa：格式化范围 math.MinInt64 -&gt; math.MaxInt64
+strconv.FormatInt：格式化范围 math.MinInt64 -&gt; math.MaxInt64
+strconv.FormatUint：格式化范围 0 -&gt; math.MaxUint64
+fmt.Sprintf(&quot;%d&quot;, math.MinInt64) // &quot;-9223372036854775808&quot; fmt.Sprintf(&quot;%d&quot;, math.MaxInt64) // &quot;9223372036854775807&quot; fmt.Sprintf(&quot;%d&quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &quot;-9223372036854775808&quot; strconv.Itoa(math.MaxInt64) // &quot;9223372036854775807&quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &quot;-9223372036854775808&quot; strconv.FormatInt(math.MaxInt64, 10) // &quot;9223372036854775807&quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &quot;18446744073709551615&quot;  string &ndash;&gt; int 转换函数：
+fmt.Sscanf：格式化范围 math.MinInt64 -&gt; math.MaxUint64
+strconv.ParseInt：格式化范围 math.MinInt64 -&gt; math.MaxInt64
+strconv.ParseUint：格式化范围 0 -&gt; math.MaxUint64
+var n int fmt.Sscanf(&quot;2147483647&quot;, &quot;%d&quot;, &amp;n) // 2147483647 var n32 int32 fmt.Sscanf(&quot;2147483647&quot;, &quot;%d&quot;, &amp;n32) // 2147483647 var n64 int64 fmt.Sscanf(&quot;-9223372036854775808&quot;, &quot;%d&quot;, &amp;n64) // -9223372036854775808 var n64_2 int64 fmt.Sscanf(&quot;9223372036854775807&quot;, &quot;%d&quot;, &amp;n64_2) // 9223372036854775807 var un64 uint64 fmt.Sscanf(&quot;18446744073709551615&quot;, &quot;%d&quot;, &amp;un64) // 18446744073709551615 // bitSize 0, 8, 16, 32, 和 64分别对应int, int8, int16, int32, 和 int64 // math.MaxUint64 18446744073709551615 // math.……
                                 <p class="readmore"><a href="https://ljc.space/post/go-type-convert/">阅读全文</a></p>
                             </div>
                         </article>
@@ -124,16 +123,10 @@
                             </div>
                             
                             <div class="post-content">
-                                <h2 id="通信">通信</h2>
-
-<h4 id="共享内存">共享内存</h4>
-
-<pre><code class="language-go">func  Test() {
-    ordersInfoApp  :=  make([]orderInfoApp, 0, totalCount)
-    var  mux sync.Mutex
-    wg  := sync.WaitGroup{}
-
-    for  i  :=  0; i &lt;=  10; i++ { …</code></pre>
+                                通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
+channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp choi &lt;- ordersInfo wg.Done() }(i) } go func() { wg.Wait() close(choi) }() for v := range choi { ordersInfoApp = append(ordersInfoApp, v) } }  相对复杂的数据流动情况
+同步和控制 goroutine 退出只能由本身控制，不能从外部强制结束该 goroutine 两种例外情况：main 函数结束或者程序崩溃结束运行
+共享变量控制结束 func main() { running := true f := func() { for running { fmt.Println(&quot;i am running&quot;) time.Sleep(1 * time.Second) } fmt.……
                                 <p class="readmore"><a href="https://ljc.space/post/go-goroutine-concurrent-control/">阅读全文</a></p>
                             </div>
                         </article>
@@ -156,12 +149,10 @@
                             </div>
                             
                             <div class="post-content">
-                                <p>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了.
-修改 go 源码包，让 go get 显示进度。</p>
-
-<ol>
-<li><strong>修改 git clone 命令, 添加 &ndash;progress 选项, 使其输出进度</strong>
-找到如下代码, createdCmd 字段值修改为 clone &ndash;progress {repo} {dir} …</li></ol>
+                                go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
+ 修改 git clone 命令, 添加 &ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &ndash;progress {repo} {dir} 其它命令 hg, svn&hellip;添加进度方法类似
+// vcsGit describes how to use Git. var vcsGit = &amp;vcsCmd{ name: &quot;Git&quot;, cmd: &quot;git&quot;, createCmd: &quot;clone {repo} {dir}&quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &quot;pull --ff-only&quot; }  修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;buf 下添加两行, 如:
+var buf bytes.Buffer cmd.Stdout = &amp;buf cmd.Stderr = &amp;buf cmd.Stdout = os.Stdout // 重定向标准输出 cmd.Stderr = os.Stderr // 重定向标准输出 err = cmd.Run()   3.执行 golang 源码 src 下的 all.bash 重新编译 golang, 编译要些时间, 编译完后使用 go get 会显示拉取进度。……
                                 <p class="readmore"><a href="https://ljc.space/post/go-get-progress/">阅读全文</a></p>
                             </div>
                         </article>
@@ -194,7 +185,7 @@
     </li>
     
     <li>
-        <a href="https://ljc.space/post/go-type-convert/" title="Go Type Convert">Go Type Convert</a>
+        <a href="https://ljc.space/post/go-type-convert/" title="golang类型转换">golang类型转换</a>
     </li>
     
     <li>
@@ -280,9 +271,9 @@
 </div>
 <footer id="footer">
     <div class="container">
-        &copy; 2018 <a href="https://ljc.space/">一蓑烟雨任平生 By 风竹</a>.
+        &copy; 2019 <a href="https://ljc.space/">一蓑烟雨任平生 By 风竹</a>.
         Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
-        <a href="http://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
+        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
         
     </div>
 </footer>
