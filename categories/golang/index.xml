@@ -17,12 +17,7 @@
       <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
       
       <guid>https://ljc.space/post/go-type-convert/</guid>
-      <description>int &amp;ndash;&amp;gt; string 转换函数：
-fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
-strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
-strconv.FormatInt：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64
-strconv.FormatUint：格式化范围 0 -&amp;gt; math.MaxUint64
-fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MaxUint64) // constant 18446744073709551615 overflows int strconv.Itoa(math.MinInt64) // &amp;quot;-9223372036854775808&amp;quot; strconv.Itoa(math.MaxInt64) // &amp;quot;9223372036854775807&amp;quot; strconv.Itoa(math.MaxUint64) // constant 18446744073709551615 overflows int strconv.FormatInt(math.MinInt64, 10) // &amp;quot;-9223372036854775808&amp;quot; strconv.FormatInt(math.MaxInt64, 10) // &amp;quot;9223372036854775807&amp;quot; strconv.FormatInt(math.MaxUint64, 10) // constant 18446744073709551615 overflows int64 strconv.FormatUint(math.MaxUint64, 10) // &amp;quot;18446744073709551615&amp;quot;  string &amp;ndash;&amp;gt; int 转换函数：</description>
+      <description>int &amp;ndash;&amp;gt; string 转换函数： fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatInt：格式化</description>
     </item>
     
     <item>
@@ -31,8 +26,7 @@ fmt.Sprintf(&amp;quot;%d&amp;quot;, math.MinInt64) // &amp;quot;-922337203685477
       <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
       
       <guid>https://ljc.space/post/go-goroutine-concurrent-control/</guid>
-      <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() }  一般在简单的数据传递下使用
-channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi := make(chan orderInfoApp, 10) wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.</description>
+      <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() } 一般在简单的数据传递下使用 channel func Test() { ordersInfoApp :=</description>
     </item>
     
     <item>
@@ -41,8 +35,7 @@ channel func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) choi 
       <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
       
       <guid>https://ljc.space/post/go-get-progress/</guid>
-      <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。
- 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码, createdCmd 字段值修改为 clone &amp;ndash;progress {repo} {dir} 其它命令 hg, svn&amp;hellip;添加进度方法类似  // vcsGit describes how to use Git. var vcsGit = &amp;amp;vcsCmd{ name: &amp;quot;Git&amp;quot;, cmd: &amp;quot;git&amp;quot;, createCmd: &amp;quot;clone {repo} {dir}&amp;quot;, // 此处修改为 clone --progress {repo} {dir} downloadCmd: &amp;quot;pull --ff-only&amp;quot; }   修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上 找到 run1()方法, 在 cmd.Stderr = &amp;amp;buf 下添加两行, 如:</description>
+      <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码</description>
     </item>
     
   </channel>

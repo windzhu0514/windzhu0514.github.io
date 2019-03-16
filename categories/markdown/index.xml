@@ -17,17 +17,7 @@
       <pubDate>Thu, 29 Nov 2018 18:15:07 +0800</pubDate>
       
       <guid>https://ljc.space/post/markdown/</guid>
-      <description>Welcome to Leanote! 欢迎来到 Leanote! 1. 排版 粗体 斜体
-这是一段错误的文本。
-引用:
- 引用 Leanote 官方的话, 为什么要做 Leanote, 原因是&amp;hellip;
- 有充列表:
- 支持 Vim 支持 Emacs  无序列表:
- 项目 1 项目 2  2. 图片与链接 图片: 链接:
-这是去往 Leanote 官方博客的链接
-3. 标题 以下是各级标题, 最多支持 5 级标题
-# h1 ## h2 ### h3 #### h4 ##### h4 ###### h5  4. 代码 示例:
-function get(key) { return m[key]; }  代码高亮示例:</description>
+      <description>Welcome to Leanote! 欢迎来到 Leanote! 1. 排版 粗体 斜体 这是一段错误的文本。 引用: 引用 Leanote 官方的话, 为什么要做 Leanote, 原因是&amp;hellip; 有充列表: 支持 Vim 支持 Emacs 无序列表: 项</description>
     </item>
     
   </channel>

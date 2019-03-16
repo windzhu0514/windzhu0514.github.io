@@ -43,13 +43,13 @@
   </url>
   
   <url>
-    <loc>https://ljc.space/categories/git/</loc>
+    <loc>https://ljc.space/tags/git/</loc>
     <lastmod>2019-01-12T22:48:32+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/tags/git/</loc>
+    <loc>https://ljc.space/categories/git/</loc>
     <lastmod>2019-01-12T22:48:32+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -61,13 +61,13 @@
   </url>
   
   <url>
-    <loc>https://ljc.space/categories/golang/</loc>
+    <loc>https://ljc.space/tags/golang/</loc>
     <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/tags/golang/</loc>
+    <loc>https://ljc.space/categories/golang/</loc>
     <lastmod>2019-03-07T17:45:27+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -79,13 +79,13 @@
   </url>
   
   <url>
-    <loc>https://ljc.space/categories/markdown/</loc>
+    <loc>https://ljc.space/tags/markdown/</loc>
     <lastmod>2018-11-29T18:15:07+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ljc.space/tags/markdown/</loc>
+    <loc>https://ljc.space/categories/markdown/</loc>
     <lastmod>2018-11-29T18:15:07+08:00</lastmod>
     <priority>0</priority>
   </url>
