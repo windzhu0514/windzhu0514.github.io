@@ -422,6 +422,7 @@ textarea {
     list-style:none;
     padding:25px 0 0;
     font-size:16px;
+    text-align: center;
 }
 .page-navigator li {
     display:inline-block;
@@ -1048,4 +1049,29 @@ table tr th, table tr td {
     border: 1px solid #CCC;
     padding: 0.5em 1em;
     text-align: left;
+}
+/* toc*/
+.toc-article {
+    border: 1px solid #bbb;
+    border-radius: 7px;
+    margin: 1.1em 0 0 2em;
+    padding: 0.7em 0.7em 0 0.7em;
+    max-width: 40%;
+    line-height: 1em;
+    float: right;  
+}
+.toc-title {
+    font-size: 120%; 
+}
+#TableOfContents {
+    
+}
+#TableOfContents ul {
+    padding: 0;
+    margin: 0.5em;
+    line-height: 1.8em;
+}
+
+#TableOfContents li {
+    list-style-type: none; 
 }

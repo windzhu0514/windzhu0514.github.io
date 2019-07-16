@@ -3,139 +3,140 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://ljc.space/post/likaifu-10-gifts/</loc>
+    <loc>/categories/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/%E4%BA%BA%E7%94%9F/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/%E5%8A%B1%E5%BF%97/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/%E5%A5%BD%E6%96%87/</loc>
+    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/likaifu-10-gifts/</loc>
     <lastmod>2019-03-11T23:10:32+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ljc.space/post/go-type-convert/</loc>
+    <loc>/tags/go/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/golang/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/golang/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/go-type-convert/</loc>
     <lastmod>2019-03-07T17:45:27+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ljc.space/post/multiple-git-account/</loc>
+    <loc>/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</loc>
+    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/git/</loc>
+    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/git/</loc>
+    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/multiple-git-account/</loc>
     <lastmod>2019-01-12T22:48:32+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ljc.space/post/go-goroutine-concurrent-control/</loc>
+    <loc>/tags/goroutine/</loc>
+    <lastmod>2018-12-07T10:05:37+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/go-goroutine-concurrent-control/</loc>
     <lastmod>2018-12-07T10:05:37+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ljc.space/post/go-get-progress/</loc>
+    <loc>/tags/%E5%B9%B6%E5%8F%91/</loc>
+    <lastmod>2018-12-07T10:05:37+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/go-get-progress/</loc>
     <lastmod>2018-11-30T14:50:56+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ljc.space/post/markdown/</loc>
+    <loc>/post/markdown/</loc>
     <lastmod>2018-11-29T18:15:07+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ljc.space/about/</loc>
+    <loc>/categories/markdown/</loc>
+    <lastmod>2018-11-29T18:15:07+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/markdown/</loc>
+    <lastmod>2018-11-29T18:15:07+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/about/</loc>
     <lastmod>2018-11-29T16:18:50+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/git/</loc>
-    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/categories/git/</loc>
-    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/go/</loc>
-    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/golang/</loc>
-    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/categories/golang/</loc>
-    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/goroutine/</loc>
-    <lastmod>2018-12-07T10:05:37+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/markdown/</loc>
-    <lastmod>2018-11-29T18:15:07+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/categories/markdown/</loc>
-    <lastmod>2018-11-29T18:15:07+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/post/</loc>
-    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/</loc>
-    <lastmod>2019-01-12T22:48:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/</loc>
-    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/%E4%BA%BA%E7%94%9F/</loc>
-    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/%E5%8A%B1%E5%BF%97/</loc>
-    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/categories/%E5%A5%BD%E6%96%87/</loc>
-    <lastmod>2019-03-11T23:10:32+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/%E5%B9%B6%E5%8F%91/</loc>
-    <lastmod>2018-12-07T10:05:37+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ljc.space/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</loc>
-    <lastmod>2019-03-07T17:45:27+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
 </urlset>

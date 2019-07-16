@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Git on 一蓑烟雨任平生</title>
-    <link>https://ljc.space/tags/git/</link>
-    <description>Recent content in Git on 一蓑烟雨任平生</description>
+    <title>git on 一蓑烟雨任平生</title>
+    <link>/tags/git/</link>
+    <description>Recent content in git on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Jan 2019 22:48:32 +0800</lastBuildDate>
     
-	<atom:link href="https://ljc.space/tags/git/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>git多账户共存</title>
-      <link>https://ljc.space/post/multiple-git-account/</link>
+      <link>/post/multiple-git-account/</link>
       <pubDate>Sat, 12 Jan 2019 22:48:32 +0800</pubDate>
       
-      <guid>https://ljc.space/post/multiple-git-account/</guid>
+      <guid>/post/multiple-git-account/</guid>
       <description>问题 很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbuc</description>
     </item>
     
     <item>
       <title>go get添加进度</title>
-      <link>https://ljc.space/post/go-get-progress/</link>
+      <link>/post/go-get-progress/</link>
       <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
       
-      <guid>https://ljc.space/post/go-get-progress/</guid>
+      <guid>/post/go-get-progress/</guid>
       <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码</description>
     </item>
     

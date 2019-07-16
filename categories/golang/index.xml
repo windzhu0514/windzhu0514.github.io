@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Golang on 一蓑烟雨任平生</title>
-    <link>https://ljc.space/categories/golang/</link>
-    <description>Recent content in Golang on 一蓑烟雨任平生</description>
+    <title>golang on 一蓑烟雨任平生</title>
+    <link>/categories/golang/</link>
+    <description>Recent content in golang on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Thu, 07 Mar 2019 17:45:27 +0800</lastBuildDate>
     
-	<atom:link href="https://ljc.space/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>golang类型转换</title>
-      <link>https://ljc.space/post/go-type-convert/</link>
+      <link>/post/go-type-convert/</link>
       <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
       
-      <guid>https://ljc.space/post/go-type-convert/</guid>
+      <guid>/post/go-type-convert/</guid>
       <description>int &amp;ndash;&amp;gt; string 转换函数： fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatInt：格式化</description>
     </item>
     
     <item>
       <title>goroutine并发控制</title>
-      <link>https://ljc.space/post/go-goroutine-concurrent-control/</link>
+      <link>/post/go-goroutine-concurrent-control/</link>
       <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
       
-      <guid>https://ljc.space/post/go-goroutine-concurrent-control/</guid>
+      <guid>/post/go-goroutine-concurrent-control/</guid>
       <description>通信 共享内存 func Test() { ordersInfoApp := make([]orderInfoApp, 0, totalCount) var mux sync.Mutex wg := sync.WaitGroup{} for i := 0; i &amp;lt;= 10; i++ { wg.Add(1) go func(pageIndex int) { // do somethine var ordersInfo orderInfoApp mux.Lock() ordersInfoApp = append(ordersInfoApp, ordersInfo) mux.Unlock() wg.Done() }(i) } wg.Wait() } 一般在简单的数据传递下使用 channel func Test() { ordersInfoApp :=</description>
     </item>
     
     <item>
       <title>go get添加进度</title>
-      <link>https://ljc.space/post/go-get-progress/</link>
+      <link>/post/go-get-progress/</link>
       <pubDate>Fri, 30 Nov 2018 14:50:56 +0800</pubDate>
       
-      <guid>https://ljc.space/post/go-get-progress/</guid>
+      <guid>/post/go-get-progress/</guid>
       <description>go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡死了. 修改 go 源码包，让 go get 显示进度。 修改 git clone 命令, 添加 &amp;ndash;progress 选项, 使其输出进度 找到如下代码</description>
     </item>
     

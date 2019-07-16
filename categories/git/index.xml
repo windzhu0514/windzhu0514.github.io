@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Git on 一蓑烟雨任平生</title>
-    <link>https://ljc.space/categories/git/</link>
-    <description>Recent content in Git on 一蓑烟雨任平生</description>
+    <title>git on 一蓑烟雨任平生</title>
+    <link>/categories/git/</link>
+    <description>Recent content in git on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Jan 2019 22:48:32 +0800</lastBuildDate>
     
-	<atom:link href="https://ljc.space/categories/git/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/git/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>git多账户共存</title>
-      <link>https://ljc.space/post/multiple-git-account/</link>
+      <link>/post/multiple-git-account/</link>
       <pubDate>Sat, 12 Jan 2019 22:48:32 +0800</pubDate>
       
-      <guid>https://ljc.space/post/multiple-git-account/</guid>
+      <guid>/post/multiple-git-account/</guid>
       <description>问题 很多开发者都会遇到在自己的电脑上使用不止一个 git 帐号的情况。一般一个是自己的 github 帐号，另一个则是公司的 git 帐号，比如 gitlab、bitbuc</description>
     </item>
     
