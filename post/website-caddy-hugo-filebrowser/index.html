@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>caddy-hugo-filebrowser搭建个人网站和后台管理 | 一蓑烟雨任平生</title>
+    <meta property="og:title" content="caddy-hugo-filebrowser搭建个人网站和后台管理 - 一蓑烟雨任平生">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content="2019-09-06T17:40:56&#43;08:00">
+        
+        
+    <meta property="article:modified_time" content="2019-09-06T17:40:56&#43;08:00">
+        
+    <meta name="Keywords" content="go,golang,go语言,博客,C,C&#43;&#43;,mfc">
+    <meta name="description" content="caddy-hugo-filebrowser搭建个人网站和后台管理">
+        
+    <meta name="author" content="风竹">
+    <meta property="og:url" content="/post/website-caddy-hugo-filebrowser/">
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="../../css/normalize.css">
+    
+        <link rel="stylesheet" href="../../css/prism.css">
+    
+    <link rel="stylesheet" href="../../css/style.css">
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+    
+
+
+    
+    
+</head>
+
+<body>
+<header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="../../">
+                        一蓑烟雨任平生
+                    </a>
+                
+                <p class="description">Go语言(golang)、C/C&#43;&#43;、MFC开发者</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="../../">首页</a>
+                    
+                    <a  href="../../about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<div id="body">
+    <div class="container">
+        <div class="col-group">
+
+            <div class="col-8" id="main">
+                <div class="res-cons">
+                    <article class="post">
+                        <header>
+                            <h1 class="post-title">caddy-hugo-filebrowser搭建个人网站和后台管理</h1>
+                        </header>
+                        <date class="post-meta meta-date">
+                            2019年9月6日
+                        </date>
+                        
+                        <div class="post-meta">
+                            <span>|</span>
+                            
+                                <span class="meta-category"><a href="../../categories/golang">golang</a></span>
+                            
+                        </div>
+                        
+                        
+                        <div class="post-meta">
+                            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span> 阅读</span></span>
+                        </div>
+                        
+                        
+                        <div class="post-content">
+                            
+
+<p>使用caddy和hugo搭建个人网站</p>
+
+<p>功能：</p>
+
+<ul>
+<li>自动https</li>
+<li>自动响应git hook，运行hugo编译markdown</li>
+<li>开机启动服务</li>
+<li>docker部署</li>
+<li>网站后台管理</li>
+</ul>
+
+<p><em>假定安装过程在非root用户下</em></p>
+
+<h1 id="hugo">hugo</h1>
+
+<pre><code class="language-shell"># 链接修改为自己需要的版本
+wget https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz
+mkdir hugo
+tar xvfz hugo_0.56.3_Linux-64bit.tar.gz -C hugo
+cp hugo /usr/local/bin/
+# 解压后的hugo默认权限为755，如果不是，修改一下权限
+sudo chmod 755 /usr/local/bin/hugo
+</code></pre>
+
+<h1 id="caddy">Caddy</h1>
+
+<h2 id="安装caddy">安装caddy</h2>
+
+<p>caddy<a href="https://caddyserver.com/download">下载页面</a></p>
+
+<p>[官方文档]<a href="https://caddyserver.com/docs">https://caddyserver.com/docs</a></p>
+
+<p>选择git插件让caddy响应github的webhook</p>
+
+<h3 id="自动安装">自动安装</h3>
+
+<pre><code class="language-shell"># 自动安装caddy
+curl https://getcaddy.com | bash -s personal http.git
+</code></pre>
+
+<h3 id="手动安装">手动安装</h3>
+
+<pre><code class="language-shell">wget https://caddyserver.com/download/linux/amd64?plugins=http.git&amp;license=personal&amp;telemetry=off
+
+sudo cp /path/to/caddy /usr/local/bin
+sudo chown root:root /usr/local/bin/caddy
+sudo chmod 755 /usr/local/bin/caddy
+</code></pre>
+
+<h2 id="配置caddy">配置caddy</h2>
+
+<p>不需要把caddy配置为服务的，请参考<a href="https://caddyserver.com/tutorial">Quick Start</a>、<a href="https://caddyserver.com/tutorial/beginner">Beginner Tutorial</a>或<a href="https://github.com/caddyserver/caddy">https://github.com/caddyserver/caddy</a>，简单快速启动网站服务</p>
+
+<p>linux下使用以下命令允许在非root用户下caddy绑定系统特权端口（e.g. 80, 443）</p>
+
+<pre><code class="language-shell">sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
+或
+sudo setcap cap_net_bind_service=+ep $(which caddy)
+</code></pre>
+
+<p>为了安全考虑，caddy不推荐在root用户下运行</p>
+
+<h3 id="添加用户">添加用户</h3>
+
+<p>如果组id或用户id重复，可自行选择其他id</p>
+
+<pre><code class="language-shell">sudo groupadd -g 333 www-data
+sudo useradd \
+  -g www-data --no-user-group \
+  --home-dir /var/www --no-create-home \
+  --shell /usr/sbin/nologin \
+  --system --uid 333 www-data
+</code></pre>
+
+<h3 id="caddyfile">Caddyfile</h3>
+
+<p>caddy可通过命令参数指定配置项启动运行，也可以通过配置文件启动，caddy的配置文件名称固定为Caddyfile，放置在网站根目录不同网站使用不同的Caddyfile或者放置在/etc/caddy/Caddyfile，多个网站共用同一个Caddyfile</p>
+
+<p><strong>Caddyfile放置在/etc/caddy/Caddyfile</strong></p>
+
+<pre><code class="language-shell">sudo mkdir /etc/caddy
+sudo chown -R root:root /etc/caddy
+
+# 复制已有的Caddyfile或新建
+sudo cp /path/to/Caddyfile /etc/caddy/
+sudo touch /etc/caddy/Caddyfile
+
+sudo chown root:root /etc/caddy/Caddyfile
+sudo chmod 644 /etc/caddy/Caddyfile
+</code></pre>
+
+<p>Caddyfile配置信息</p>
+
+<pre><code class="language-shell">example.com {
+    root /var/www/website
+    log / /var/log/caddy/access.log {
+        rotate_size 50  # 50M以后轮转
+    }
+    git {
+        # hugo网站目录托管仓库
+        repo https://github.com/githubusername/mysite
+        # 使用key 托管仓库可以设置为私有但是要修改key的权限
+        # key $HOME/.ssh/id_rsa
+        # --recurse-submodules 目录包含有子模块
+        clone_args --recurse-submodules
+        pull_args --recurse-submodules
+        # 放置仓库的路径，相对于网站根目录，默认是网站根目录
+        path /var/www/mysite
+        # git web hook 路径 口令
+        hook /webhook xxxxxx
+        # 成功拉取后执行的命令
+        then hugo -s /var/www/mysite -d /var/www/website --logFile /var/log/hugo/hugo.log
+    }
+}
+
+# 重定向www到example.com
+www.example.com {
+    redir https://example.com{uri}
+}
+</code></pre>
+
+<h3 id="ssl配置信息">ssl配置信息</h3>
+
+<pre><code class="language-shell">sudo mkdir /etc/ssl/caddy
+sudo chown -R root:www-data /etc/ssl/caddy
+sudo chmod 0770 /etc/ssl/caddy
+</code></pre>
+
+<h3 id="日志文件">日志文件</h3>
+
+<pre><code class="language-shell">sudo mkdir /var/log/caddy
+sudo touch /var/log/caddy/caddy.log
+sudo touch /var/log/caddy/access.log
+
+sudo mkdir /var/log/hugo
+sudo touch /var/log/hugo/hugo.log
+
+sudo chown -R www-data :www-data /var/log/caddy
+sudo chmod -R 0775 /var/log/caddy
+
+sudo chown -R www-data :www-data /var/log/caddy
+sudo chmod -R 0775 /var/log/hugo
+</code></pre>
+
+<h2 id="配置网站">配置网站</h2>
+
+<h3 id="网站根目录">网站根目录</h3>
+
+<pre><code class="language-shell">sudo mkdir /var/www
+sudo chown www-data:www-data /var/www
+sudo chmod 555 /var/www
+
+# caddy不会自动创建网站根目录 复制已有网站目录到/var/www/或者新建一个根目录
+sudo cp -R example.com /var/www/
+或
+sudo mkdir /var/www/example.com
+
+sudo chown -R www-data:www-data /var/www/example.com
+sudo chmod -R 555 /var/www/example.com
+</code></pre>
+
+<h2 id="安装caddy为系统服务">安装caddy为系统服务</h2>
+
+<p><strong>检查系统自启动控制方式</strong></p>
+
+<pre><code class="language-shell"># 检查系统自启动方式
+Linux系统目前存在的三种系统初始化控制方式，对应的配置文件目录分别为
+/usr/lib/systemd systemd方式
+/usr/share/upstart Upstart方式
+/etc/init.d SysVinit方式（sysvinit 就是 system V 风格的 init 系统）
+</code></pre>
+
+<p>详细介绍三个体系：Sysvinit、Upstart、Systemd</p>
+
+<p>Sysvinit：<a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html">https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html</a></p>
+
+<p>Upstart：<a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html">https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html</a></p>
+
+<p>Systemd：<a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html">https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html</a></p>
+
+<h3 id="caddy-hook-service-插件安装">caddy hook.service 插件安装</h3>
+
+<p>下载页面选择hook.service插件，该插件没有经过完整的测试，可能存在某些问题。</p>
+
+<pre><code class="language-shell">curl https://getcaddy.com | bash -s personal hook.service,http.git
+</code></pre>
+
+<p>hook.service的<a href="https://github.com/hacdias/caddy-service/blob/master/README.md">使用方法</a>：</p>
+
+<p>-name 项指定服务的名称，默认是caddy，如果指定了名字，每次运行<code>caddy -service</code>命令时，需要指定服务的名字</p>
+
+<p>使用<code>caddy -service install</code>安装会根据不同系统类型自动创建启动配置</p>
+
+<p><strong>Install a Caddy service:</strong></p>
+
+<pre><code class="language-shell">caddy -service install -agree -email myemail@email.com -conf /path/to/Caddyfile [-name optionalServiceName] [-option optionValue]
+</code></pre>
+
+<p><strong>Uninstall a Caddy service:</strong></p>
+
+<pre><code class="language-shell">caddy -service uninstall [-name optionalName]
+</code></pre>
+
+<p><strong>Start a Caddy service:</strong></p>
+
+<pre><code class="language-shell">caddy -service start [-name optionalName]
+</code></pre>
+
+<p><strong>Stop a Caddy service:</strong></p>
+
+<pre><code class="language-shell">caddy -service stop [-name optionalName]
+</code></pre>
+
+<p><strong>Restart a Caddy service:</strong></p>
+
+<pre><code class="language-shell">caddy -service restart [-name optionalName]
+</code></pre>
+
+<h3 id="upstart-模式安装">upstart 模式安装</h3>
+
+<p>CentOS release 6.10 只支持Sysvinit</p>
+
+<h4 id="安装步骤">安装步骤</h4>
+
+<p><a href="https://github.com/caddyserver/caddy/tree/master/dist/init/linux-upstart">Upstart conf for Caddy</a></p>
+
+<p><a href="https://denbeke.be/blog/servers/running-caddy-server-as-a-service/">Running Caddy Server as a service with Upstart</a></p>
+
+<p>CentOS 安装问题</p>
+
+<pre><code class="language-shell">[root@localhost ~]# service caddy start
+Starting caddy
+/etc/init.d/caddy: line 52: start-stop-daemon: command not found
+
+需要安装start-stop-daemon
+https://blog.csdn.net/wh211212/article/details/53523457
+
+安装 start-stop-daemon 又需要
+checking for perl &gt;= 5.20.2... configure: error: cannot find perl &gt;= 5.20.2
+
+又需要安装perl
+耐心已耗完
+正在安装Centos 7 …… ^_^
+</code></pre>
+
+<h4 id="启动运行">启动运行</h4>
+
+<pre><code class="language-shell">sudo service caddy start|stop|restart
+</code></pre>
+
+<h3 id="systemd-模式安装">systemd 模式安装</h3>
+
+<h4 id="安装步骤-1">安装步骤</h4>
+
+<p><a href="https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd">systemd Service Unit for Caddy</a></p>
+
+<p><a href="https://denbeke.be/blog/servers/running-caddy-server-as-a-service-with-systemd/">Running Caddy Server as a service with systemd</a></p>
+
+<h4 id="启动运行-1">启动运行</h4>
+
+<pre><code class="language-shell"># 启用服务开机启动
+sudo systemctl enable caddy.service
+
+# 关闭服务开机启动
+sudo systemctl disable caddy.service
+
+# 启动服务
+sudo systemctl start caddy.service
+
+# 重启服务
+sudo systemctl restart caddy.service
+
+# 关闭服务
+sudo systemctl stop caddy.service
+</code></pre>
+
+<h3 id="sysvinit-模式安装">sysvinit 模式安装</h3>
+
+<p>暂未尝试</p>
+
+<h1 id="filebrowser实现文件浏览和后台管理">filebrowser实现文件浏览和后台管理</h1>
+
+<p>官方文档：<a href="https://filebrowser.xyz/">https://filebrowser.xyz/</a></p>
+
+<h2 id="安装">安装</h2>
+
+<pre><code class="language-sh">curl -fsSL https://filebrowser.xyz/get.sh | bash
+filebrowser -r /path/to/your/files
+</code></pre>
+
+<h2 id="filebrowser配置">filebrowser配置</h2>
+
+<p>参考：<a href="https://filebrowser.xyz/cli/filebrowser">https://filebrowser.xyz/cli/filebrowser</a></p>
+
+<p>filebrowser支持不使用配置直接运行</p>
+
+<p><strong>指定配置文件</strong></p>
+
+<p>配置文件的名字必须是<code>.filebrowser</code>，扩展名可以是json、toml、yaml、yml四种任意一个</p>
+
+<p>配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一</p>
+
+<h3 id="toml配置-物理机部署使用">toml配置 物理机部署使用</h3>
+
+<pre><code class="language-toml"># docker filebrowser config file
+#log = &quot;/var/log/filebrowser/filebrowser.log&quot;
+database = &quot;/etc/filebrowser/filebrowser.db&quot;
+# 默认绑定地址是127.0.0.1 只能本机访问 如果外部网络访问 设置为0,0,0,0
+address =&quot;0.0.0.0&quot;
+port = 9000
+root = &quot;/var/filebrowser/mysite&quot;
+baseurl = &quot;/manager
+</code></pre>
+
+<h3 id="json配置-docker使用">json配置 docker使用</h3>
+
+<p><a href="https://filebrowser.xyz/installation#docker">官方docker镜像</a>的 Dockerfile里filebrowser的配置文件是json类型，docker启动挂载的配置文件也必须是json类型</p>
+
+<p>address必须是0.0.0.0 默认是localhost</p>
+
+<pre><code class="language-json">{
+  &quot;port&quot;: 9001,
+  &quot;baseURL&quot;: &quot;/manager&quot;,
+  &quot;address&quot;: &quot;0.0.0.0&quot;,
+  &quot;log&quot;: &quot;stdout&quot;,
+  &quot;database&quot;: &quot;/database.db&quot;,
+  &quot;root&quot;: &quot;/srv&quot;
+}
+</code></pre>
+
+<h3 id="web配置">web配置</h3>
+
+<h4 id="配置事件命令">配置事件命令</h4>
+
+<p>参考：<a href="https://filebrowser.xyz/configuration/command-runner">https://filebrowser.xyz/configuration/command-runner</a></p>
+
+<p>filebrowser启动后可通过web页面修改密码、管理用户权限和指定某个事件后运行命令</p>
+
+<p>Command runner里可以指定以下四个事件发生时执行的命令（不包括Save事件，文件修改后保存执行的是Updload事件）</p>
+
+<p>Copy<br />
+Rename<br />
+Upload<br />
+Delete<br />
+<del>Save</del></p>
+
+<p>如果要使用变量，需设置一下配置</p>
+
+<p><strong>Global Settings &ndash; Execute on shell</strong>：配置里指定要使用的shell<code>bash -c</code></p>
+
+<p>命令中可以使用filebrowser内置的以下环境变量</p>
+
+<pre><code class="language-sh">FILE        改动文件的绝对路径
+SCOPE       当前用户的用户目录路径
+TRIGGER     事件名
+USERNAME    当前用户的用户名
+DESTINATION 目标位置的绝对路径，只在copy和rename时有效
+</code></pre>
+
+<p>修改文件后执行git推送</p>
+
+<pre><code class="language-sh">git pull
+git add $FILE
+git commit -m&quot;add or modify post&quot;
+git push
+</code></pre>
+
+<p>默认命令是阻塞执行，如果需要非阻塞运行，在命令前面添加<code>&amp;</code></p>
+
+<pre><code class="language-sh">&amp;git pull
+&amp;git add $FILE
+&amp;git commit -m&quot;add or modify post&quot;
+&amp;git push
+</code></pre>
+
+<p><strong>注意：</strong></p>
+
+<p>filebrowser命令执行时的当前目录是程序启动的目录</p>
+
+<p>如果在docker里运行，工作目录是<code>/</code>，需要在<a href="https://github.com/filebrowser/filebrowser/blob/master/Dockerfile">官方Dockerfile</a>里添加<code>WORKDIR /path/to/workdir</code>指定工作目录</p>
+
+<p>为了方便查看修改文件，我直接在文件目录后台运行的filebrowser</p>
+
+<pre><code class="language-sh">(filebrowser -c /home/ljc/websiteconf/filebrowser.toml &gt; /var/log/filebrowser/filebrowser.log 2&gt;&amp;1 &amp;)
+</code></pre>
+
+<p>或者自己手动修改源代码设置命令工作目录，然后新增一个账户，设置该账户的目录（scope）为要提交项目的根目录即.git的目录，需要自动提交时，使用此账户增加或修改文件。</p>
+
+<pre><code class="language-go">cmd := exec.Command(command[0], command[1:]...)
+cmd.Dir = dst // 添加此行  
+cmd.Env = append(os.Environ(), fmt.Sprintf(&quot;FILE=%s&quot;, path))
+cmd.Env = append(cmd.Env, fmt.Sprintf(&quot;SCOPE=%s&quot;, user.Scope))
+cmd.Env = append(cmd.Env, fmt.Sprintf(&quot;TRIGGER=%s&quot;, evt))
+cmd.Env = append(cmd.Env, fmt.Sprintf(&quot;USERNAME=%s&quot;, user.Username))
+cmd.Env = append(cmd.Env, fmt.Sprintf(&quot;DESTINATION=%s&quot;, dst))
+</code></pre>
+
+<p>此方法是临时解决方案，具体功能等待filebrowser新版。issue：<a href="https://github.com/filebrowser/filebrowser/issues/854">https://github.com/filebrowser/filebrowser/issues/854</a></p>
+
+<h2 id="系统服务">系统服务</h2>
+
+<p>systemd 模式</p>
+
+<pre><code class="language-sh">[Unit]
+Description=File Browser
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/filebrowser
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<p>如果不想使用默认配置文件路径，在<code>ExecStart=/usr/local/bin/filebrowser</code>后面通过命令选项指定配置</p>
+
+<h1 id="docker部署">docker部署</h1>
+
+<h2 id="caddy-hugo">caddy+hugo</h2>
+
+<p>下载caddy+hugo镜像</p>
+
+<pre><code class="language-sh">docker pull windzhu0514/caddy-hugo
+</code></pre>
+
+<p>或者从Dockerfile编译</p>
+
+<pre><code class="language-sh">FROM alpine
+MAINTAINER ljc &lt;windzhu0514@163.com&gt;
+
+RUN apk update &amp;&amp; \
+    apk add git curl bash &amp;&amp; \
+    curl https://getcaddy.com | bash -s personal http.git &amp;&amp; \
+    apk add hugo &amp;&amp; \
+    # hugo not create the log dir,caddy not create access.log dir
+    mkdir /var/log/hugo &amp;&amp; \
+    mkdir /var/log/caddy &amp;&amp; \
+    apk del curl bash wget
+
+ADD ./Caddyfile /etc/caddy/Caddyfile
+
+EXPOSE 9000
+
+ENTRYPOINT [&quot;caddy&quot;,&quot;-conf&quot;,&quot;/etc/caddy/Caddyfile&quot;]
+</code></pre>
+
+<p>启动服务</p>
+
+<pre><code class="language-sh">sudo docker run -d -p 9000:9000 --name alpine-website-d  windzhu0514/caddy-hugo:0.0.3
+</code></pre>
+
+<p>浏览器输入<a href="https://ip:9000访问网站，如果提示`404">https://ip:9000访问网站，如果提示`404</a> Site [ip:port] is not served on this interface<code>
+容器里caddy监听外网无法访问 修改Caddyfile站点地址为:9000</code></p>
+
+<h2 id="filebrowser">filebrowser</h2>
+
+<p>容器中的目录可以不必和例子相同，但是配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一（参考<a href="https://filebrowser.xyz/cli/filebrowser">.filebrowser </a>）</p>
+
+<p>启动filebrowser</p>
+
+<pre><code class="language-sh">sudo docker run -d --restart=always --name filebrowser \
+-v /var/filebrowser/mysite:/srv \
+-v /etc/filebrowser/filebrowser.db:/database.db \
+-v /etc/filebrowser/.filebrowser.json:/.filebrowser.json \
+-p 9001:9001  filebrowser/filebrowser
+</code></pre>
+
+<h1 id="代理网站">代理网站</h1>
+
+<p>域名指向中国大陆境内服务器且开通Web服务时需要备案。域名指向中国大陆境外服务器（例如中国香港等大陆境外）不需要备案。首次备案时间需要一周到一个月才能完成，如果更换了服务器，需要修改备案信息。如果手里有境外服务器，域名绑定到境外服务器服务器，如果境外服务器性能较低，可以把网站部署在境内服务器，由境外服务器跳转到境内服务器。</p>
+
+<p>境外服务器的代理依然使用强大的caddy，配置如下</p>
+
+<pre><code class="language-sh">ljc.space {
+    cache
+    proxy / http://ip:9000 # 转发所有
+}
+
+www.ljc.space {
+    redir https://ljc.space{uri}
+}
+</code></pre>
+
+                        </div>
+
+                        
+
+
+                        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="../../post/go-vscode-remote-development/">VSCode Remote Development-go开发环境搭建</a></li>
+        
+        <li><a href="../../post/go-type-convert/">golang类型转换</a></li>
+        
+        <li><a href="../../post/go-goroutine-concurrent-control/">goroutine并发控制</a></li>
+        
+        <li><a href="../../post/go-get-progress/">go get添加进度</a></li>
+        
+        <li><a href="../../post/likaifu-10-gifts/">李开复：留学带给我的十件礼物，第一件是自信</a></li>
+        
+    </ul>
+</div>
+
+
+                        <div class="post-meta meta-tags">
+                            
+                            <ul class="clearfix">
+                                
+                                <li><a href="../../tags/go">go</a></li>
+                                
+                                <li><a href="../../tags/caddy">caddy</a></li>
+                                
+                                <li><a href="../../tags/hugo">hugo</a></li>
+                                
+                                <li><a href="../../tags/filebrowser">filebrowser</a></li>
+                                
+                                <li><a href="../../tags/%E7%BD%91%E7%AB%99">网站</a></li>
+                                
+                                <li><a href="../../tags/docker">docker</a></li>
+                                
+                            </ul>
+                            
+                        </div>
+                    </article>
+                    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "windzhu0514/windzhu0514.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+                </div>
+            </div>
+            <div id="secondary">
+    <section class="widget">
+        <form id="search" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
+    </li>
+    
+    <li>
+        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a>
+    </li>
+    
+    <li>
+        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信">李开复：留学带给我的十件礼物，第一件是自信</a>
+    </li>
+    
+    <li>
+        <a href="../../post/go-type-convert/" title="golang类型转换">golang类型转换</a>
+    </li>
+    
+    <li>
+        <a href="../../post/multiple-git-account/" title="git多账户共存">git多账户共存</a>
+    </li>
+    
+    <li>
+        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制">goroutine并发控制</a>
+    </li>
+    
+    <li>
+        <a href="../../post/go-get-progress/" title="go get添加进度">go get添加进度</a>
+    </li>
+    
+    <li>
+        <a href="../../post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">分类</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="../../categories/git/">git(1)</a>
+    </li>
+    
+    <li>
+        <a href="../../categories/golang/">golang(5)</a>
+    </li>
+    
+    <li>
+        <a href="../../categories/markdown/">markdown(1)</a>
+    </li>
+    
+    <li>
+        <a href="../../categories/%E5%A5%BD%E6%96%87/">好文(1)</a>
+    </li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">标签</h3>
+<div class="tagcloud">
+    
+    <a href="../../tags/caddy/">caddy</a>
+    
+    <a href="../../tags/docker/">docker</a>
+    
+    <a href="../../tags/filebrowser/">filebrowser</a>
+    
+    <a href="../../tags/git/">git</a>
+    
+    <a href="../../tags/go/">go</a>
+    
+    <a href="../../tags/golang/">golang</a>
+    
+    <a href="../../tags/goroutine/">goroutine</a>
+    
+    <a href="../../tags/hugo/">hugo</a>
+    
+    <a href="../../tags/markdown/">markdown</a>
+    
+    <a href="../../tags/ssh/">ssh</a>
+    
+    <a href="../../tags/%E4%BA%BA%E7%94%9F/">人生</a>
+    
+    <a href="../../tags/%E5%8A%B1%E5%BF%97/">励志</a>
+    
+    <a href="../../tags/%E5%B9%B6%E5%8F%91/">并发</a>
+    
+    <a href="../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">类型转换</a>
+    
+    <a href="../../tags/%E7%BD%91%E7%AB%99/">网站</a>
+    
+</div>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="../../index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+        </div>
+    </div>
+</div>
+<footer id="footer">
+    <div class="container">
+        &copy; 2019 <a href="../../">一蓑烟雨任平生 By 风竹</a>.
+        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
+        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/rujews/maupassant-hugo" target="_blank">maupassant</a>.
+        
+    </div>
+</footer>
+
+
+    <script type="text/javascript">
+    
+    (function(){
+        $("pre code").parent().addClass("line-numbers")
+    }())
+
+    window.MathJax = {
+        tex2jax: {
+            inlineMath: [ ['$','$'] ],
+            processEscapes: true
+        }
+    };
+    </script>
+    <script type="text/javascript" src="../../js/prism.js" async="true"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src="../../js/totop.js?v=0.0.0" async=""></script>
+
+
+
+<script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+</body>
+</html>
