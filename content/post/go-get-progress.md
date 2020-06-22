@@ -23,7 +23,7 @@ var vcsGit = &vcsCmd{
 }
 ```
 
-2.  修改 cmd.Run()执行的地方, 使其将输出定位到标准输出流上
+2.  修改 cmd.Run()执行的地方, 将输出定位到标准输出流上
     找到 run1()方法, 在 cmd.Stderr = &buf 下添加两行, 如:
 
         var buf bytes.Buffer
