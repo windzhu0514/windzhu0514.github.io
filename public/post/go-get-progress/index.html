@@ -98,10 +98,10 @@
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// vcsGit describes how to use Git.
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">vcsGit</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">vcsCmd</span>{
-	<span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;Git&#34;</span>,
-	<span style="color:#a6e22e">cmd</span>:  <span style="color:#e6db74">&#34;git&#34;</span>,
-	<span style="color:#a6e22e">createCmd</span>:   <span style="color:#e6db74">&#34;clone {repo} {dir}&#34;</span>, <span style="color:#75715e">// 此处修改为 clone --progress {repo} {dir}
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">downloadCmd</span>: <span style="color:#e6db74">&#34;pull --ff-only&#34;</span>
+ <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;Git&#34;</span>,
+ <span style="color:#a6e22e">cmd</span>:  <span style="color:#e6db74">&#34;git&#34;</span>,
+ <span style="color:#a6e22e">createCmd</span>:   <span style="color:#e6db74">&#34;clone {repo} {dir}&#34;</span>, <span style="color:#75715e">// 此处修改为 clone --progress {repo} {dir}
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">downloadCmd</span>: <span style="color:#e6db74">&#34;pull --ff-only&#34;</span>
 }
 </code></pre></div><ol start="2">
 <li>

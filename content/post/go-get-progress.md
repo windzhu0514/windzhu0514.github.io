@@ -16,10 +16,10 @@ go get 比较大的包时会很慢, 可能几分钟或更长, 让人误以为卡
 ```go
 // vcsGit describes how to use Git.
 var vcsGit = &vcsCmd{
-	name: "Git",
-	cmd:  "git",
-	createCmd:   "clone {repo} {dir}", // 此处修改为 clone --progress {repo} {dir}
-	downloadCmd: "pull --ff-only"
+ name: "Git",
+ cmd:  "git",
+ createCmd:   "clone {repo} {dir}", // 此处修改为 clone --progress {repo} {dir}
+ downloadCmd: "pull --ff-only"
 }
 ```
 
