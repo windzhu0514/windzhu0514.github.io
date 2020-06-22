@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>类型转换 on 一蓑烟雨任平生</title>
+    <link>/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</link>
+    <description>Recent content in 类型转换 on 一蓑烟雨任平生</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 07 Mar 2019 17:45:27 +0800</lastBuildDate>
+    
+	<atom:link href="/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>golang类型转换</title>
+      <link>/post/go-type-convert/</link>
+      <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
+      
+      <guid>/post/go-type-convert/</guid>
+      <description>int &amp;ndash;&amp;gt; string 转换函数： fmt.Sprintf：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.Itoa：格式化范围 math.MinInt64 -&amp;gt; math.MaxInt64 strconv.FormatInt：格式化</description>
+    </item>
+    
+  </channel>
+</rss>
