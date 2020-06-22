@@ -23,14 +23,14 @@ var vcsGit = &vcsCmd{
 }
 ```
 
-2.  修改 cmd.Run()执行的地方, 将输出定位到标准输出流上
-    找到 run1()方法, 在 cmd.Stderr = &buf 下添加两行, 如:
+2.修改 cmd.Run()执行的地方, 将输出定位到标准输出流上
+找到 run1()方法, 在 cmd.Stderr = &buf 下添加两行, 如:
 
-        var buf bytes.Buffer
-        cmd.Stdout = &buf
-        cmd.Stderr = &buf
-        cmd.Stdout = os.Stdout // 重定向标准输出
-        cmd.Stderr = os.Stderr // 重定向标准输出
-        err = cmd.Run()
+var buf bytes.Buffer
+cmd.Stdout = &buf
+cmd.Stderr = &buf
+cmd.Stdout = os.Stdout // 重定向标准输出
+cmd.Stderr = os.Stderr // 重定向标准输出
+err = cmd.Run()
 
 3.执行 golang 源码 src 下的 all.bash 重新编译 golang, 编译要些时间, 编译完后使用 go get 会显示拉取进度
