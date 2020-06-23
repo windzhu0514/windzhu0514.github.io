@@ -103,8 +103,7 @@
  <span style="color:#a6e22e">createCmd</span>:   <span style="color:#e6db74">&#34;clone {repo} {dir}&#34;</span>, <span style="color:#75715e">// 此处修改为 clone --progress {repo} {dir}
 </span><span style="color:#75715e"></span> <span style="color:#a6e22e">downloadCmd</span>: <span style="color:#e6db74">&#34;pull --ff-only&#34;</span>
 }
-</code></pre></div><p>2.修改 cmd.Run()执行的地方, 将输出定位到标准输出流上
-找到 run1()方法, 在 cmd.Stderr = &amp;buf 下添加两行, 如:</p>
+</code></pre></div><p>2.修改 cmd.Run()执行的地方, 将输出定位到标准输出流上找到 run1()方法, 在 cmd.Stderr = &amp;buf 下添加两行, 如下:</p>
 <p>var buf bytes.Buffer
 cmd.Stdout = &amp;buf
 cmd.Stderr = &amp;buf
