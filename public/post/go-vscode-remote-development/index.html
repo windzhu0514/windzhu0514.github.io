@@ -89,18 +89,18 @@
         
         
         <div class="post-content">
-            <h1 id="vscode">安装vscode</h1>
+            <h1 id="安装vscode">安装vscode</h1>
 <p>刚学习go的时候一直使用的vscode开发，轻巧方便。但随着工程代码量增加，本地下载的包越来越多，代码提示和自动补全功能变得越来越慢，就转向了goland神IDE，打开一个工程占用1.5G内存，吓得我赶紧又加了8G内存！！！</p>
 <p>正式版的vscode已支持VSCode Remote Development，附上vscode下载地址：<a href="https://code.visualstudio.com/download">Visual Studio Code下载地址</a></p>
 <p>安装完成，安装<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go">GO</a>扩展和<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development</a>扩展，Remote Development扩展包含了<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh">Remote - SSH</a>、<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Remote - Containers</a>和<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl">Remote - WSL</a>三个扩展，分别用于通过ssh远程连接、连接docker容器和连接<a href="https://docs.microsoft.com/en-us/windows/wsl/about"> Windows Subsystem for Linux (WSL)</a>。</p>
-<h1 id="ssh">本机安装ssh客户端</h1>
+<h1 id="本机安装ssh客户端">本机安装ssh客户端</h1>
 <p>如果安装过git，就不需要再进行安装</p>
 <p>具体安装说明参照：<a href="https://code.visualstudio.com/docs/remote/troubleshooting#_installing-a-supported-ssh-client">Installing a supported SSH client</a></p>
 <h1 id="remote---ssh">Remote - SSH</h1>
 <p>Remote - SSH已支持系统版本： x86_64 Debian 8+, Ubuntu 16.04+, CentOS / RHEL 7+</p>
 <p>正在实验中的支持系统版本：ARMv7l (or ARMv8 in 32-bit mode) Raspbian Stretch/9+ (32-bit) ，这些系统暂时只<a href="https://code.visualstudio.com/insiders/">Visual Studio Code Insiders</a>提供支持。</p>
 <p>具体使用说明参照：<a href="https://code.visualstudio.com/docs/remote/ssh">Remote Development using SSH</a></p>
-<h2 id="ssh-key">使用SSH key认证连接</h2>
+<h2 id="使用ssh-key认证连接">使用SSH key认证连接</h2>
 <ol>
 <li><code>ctrl+shift+p</code>或者<code>菜单-查看-命令面板</code>，打开命令面板，运行<code>Remote-SSH: Connect to Host</code>命令</li>
 <li>在弹出的窗口下拉列表里选择<code>Configure SSH Hosts...</code>，回车</li>
@@ -116,7 +116,7 @@
         User your-user-name-on-host
         HostName another-host-fqdn-or-ip-goes-here
         IdentityFile ~/.ssh/id_rsa-remote-ssh
-</code></pre><h2 id="heading">使用用户和密码连接</h2>
+</code></pre><h2 id="使用用户和密码连接">使用用户和密码连接</h2>
 <ol>
 <li><code>ctrl+shift+p</code>或者<code>菜单-查看-命令面板</code>，打开命令面板，运行<code>Remote-SSH: Connect to Host</code>命令</li>
 <li>在弹出的窗口中输入用户名@远程机器IP地址：<code>username@remoteip</code>，回车</li>
@@ -128,9 +128,9 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Host example-remote-linux-machine
     User your-user-name-here
     HostName host-fqdn-or-ip-goes-here
-</code></pre></div><h1 id="heading-1">安装扩展到远程机器</h1>
+</code></pre></div><h1 id="安装扩展到远程机器">安装扩展到远程机器</h1>
 <p>给远程机器安装的扩展，需要先安装到本地，然后在扩展列表里点击<code>Install in SSH:xxx</code>，安装到远程机器</p>
-<h1 id="go-tool">安装go tool到远程机器</h1>
+<h1 id="安装go-tool到远程机器">安装go tool到远程机器</h1>
 <ol>
 <li><code>ctrl+shift+p</code>或者<code>菜单-查看-命令面板</code>，打开命令面板，运行<code>Go:Install/Update Tools</code>命令</li>
 <li>在弹出的下拉列表里选择要安装的go tools</li>
@@ -138,7 +138,7 @@
 <li>安装完成后，欢快的操作吧</li>
 </ol>
 <p>如果远程服务没有go程序，安装的go tools会先下载到本地，再传送到远程机器，部分go tools需要翻墙安装，只需设置本地代理即可。</p>
-<h1 id="heading-2">问题及解决方法</h1>
+<h1 id="问题及解决方法">问题及解决方法</h1>
 <ul>
 <li>连接远程终端时出现一下错误</li>
 </ul>
@@ -151,7 +151,7 @@ vscode github issues：https://github.com/microsoft/vscode-remote-release/issues
 <p>1 复制其他可用机器上的.vscode-server文件夹到用户目录下</p>
 <p>2 设置代理参照一下链接：
 <a href="https://github.com/Microsoft/vscode-remote-release/issues/78#issuecomment-491229576">https://github.com/Microsoft/vscode-remote-release/issues/78#issuecomment-491229576</a></p>
-<h1 id="heading-3">参考资料：</h1>
+<h1 id="参考资料">参考资料：</h1>
 <p><a href="https://code.visualstudio.com/docs/remote/remote-overview">VS Code Remote Development</a></p>
 
         </div>
@@ -225,6 +225,10 @@ vscode github issues：https://github.com/microsoft/vscode-remote-release/issues
 <ul class="widget-list">
     
     <li>
+        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析">Go Rate限流器代码分析</a>
+    </li>
+    
+    <li>
         <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
     </li>
     
@@ -267,7 +271,7 @@ vscode github issues：https://github.com/microsoft/vscode-remote-release/issues
     
     <li><a href="../../categories/git/">git (1)</a></li>
     
-    <li><a href="../../categories/golang/">golang (5)</a></li>
+    <li><a href="../../categories/golang/">golang (6)</a></li>
     
     <li><a href="../../categories/markdown/">markdown (1)</a></li>
     
@@ -298,9 +302,13 @@ vscode github issues：https://github.com/microsoft/vscode-remote-release/issues
     
     <a href="../../tags/markdown/">markdown</a>
     
+    <a href="../../tags/rate/">rate</a>
+    
     <a href="../../tags/ssh/">ssh</a>
     
     <a href="../../tags/%E4%BA%BA%E7%94%9F/">人生</a>
+    
+    <a href="../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/">令牌桶</a>
     
     <a href="../../tags/%E5%8A%B1%E5%BF%97/">励志</a>
     
@@ -309,6 +317,8 @@ vscode github issues：https://github.com/microsoft/vscode-remote-release/issues
     <a href="../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">类型转换</a>
     
     <a href="../../tags/%E7%BD%91%E7%AB%99/">网站</a>
+    
+    <a href="../../tags/%E9%99%90%E6%B5%81%E5%99%A8/">限流器</a>
     
 </div>
     </section>

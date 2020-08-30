@@ -89,8 +89,8 @@
         
         
         <div class="post-content">
-            <h2 id="heading">通信</h2>
-<h4 id="heading-1">共享内存</h4>
+            <h2 id="通信">通信</h2>
+<h4 id="共享内存">共享内存</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span>  <span style="color:#a6e22e">Test</span>() {
 	<span style="color:#a6e22e">ordersInfoApp</span>  <span style="color:#f92672">:=</span>  make([]<span style="color:#a6e22e">orderInfoApp</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">totalCount</span>)
 	<span style="color:#66d9ef">var</span>  <span style="color:#a6e22e">mux</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
@@ -139,10 +139,10 @@
 	}
 }
 </code></pre></div><p>相对复杂的数据流动情况</p>
-<h2 id="heading-2">同步和控制</h2>
+<h2 id="同步和控制">同步和控制</h2>
 <p>goroutine 退出只能由本身控制，不能从外部强制结束该 goroutine
 两种例外情况：main 函数结束或者程序崩溃结束运行</p>
-<h4 id="heading-3">共享变量控制结束</h4>
+<h4 id="共享变量控制结束">共享变量控制结束</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span>  <span style="color:#a6e22e">main</span>() {
 	<span style="color:#a6e22e">running</span>  <span style="color:#f92672">:=</span>  <span style="color:#66d9ef">true</span>
 	<span style="color:#a6e22e">f</span>  <span style="color:#f92672">:=</span>  <span style="color:#66d9ef">func</span>() {
@@ -167,7 +167,7 @@
 不适合用于同级的子 go 程间的通信，全局变量传递的信息太少
 因为是单向通知,主进程无法等待所有子 goroutine 退出
 这种方法只适用于非常简单的逻辑且并发量不太大的场景</p>
-<h4 id="syncwaitgroup-">sync.Waitgroup 等待结束</h4>
+<h4 id="syncwaitgroup-等待结束">sync.Waitgroup 等待结束</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span>  <span style="color:#a6e22e">main</span>() {
 	<span style="color:#66d9ef">var</span>  <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
 	<span style="color:#66d9ef">for</span>  <span style="color:#a6e22e">i</span>  <span style="color:#f92672">:=</span>  <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt;  <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
@@ -180,7 +180,7 @@
 
 	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
 }
-</code></pre></div><h4 id="channel-">channel 控制结束</h4>
+</code></pre></div><h4 id="channel-控制结束">channel 控制结束</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 可扩展到多个work
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span>  <span style="color:#a6e22e">main</span>() {
 	<span style="color:#a6e22e">chClose</span>  <span style="color:#f92672">:=</span>  make(<span style="color:#66d9ef">chan</span>  <span style="color:#66d9ef">struct</span>{})
@@ -640,6 +640,10 @@
 <ul class="widget-list">
     
     <li>
+        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析">Go Rate限流器代码分析</a>
+    </li>
+    
+    <li>
         <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
     </li>
     
@@ -682,7 +686,7 @@
     
     <li><a href="../../categories/git/">git (1)</a></li>
     
-    <li><a href="../../categories/golang/">golang (5)</a></li>
+    <li><a href="../../categories/golang/">golang (6)</a></li>
     
     <li><a href="../../categories/markdown/">markdown (1)</a></li>
     
@@ -713,9 +717,13 @@
     
     <a href="../../tags/markdown/">markdown</a>
     
+    <a href="../../tags/rate/">rate</a>
+    
     <a href="../../tags/ssh/">ssh</a>
     
     <a href="../../tags/%E4%BA%BA%E7%94%9F/">人生</a>
+    
+    <a href="../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/">令牌桶</a>
     
     <a href="../../tags/%E5%8A%B1%E5%BF%97/">励志</a>
     
@@ -724,6 +732,8 @@
     <a href="../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">类型转换</a>
     
     <a href="../../tags/%E7%BD%91%E7%AB%99/">网站</a>
+    
+    <a href="../../tags/%E9%99%90%E6%B5%81%E5%99%A8/">限流器</a>
     
 </div>
     </section>
