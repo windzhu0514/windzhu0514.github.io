@@ -1,189 +1,71 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>caddy-hugo-filebrowser搭建个人网站和后台管理 | 一蓑烟雨任平生</title>
-    <meta property="og:title" content="caddy-hugo-filebrowser搭建个人网站和后台管理 - 一蓑烟雨任平生">
-    <meta property="og:type" content="article">
-        
-    <meta property="article:published_time" content='2019-09-06T17:40:56&#43;08:00'>
-        
-        
-    <meta property="article:modified_time" content='2019-09-06T17:40:56&#43;08:00'>
-        
-    <meta name="Keywords" content="go,golang,go语言,博客,C,C&#43;&#43;,mfc">
-    <meta name="description" content="caddy-hugo-filebrowser搭建个人网站和后台管理">
-        
-    <meta name="author" content="风竹">
-    <meta property="og:url" content="/post/website-caddy-hugo-filebrowser/">
-    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
-
-    <link rel="stylesheet" href='../../css/normalize.css'>
-    <link rel="stylesheet" href='../../css/style.css'>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    
-
-
-    
-    
-</head>
-
-
-<body>
-    <header id="header" class="clearfix">
-    <div class="container">
-        <div class="col-group">
-            <div class="site-name ">
-                
-                    <a id="logo" href="../../">
-                        一蓑烟雨任平生
-                    </a>
-                
-                <p class="description">Go语言(golang)、C/C&#43;&#43;、MFC开发者</p>
-            </div>
-            <div>
-                <nav id="nav-menu" class="clearfix">
-                    <a class="current" href="../../">首页</a>
-                    
-                    <a  href="../../about/" title="关于">关于</a>
-                    
-                </nav>
-            </div>
-        </div>
-    </div>
-</header>
-
-    <div id="body">
-        <div class="container">
-            <div class="col-group">
-
-                <div class="col-8" id="main">
-                    
-<div class="res-cons">
-    
-    <article class="post">
-        <header>
-            <h1 class="post-title">caddy-hugo-filebrowser搭建个人网站和后台管理</h1>
-        </header>
-        <date class="post-meta meta-date">
-            2019年9月6日
-        </date>
-        
-        <div class="post-meta">
-            <span>|</span>
-            
-            <span class="meta-category"><a href='../../categories/golang'>golang</a></span>
-            
-        </div>
-        
-        
-        <div class="post-meta">
-            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
-                    阅读</span></span>
-        </div>
-        
-        
-        <div class="post-content">
-            <p>使用caddy和hugo搭建个人网站</p>
-<p>功能：</p>
-<ul>
-<li>自动https</li>
-<li>自动响应git hook，运行hugo编译markdown</li>
-<li>开机启动服务</li>
-<li>docker部署</li>
-<li>网站后台管理</li>
-</ul>
-<p><em>假定安装过程在非root用户下</em></p>
-<h1 id="hugo">hugo</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 链接修改为自己需要的版本</span>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>caddy-hugo-filebrowser搭建个人网站和后台管理 | 一蓑烟雨任平生</title><meta property="og:title" content="caddy-hugo-filebrowser搭建个人网站和后台管理 - 一蓑烟雨任平生"><meta property="og:type" content="article"><meta property="article:published_time" content="2019-09-06T17:40:56+08:00"><meta property="article:modified_time" content="2019-09-06T17:40:56+08:00"><meta name=Keywords content="go,golang,go语言,博客,C,C++,mfc"><meta name=description content="caddy-hugo-filebrowser搭建个人网站和后台管理"><meta name=author content="风竹"><meta property="og:url" content="/post/website-caddy-hugo-filebrowser/"><link rel="shortcut icon" href=../../favicon.ico type=image/x-icon><link rel=stylesheet href=../../css/normalize.css><link rel=stylesheet href=../../css/style.css><script type=text/javascript src=//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js></script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=../../>一蓑烟雨任平生</a><p class=description>Go语言(golang)、C/C++、MFC开发者</p></div><div><nav id=nav-menu class=clearfix><a class=current href=../../>首页</a>
+<a href=../../about/ title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><article class=post><header><h1 class=post-title>caddy-hugo-filebrowser搭建个人网站和后台管理</h1></header><date class="post-meta meta-date">2019年9月6日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=../../categories/golang>golang</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><p>使用caddy和hugo搭建个人网站</p><p>功能：</p><ul><li>自动https</li><li>自动响应git hook，运行hugo编译markdown</li><li>开机启动服务</li><li>docker部署</li><li>网站后台管理</li></ul><p><em>假定安装过程在非root用户下</em></p><h1 id=hugo>hugo</h1><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 链接修改为自己需要的版本</span>
 wget https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz
 mkdir hugo
 tar xvfz hugo_0.56.3_Linux-64bit.tar.gz -C hugo
 cp hugo /usr/local/bin/
-<span style="color:#75715e"># 解压后的hugo默认权限为755，如果不是，修改一下权限</span>
-sudo chmod <span style="color:#ae81ff">755</span> /usr/local/bin/hugo
-</code></pre></div><h1 id="caddy">Caddy</h1>
-<h2 id="安装caddy">安装caddy</h2>
-<p>caddy<a href="https://caddyserver.com/download">下载页面</a></p>
-<p>[官方文档]https://caddyserver.com/docs</p>
-<p>选择git插件让caddy响应github的webhook</p>
-<h3 id="自动安装">自动安装</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 自动安装caddy</span>
+<span style=color:#75715e># 解压后的hugo默认权限为755，如果不是，修改一下权限</span>
+sudo chmod <span style=color:#ae81ff>755</span> /usr/local/bin/hugo
+</code></pre></div><h1 id=caddy>Caddy</h1><h2 id=安装caddy>安装caddy</h2><p>caddy<a href=https://caddyserver.com/download>下载页面</a></p><p>[官方文档]https://caddyserver.com/docs</p><p>选择git插件让caddy响应github的webhook</p><h3 id=自动安装>自动安装</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 自动安装caddy</span>
 curl https://getcaddy.com | bash -s personal http.git
-</code></pre></div><h3 id="手动安装">手动安装</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">wget https://caddyserver.com/download/linux/amd64?plugins<span style="color:#f92672">=</span>http.git&amp;license<span style="color:#f92672">=</span>personal&amp;telemetry<span style="color:#f92672">=</span>off
+</code></pre></div><h3 id=手动安装>手动安装</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>wget https://caddyserver.com/download/linux/amd64?plugins<span style=color:#f92672>=</span>http.git&amp;license<span style=color:#f92672>=</span>personal&amp;telemetry<span style=color:#f92672>=</span>off
 
 sudo cp /path/to/caddy /usr/local/bin
 sudo chown root:root /usr/local/bin/caddy
-sudo chmod <span style="color:#ae81ff">755</span> /usr/local/bin/caddy
-</code></pre></div><h2 id="配置caddy">配置caddy</h2>
-<p>不需要把caddy配置为服务的，请参考<a href="https://caddyserver.com/tutorial">Quick Start</a>、<a href="https://caddyserver.com/tutorial/beginner">Beginner Tutorial</a>或<a href="https://github.com/caddyserver/caddy">https://github.com/caddyserver/caddy</a>，简单快速启动网站服务</p>
-<p>linux下使用以下命令允许在非root用户下caddy绑定系统特权端口（e.g. 80, 443）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo setcap <span style="color:#e6db74">&#39;cap_net_bind_service=+ep&#39;</span> /usr/local/bin/caddy
+sudo chmod <span style=color:#ae81ff>755</span> /usr/local/bin/caddy
+</code></pre></div><h2 id=配置caddy>配置caddy</h2><p>不需要把caddy配置为服务的，请参考<a href=https://caddyserver.com/tutorial>Quick Start</a>、<a href=https://caddyserver.com/tutorial/beginner>Beginner Tutorial</a>或<a href=https://github.com/caddyserver/caddy>https://github.com/caddyserver/caddy</a>，简单快速启动网站服务</p><p>linux下使用以下命令允许在非root用户下caddy绑定系统特权端口（e.g. 80, 443）</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo setcap <span style=color:#e6db74>&#39;cap_net_bind_service=+ep&#39;</span> /usr/local/bin/caddy
 或
-sudo setcap cap_net_bind_service<span style="color:#f92672">=</span>+ep <span style="color:#66d9ef">$(</span>which caddy<span style="color:#66d9ef">)</span>
-</code></pre></div><p>为了安全考虑，caddy不推荐在root用户下运行</p>
-<h3 id="添加用户">添加用户</h3>
-<p>如果组id或用户id重复，可自行选择其他id</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo groupadd -g <span style="color:#ae81ff">333</span> www-data
-sudo useradd <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -g www-data --no-user-group <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  --home-dir /var/www --no-create-home <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  --shell /usr/sbin/nologin <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  --system --uid <span style="color:#ae81ff">333</span> www-data
-</code></pre></div><h3 id="caddyfile">Caddyfile</h3>
-<p>caddy可通过命令参数指定配置项启动运行，也可以通过配置文件启动，caddy的配置文件名称固定为Caddyfile，放置在网站根目录不同网站使用不同的Caddyfile或者放置在/etc/caddy/Caddyfile，多个网站共用同一个Caddyfile</p>
-<p><strong>Caddyfile放置在/etc/caddy/Caddyfile</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo mkdir /etc/caddy
+sudo setcap cap_net_bind_service<span style=color:#f92672>=</span>+ep <span style=color:#66d9ef>$(</span>which caddy<span style=color:#66d9ef>)</span>
+</code></pre></div><p>为了安全考虑，caddy不推荐在root用户下运行</p><h3 id=添加用户>添加用户</h3><p>如果组id或用户id重复，可自行选择其他id</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo groupadd -g <span style=color:#ae81ff>333</span> www-data
+sudo useradd <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -g www-data --no-user-group <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --home-dir /var/www --no-create-home <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --shell /usr/sbin/nologin <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --system --uid <span style=color:#ae81ff>333</span> www-data
+</code></pre></div><h3 id=caddyfile>Caddyfile</h3><p>caddy可通过命令参数指定配置项启动运行，也可以通过配置文件启动，caddy的配置文件名称固定为Caddyfile，放置在网站根目录不同网站使用不同的Caddyfile或者放置在/etc/caddy/Caddyfile，多个网站共用同一个Caddyfile</p><p><strong>Caddyfile放置在/etc/caddy/Caddyfile</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo mkdir /etc/caddy
 sudo chown -R root:root /etc/caddy
 
-<span style="color:#75715e"># 复制已有的Caddyfile或新建</span>
+<span style=color:#75715e># 复制已有的Caddyfile或新建</span>
 sudo cp /path/to/Caddyfile /etc/caddy/
 sudo touch /etc/caddy/Caddyfile
 
 sudo chown root:root /etc/caddy/Caddyfile
-sudo chmod <span style="color:#ae81ff">644</span> /etc/caddy/Caddyfile
-</code></pre></div><p>Caddyfile配置信息</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">example.com <span style="color:#f92672">{</span>
+sudo chmod <span style=color:#ae81ff>644</span> /etc/caddy/Caddyfile
+</code></pre></div><p>Caddyfile配置信息</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>example.com <span style=color:#f92672>{</span>
     root /var/www/website
-    log /var/log/caddy/access.log <span style="color:#f92672">{</span>
-        rotate_size <span style="color:#ae81ff">50</span>  <span style="color:#75715e"># 50M以后轮转</span>
-    <span style="color:#f92672">}</span>
-    errors /var/log/caddy/errors.log <span style="color:#f92672">{</span>
-        rotate_size <span style="color:#ae81ff">50</span>  <span style="color:#75715e"># 50M以后轮转</span>
-    <span style="color:#f92672">}</span>
-    git <span style="color:#f92672">{</span>
-        <span style="color:#75715e"># hugo网站目录托管仓库</span>
+    log /var/log/caddy/access.log <span style=color:#f92672>{</span>
+        rotate_size <span style=color:#ae81ff>50</span>  <span style=color:#75715e># 50M以后轮转</span>
+    <span style=color:#f92672>}</span>
+    errors /var/log/caddy/errors.log <span style=color:#f92672>{</span>
+        rotate_size <span style=color:#ae81ff>50</span>  <span style=color:#75715e># 50M以后轮转</span>
+    <span style=color:#f92672>}</span>
+    git <span style=color:#f92672>{</span>
+        <span style=color:#75715e># hugo网站目录托管仓库</span>
         repo https://github.com/githubusername/mysite
-        <span style="color:#75715e"># 使用key 托管仓库可以设置为私有但是要修改key的权限</span>
-        <span style="color:#75715e"># key $HOME/.ssh/id_rsa</span>
-        <span style="color:#75715e"># --recurse-submodules 目录包含有子模块</span>
+        <span style=color:#75715e># 使用key 托管仓库可以设置为私有但是要修改key的权限</span>
+        <span style=color:#75715e># key $HOME/.ssh/id_rsa</span>
+        <span style=color:#75715e># --recurse-submodules 目录包含有子模块</span>
         clone_args --recurse-submodules
         pull_args --recurse-submodules
-        <span style="color:#75715e"># 放置仓库的路径，相对于网站根目录，默认是网站根目录</span>
+        <span style=color:#75715e># 放置仓库的路径，相对于网站根目录，默认是网站根目录</span>
         path /var/www/mysite
-        <span style="color:#75715e"># git web hook 路径 口令</span>
+        <span style=color:#75715e># git web hook 路径 口令</span>
         hook /webhook xxxxxx
-        <span style="color:#75715e"># 成功拉取后执行的命令</span>
-        <span style="color:#66d9ef">then</span> hugo -s /var/www/mysite -d /var/www/website --logFile /var/log/hugo/hugo.log
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
+        <span style=color:#75715e># 成功拉取后执行的命令</span>
+        <span style=color:#66d9ef>then</span> hugo -s /var/www/mysite -d /var/www/website --logFile /var/log/hugo/hugo.log
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
 
-<span style="color:#75715e"># 重定向www到example.com</span>
-www.example.com <span style="color:#f92672">{</span>
-    redir https://example.com<span style="color:#f92672">{</span>uri<span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><h3 id="ssl配置信息">ssl配置信息</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo mkdir /etc/ssl/caddy
+<span style=color:#75715e># 重定向www到example.com</span>
+www.example.com <span style=color:#f92672>{</span>
+    redir https://example.com<span style=color:#f92672>{</span>uri<span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=ssl配置信息>ssl配置信息</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo mkdir /etc/ssl/caddy
 sudo chown -R root:www-data /etc/ssl/caddy
-sudo chmod <span style="color:#ae81ff">0770</span> /etc/ssl/caddy
-</code></pre></div><h3 id="日志文件">日志文件</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo mkdir /var/log/caddy
+sudo chmod <span style=color:#ae81ff>0770</span> /etc/ssl/caddy
+</code></pre></div><h3 id=日志文件>日志文件</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo mkdir /var/log/caddy
 sudo touch /var/log/caddy/caddy.log
 sudo touch /var/log/caddy/access.log
 
@@ -191,57 +73,33 @@ sudo mkdir /var/log/hugo
 sudo touch /var/log/hugo/hugo.log
 
 sudo chown -R www-data:www-data /var/log/caddy
-sudo chmod -R <span style="color:#ae81ff">0775</span> /var/log/caddy
+sudo chmod -R <span style=color:#ae81ff>0775</span> /var/log/caddy
 
 sudo chown -R www-data :www-data /var/log/caddy
-sudo chmod -R <span style="color:#ae81ff">0775</span> /var/log/hugo
-</code></pre></div><h2 id="配置网站">配置网站</h2>
-<h3 id="网站根目录">网站根目录</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo mkdir /var/www
+sudo chmod -R <span style=color:#ae81ff>0775</span> /var/log/hugo
+</code></pre></div><h2 id=配置网站>配置网站</h2><h3 id=网站根目录>网站根目录</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo mkdir /var/www
 sudo chown www-data:www-data /var/www
-sudo chmod <span style="color:#ae81ff">555</span> /var/www
+sudo chmod <span style=color:#ae81ff>555</span> /var/www
 
-<span style="color:#75715e"># caddy不会自动创建网站根目录 复制已有网站目录到/var/www/或者新建一个根目录</span>
+<span style=color:#75715e># caddy不会自动创建网站根目录 复制已有网站目录到/var/www/或者新建一个根目录</span>
 sudo cp -R example.com /var/www/
 或
 sudo mkdir /var/www/example.com
 
 sudo chown -R www-data:www-data /var/www/example.com
-sudo chmod -R <span style="color:#ae81ff">555</span> /var/www/example.com
-</code></pre></div><h2 id="安装caddy为系统服务">安装caddy为系统服务</h2>
-<p><strong>检查系统自启动控制方式</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 检查系统自启动方式</span>
+sudo chmod -R <span style=color:#ae81ff>555</span> /var/www/example.com
+</code></pre></div><h2 id=安装caddy为系统服务>安装caddy为系统服务</h2><p><strong>检查系统自启动控制方式</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 检查系统自启动方式</span>
 Linux系统目前存在的三种系统初始化控制方式，对应的配置文件目录分别为
 /usr/lib/systemd systemd方式
 /usr/share/upstart Upstart方式
 /etc/init.d SysVinit方式（sysvinit 就是 system V 风格的 init 系统）
-</code></pre></div><p>详细介绍三个体系：Sysvinit、Upstart、Systemd</p>
-<p>Sysvinit：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html</p>
-<p>Upstart：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html</p>
-<p>Systemd：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html</p>
-<h3 id="caddy-hookservice-插件安装">caddy hook.service 插件安装</h3>
-<p>下载页面选择hook.service插件，该插件没有经过完整的测试，可能存在某些问题。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">curl https://getcaddy.com | bash -s personal hook.service,http.git
-</code></pre></div><p>hook.service的<a href="https://github.com/hacdias/caddy-service/blob/master/README.md">使用方法</a>：</p>
-<p>-name 项指定服务的名称，默认是caddy，如果指定了名字，每次运行<code>caddy -service</code>命令时，需要指定服务的名字</p>
-<p>使用<code>caddy -service install</code>安装会根据不同系统类型自动创建启动配置</p>
-<p><strong>Install a Caddy service:</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">caddy -service install -agree -email myemail@email.com -conf /path/to/Caddyfile <span style="color:#f92672">[</span>-name optionalServiceName<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-option optionValue<span style="color:#f92672">]</span>
-</code></pre></div><p><strong>Uninstall a Caddy service:</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">caddy -service uninstall <span style="color:#f92672">[</span>-name optionalName<span style="color:#f92672">]</span>
-</code></pre></div><p><strong>Start a Caddy service:</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">caddy -service start <span style="color:#f92672">[</span>-name optionalName<span style="color:#f92672">]</span>
-</code></pre></div><p><strong>Stop a Caddy service:</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">caddy -service stop <span style="color:#f92672">[</span>-name optionalName<span style="color:#f92672">]</span>
-</code></pre></div><p><strong>Restart a Caddy service:</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">caddy -service restart <span style="color:#f92672">[</span>-name optionalName<span style="color:#f92672">]</span>
-</code></pre></div><h3 id="upstart-模式安装">upstart 模式安装</h3>
-<p>CentOS release 6.10 只支持Sysvinit</p>
-<h4 id="安装步骤">安装步骤</h4>
-<p><a href="https://github.com/caddyserver/caddy/tree/master/dist/init/linux-upstart">Upstart conf for Caddy</a></p>
-<p><a href="https://denbeke.be/blog/servers/running-caddy-server-as-a-service/">Running Caddy Server as a service with Upstart</a></p>
-<p>CentOS 安装问题</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># service caddy start</span>
+</code></pre></div><p>详细介绍三个体系：Sysvinit、Upstart、Systemd</p><p>Sysvinit：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html</p><p>Upstart：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html</p><p>Systemd：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html</p><h3 id=caddy-hookservice-插件安装>caddy hook.service 插件安装</h3><p>下载页面选择hook.service插件，该插件没有经过完整的测试，可能存在某些问题。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl https://getcaddy.com | bash -s personal hook.service,http.git
+</code></pre></div><p>hook.service的<a href=https://github.com/hacdias/caddy-service/blob/master/README.md>使用方法</a>：</p><p>-name 项指定服务的名称，默认是caddy，如果指定了名字，每次运行<code>caddy -service</code>命令时，需要指定服务的名字</p><p>使用<code>caddy -service install</code>安装会根据不同系统类型自动创建启动配置</p><p><strong>Install a Caddy service:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>caddy -service install -agree -email myemail@email.com -conf /path/to/Caddyfile <span style=color:#f92672>[</span>-name optionalServiceName<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-option optionValue<span style=color:#f92672>]</span>
+</code></pre></div><p><strong>Uninstall a Caddy service:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>caddy -service uninstall <span style=color:#f92672>[</span>-name optionalName<span style=color:#f92672>]</span>
+</code></pre></div><p><strong>Start a Caddy service:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>caddy -service start <span style=color:#f92672>[</span>-name optionalName<span style=color:#f92672>]</span>
+</code></pre></div><p><strong>Stop a Caddy service:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>caddy -service stop <span style=color:#f92672>[</span>-name optionalName<span style=color:#f92672>]</span>
+</code></pre></div><p><strong>Restart a Caddy service:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>caddy -service restart <span style=color:#f92672>[</span>-name optionalName<span style=color:#f92672>]</span>
+</code></pre></div><h3 id=upstart-模式安装>upstart 模式安装</h3><p>CentOS release 6.10 只支持Sysvinit</p><h4 id=安装步骤>安装步骤</h4><p><a href=https://github.com/caddyserver/caddy/tree/master/dist/init/linux-upstart>Upstart conf for Caddy</a></p><p><a href=https://denbeke.be/blog/servers/running-caddy-server-as-a-service/>Running Caddy Server as a service with Upstart</a></p><p>CentOS 安装问题</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span><span style=color:#75715e># service caddy start</span>
 Starting caddy
 /etc/init.d/caddy: line 52: start-stop-daemon: command not found
 
@@ -249,483 +107,218 @@ Starting caddy
 https://blog.csdn.net/wh211212/article/details/53523457
 
 安装 start-stop-daemon 又需要
-checking <span style="color:#66d9ef">for</span> perl &gt;<span style="color:#f92672">=</span> 5.20.2... configure: error: cannot find perl &gt;<span style="color:#f92672">=</span> 5.20.2
+checking <span style=color:#66d9ef>for</span> perl &gt;<span style=color:#f92672>=</span> 5.20.2... configure: error: cannot find perl &gt;<span style=color:#f92672>=</span> 5.20.2
 
 又需要安装perl
 耐心已耗完
-正在安装Centos <span style="color:#ae81ff">7</span> …… ^_^
-</code></pre></div><h4 id="启动运行">启动运行</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo service caddy start|stop|restart
-</code></pre></div><h3 id="systemd-模式安装">systemd 模式安装</h3>
-<h4 id="安装步骤-1">安装步骤</h4>
-<p><a href="https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd">systemd Service Unit for Caddy</a></p>
-<p><a href="https://denbeke.be/blog/servers/running-caddy-server-as-a-service-with-systemd/">Running Caddy Server as a service with systemd</a></p>
-<h4 id="启动运行-1">启动运行</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 启用服务开机启动</span>
+正在安装Centos <span style=color:#ae81ff>7</span> …… ^_^
+</code></pre></div><h4 id=启动运行>启动运行</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo service caddy start|stop|restart
+</code></pre></div><h3 id=systemd-模式安装>systemd 模式安装</h3><h4 id=安装步骤-1>安装步骤</h4><p><a href=https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd>systemd Service Unit for Caddy</a></p><p><a href=https://denbeke.be/blog/servers/running-caddy-server-as-a-service-with-systemd/>Running Caddy Server as a service with systemd</a></p><h4 id=启动运行-1>启动运行</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 启用服务开机启动</span>
 sudo systemctl enable caddy.service
 
-<span style="color:#75715e"># 关闭服务开机启动</span>
+<span style=color:#75715e># 关闭服务开机启动</span>
 sudo systemctl disable caddy.service
 
-<span style="color:#75715e"># 启动服务</span>
+<span style=color:#75715e># 启动服务</span>
 sudo systemctl start caddy.service
 
-<span style="color:#75715e"># 重启服务</span>
+<span style=color:#75715e># 重启服务</span>
 sudo systemctl restart caddy.service
 
-<span style="color:#75715e"># 关闭服务</span>
+<span style=color:#75715e># 关闭服务</span>
 sudo systemctl stop caddy.service
-</code></pre></div><h3 id="sysvinit-模式安装">sysvinit 模式安装</h3>
-<p>暂未尝试</p>
-<p>如果启动后出现或其他错误，先使用</p>
-<pre><code>/usr/local/bin/caddy -conf /etc/caddy/Caddyfile 
+</code></pre></div><h3 id=sysvinit-模式安装>sysvinit 模式安装</h3><p>暂未尝试</p><p>如果启动后出现或其他错误，先使用</p><pre><code>/usr/local/bin/caddy -conf /etc/caddy/Caddyfile 
 查看错误原因
 </code></pre><pre><code>Nov 11 04:10:30 localhost.localdomain systemd[1]: Started Caddy HTTP/2 web server.
 Nov 11 04:10:30 localhost.localdomain systemd[1]: caddy.service: main process exited, code=exited, status=2/INVALIDARGUMENT
 Nov 11 04:10:30 localhost.localdomain systemd[1]: Unit caddy.service entered failed state.
 Nov 11 04:10:30 localhost.localdomain systemd[1]: caddy.service failed.
-</code></pre><h1 id="filebrowser实现文件浏览和后台管理">filebrowser实现文件浏览和后台管理</h1>
-<p>官方文档：https://filebrowser.xyz/</p>
-<h2 id="安装">安装</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl -fsSL https://filebrowser.xyz/get.sh | bash
+</code></pre><h1 id=filebrowser实现文件浏览和后台管理>filebrowser实现文件浏览和后台管理</h1><p>官方文档：https://filebrowser.xyz/</p><h2 id=安装>安装</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>curl -fsSL https://filebrowser.xyz/get.sh | bash
 filebrowser -r /path/to/your/files
-</code></pre></div><h2 id="filebrowser配置">filebrowser配置</h2>
-<p>参考：https://filebrowser.xyz/cli/filebrowser</p>
-<p>filebrowser支持不使用配置直接运行</p>
-<p><strong>指定配置文件</strong></p>
-<p>配置文件的名字必须是<code>.filebrowser</code>，扩展名可以是json、toml、yaml、yml四种任意一个</p>
-<p>配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一</p>
-<h3 id="toml配置-物理机部署使用">toml配置 物理机部署使用</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># docker filebrowser config file</span>
-<span style="color:#75715e">#log = &#34;/var/log/filebrowser/filebrowser.log&#34;</span>
-<span style="color:#a6e22e">database</span> = <span style="color:#e6db74">&#34;/etc/filebrowser/filebrowser.db&#34;</span>
-<span style="color:#75715e"># 默认绑定地址是127.0.0.1 只能本机访问 如果外部网络访问 设置为0,0,0,0</span>
-<span style="color:#a6e22e">address</span> =<span style="color:#e6db74">&#34;0.0.0.0&#34;</span>
-<span style="color:#a6e22e">port</span> = <span style="color:#ae81ff">9000</span>
-<span style="color:#a6e22e">root</span> = <span style="color:#e6db74">&#34;/var/filebrowser/mysite&#34;</span>
-<span style="color:#a6e22e">baseurl</span> = <span style="color:#960050;background-color:#1e0010">&#34;/</span><span style="color:#a6e22e">manager</span>
-</code></pre></div><h3 id="json配置-docker使用">json配置 docker使用</h3>
-<p><a href="https://filebrowser.xyz/installation#docker">官方docker镜像</a>的 Dockerfile里filebrowser的配置文件是json类型，docker启动挂载的配置文件也必须是json类型</p>
-<p>address必须是0.0.0.0 默认是localhost</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">9001</span>,
-  <span style="color:#f92672">&#34;baseURL&#34;</span>: <span style="color:#e6db74">&#34;/manager&#34;</span>,
-  <span style="color:#f92672">&#34;address&#34;</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
-  <span style="color:#f92672">&#34;log&#34;</span>: <span style="color:#e6db74">&#34;stdout&#34;</span>,
-  <span style="color:#f92672">&#34;database&#34;</span>: <span style="color:#e6db74">&#34;/database.db&#34;</span>,
-  <span style="color:#f92672">&#34;root&#34;</span>: <span style="color:#e6db74">&#34;/srv&#34;</span>
+</code></pre></div><h2 id=filebrowser配置>filebrowser配置</h2><p>参考：https://filebrowser.xyz/cli/filebrowser</p><p>filebrowser支持不使用配置直接运行</p><p><strong>指定配置文件</strong></p><p>配置文件的名字必须是<code>.filebrowser</code>，扩展名可以是json、toml、yaml、yml四种任意一个</p><p>配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一</p><h3 id=toml配置-物理机部署使用>toml配置 物理机部署使用</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml><span style=color:#75715e># docker filebrowser config file</span>
+<span style=color:#75715e>#log = &#34;/var/log/filebrowser/filebrowser.log&#34;</span>
+<span style=color:#a6e22e>database</span> = <span style=color:#e6db74>&#34;/etc/filebrowser/filebrowser.db&#34;</span>
+<span style=color:#75715e># 默认绑定地址是127.0.0.1 只能本机访问 如果外部网络访问 设置为0,0,0,0</span>
+<span style=color:#a6e22e>address</span> =<span style=color:#e6db74>&#34;0.0.0.0&#34;</span>
+<span style=color:#a6e22e>port</span> = <span style=color:#ae81ff>9000</span>
+<span style=color:#a6e22e>root</span> = <span style=color:#e6db74>&#34;/var/filebrowser/mysite&#34;</span>
+<span style=color:#a6e22e>baseurl</span> = <span style=color:#960050;background-color:#1e0010>&#34;/</span><span style=color:#a6e22e>manager</span>
+</code></pre></div><h3 id=json配置-docker使用>json配置 docker使用</h3><p><a href=https://filebrowser.xyz/installation#docker>官方docker镜像</a>的 Dockerfile里filebrowser的配置文件是json类型，docker启动挂载的配置文件也必须是json类型</p><p>address必须是0.0.0.0 默认是localhost</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;port&#34;</span>: <span style=color:#ae81ff>9001</span>,
+  <span style=color:#f92672>&#34;baseURL&#34;</span>: <span style=color:#e6db74>&#34;/manager&#34;</span>,
+  <span style=color:#f92672>&#34;address&#34;</span>: <span style=color:#e6db74>&#34;0.0.0.0&#34;</span>,
+  <span style=color:#f92672>&#34;log&#34;</span>: <span style=color:#e6db74>&#34;stdout&#34;</span>,
+  <span style=color:#f92672>&#34;database&#34;</span>: <span style=color:#e6db74>&#34;/database.db&#34;</span>,
+  <span style=color:#f92672>&#34;root&#34;</span>: <span style=color:#e6db74>&#34;/srv&#34;</span>
 }
-</code></pre></div><h3 id="web配置">web配置</h3>
-<h4 id="配置事件命令">配置事件命令</h4>
-<p>参考：https://filebrowser.xyz/configuration/command-runner</p>
-<p>filebrowser启动后可通过web页面修改密码、管理用户权限和指定某个事件后运行命令</p>
-<p>Command runner里可以指定以下四个事件发生时执行的命令（不包括Save事件，文件修改后保存执行的是Updload事件）</p>
-<p>Copy<br>
-Rename<br>
-Upload<br>
-Delete<br>
-<del>Save</del></p>
-<p>如果要使用变量，需设置一下配置</p>
-<p><strong>Global Settings &ndash; Execute on shell</strong>：配置里指定要使用的shell<code>bash -c</code></p>
-<p>命令中可以使用filebrowser内置的以下环境变量</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">FILE        改动文件的绝对路径
+</code></pre></div><h3 id=web配置>web配置</h3><h4 id=配置事件命令>配置事件命令</h4><p>参考：https://filebrowser.xyz/configuration/command-runner</p><p>filebrowser启动后可通过web页面修改密码、管理用户权限和指定某个事件后运行命令</p><p>Command runner里可以指定以下四个事件发生时执行的命令（不包括Save事件，文件修改后保存执行的是Updload事件）</p><p>Copy<br>Rename<br>Upload<br>Delete<br><del>Save</del></p><p>如果要使用变量，需设置一下配置</p><p><strong>Global Settings &ndash; Execute on shell</strong>：配置里指定要使用的shell<code>bash -c</code></p><p>命令中可以使用filebrowser内置的以下环境变量</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>FILE        改动文件的绝对路径
 SCOPE       当前用户的用户目录路径
 TRIGGER     事件名
 USERNAME    当前用户的用户名
 DESTINATION 目标位置的绝对路径，只在copy和rename时有效
-</code></pre></div><p>修改文件后执行git推送</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git pull
+</code></pre></div><p>修改文件后执行git推送</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>git pull
 git add $FILE
-git commit -m<span style="color:#e6db74">&#34;add or modify post&#34;</span>
+git commit -m<span style=color:#e6db74>&#34;add or modify post&#34;</span>
 git push
-</code></pre></div><p>默认命令是阻塞执行，如果需要非阻塞运行，在命令前面添加<code>&amp;</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">&amp;git pull
+</code></pre></div><p>默认命令是阻塞执行，如果需要非阻塞运行，在命令前面添加<code>&</code></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>&amp;git pull
 &amp;git add $FILE
-&amp;git commit -m<span style="color:#e6db74">&#34;add or modify post&#34;</span>
+&amp;git commit -m<span style=color:#e6db74>&#34;add or modify post&#34;</span>
 &amp;git push
-</code></pre></div><p><strong>注意：</strong></p>
-<p>filebrowser命令执行时的当前目录是程序启动的目录</p>
-<p>如果在docker里运行，工作目录是<code>/</code>，需要在<a href="https://github.com/filebrowser/filebrowser/blob/master/Dockerfile">官方Dockerfile</a>里添加<code>WORKDIR /path/to/workdir</code>指定工作目录</p>
-<p>为了方便查看修改文件，我直接在文件目录后台运行的filebrowser</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">(</span>filebrowser -c /home/ljc/websiteconf/filebrowser.toml &gt; /var/log/filebrowser/filebrowser.log 2&gt;&amp;<span style="color:#ae81ff">1</span> &amp;<span style="color:#f92672">)</span>
-</code></pre></div><h2 id="系统服务">系统服务</h2>
-<p>systemd 模式</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>Unit<span style="color:#f92672">]</span>
-Description<span style="color:#f92672">=</span>File Browser
-After<span style="color:#f92672">=</span>network.target
+</code></pre></div><p><strong>注意：</strong></p><p>filebrowser命令执行时的当前目录是程序启动的目录</p><p>如果在docker里运行，工作目录是<code>/</code>，需要在<a href=https://github.com/filebrowser/filebrowser/blob/master/Dockerfile>官方Dockerfile</a>里添加<code>WORKDIR /path/to/workdir</code>指定工作目录</p><p>为了方便查看修改文件，我直接在文件目录后台运行的filebrowser</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#f92672>(</span>filebrowser -c /home/ljc/websiteconf/filebrowser.toml &gt; /var/log/filebrowser/filebrowser.log 2&gt;&amp;<span style=color:#ae81ff>1</span> &amp;<span style=color:#f92672>)</span>
+</code></pre></div><h2 id=系统服务>系统服务</h2><p>systemd 模式</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#f92672>[</span>Unit<span style=color:#f92672>]</span>
+Description<span style=color:#f92672>=</span>File Browser
+After<span style=color:#f92672>=</span>network.target
 
-<span style="color:#f92672">[</span>Service<span style="color:#f92672">]</span>
-ExecStart<span style="color:#f92672">=</span>/usr/local/bin/filebrowser
+<span style=color:#f92672>[</span>Service<span style=color:#f92672>]</span>
+ExecStart<span style=color:#f92672>=</span>/usr/local/bin/filebrowser
 
-<span style="color:#f92672">[</span>Install<span style="color:#f92672">]</span>
-WantedBy<span style="color:#f92672">=</span>multi-user.target
-</code></pre></div><p>如果不想使用默认配置文件路径，在<code>ExecStart=/usr/local/bin/filebrowser</code>后面通过命令选项指定配置</p>
-<h1 id="docker部署">docker部署</h1>
-<h2 id="caddyhugo">caddy+hugo</h2>
-<p>下载caddy+hugo镜像</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker pull windzhu0514/caddy-hugo
-</code></pre></div><p>或者从Dockerfile编译</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">FROM alpine
+<span style=color:#f92672>[</span>Install<span style=color:#f92672>]</span>
+WantedBy<span style=color:#f92672>=</span>multi-user.target
+</code></pre></div><p>如果不想使用默认配置文件路径，在<code>ExecStart=/usr/local/bin/filebrowser</code>后面通过命令选项指定配置</p><h1 id=docker部署>docker部署</h1><h2 id=caddyhugo>caddy+hugo</h2><p>下载caddy+hugo镜像</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>docker pull windzhu0514/caddy-hugo
+</code></pre></div><p>或者从Dockerfile编译</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>FROM alpine
 MAINTAINER ljc &lt;windzhu0514@163.com&gt;
 
-RUN apk update <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    apk add git curl bash <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    curl https://getcaddy.com | bash -s personal http.git <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    apk add hugo <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    <span style="color:#75715e"># hugo not create the log dir,caddy not create access.log dir</span>
-    mkdir /var/log/hugo <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    mkdir /var/log/caddy <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    apk del curl bash wget
+RUN apk update <span style=color:#f92672>&amp;&amp;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    apk add git curl bash <span style=color:#f92672>&amp;&amp;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    curl https://getcaddy.com | bash -s personal http.git <span style=color:#f92672>&amp;&amp;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    apk add hugo <span style=color:#f92672>&amp;&amp;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    <span style=color:#75715e># hugo not create the log dir,caddy not create access.log dir</span>
+    mkdir /var/log/hugo <span style=color:#f92672>&amp;&amp;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    mkdir /var/log/caddy <span style=color:#f92672>&amp;&amp;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    apk del curl bash wget
 
 ADD ./Caddyfile /etc/caddy/Caddyfile
 
-EXPOSE <span style="color:#ae81ff">9000</span>
+EXPOSE <span style=color:#ae81ff>9000</span>
 
-ENTRYPOINT <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;caddy&#34;</span>,<span style="color:#e6db74">&#34;-conf&#34;</span>,<span style="color:#e6db74">&#34;/etc/caddy/Caddyfile&#34;</span><span style="color:#f92672">]</span>
-</code></pre></div><p>启动服务</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo docker run -d -p 9000:9000 --name alpine-website-d  windzhu0514/caddy-hugo:0.0.3
+ENTRYPOINT <span style=color:#f92672>[</span><span style=color:#e6db74>&#34;caddy&#34;</span>,<span style=color:#e6db74>&#34;-conf&#34;</span>,<span style=color:#e6db74>&#34;/etc/caddy/Caddyfile&#34;</span><span style=color:#f92672>]</span>
+</code></pre></div><p>启动服务</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>sudo docker run -d -p 9000:9000 --name alpine-website-d  windzhu0514/caddy-hugo:0.0.3
 </code></pre></div><p>浏览器输入https://ip:9000访问网站，如果提示<code>404 Site [ip:port] is not served on this interface</code>
-容器里caddy监听外网无法访问 修改Caddyfile站点地址为<code>:9000</code></p>
-<h2 id="filebrowser">filebrowser</h2>
-<p>容器中的目录可以不必和例子相同，但是配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一（参考<a href="https://filebrowser.xyz/cli/filebrowser">.filebrowser </a>）</p>
-<p>启动filebrowser</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo docker run -d --restart<span style="color:#f92672">=</span>always --name filebrowser <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>-v /var/filebrowser/mysite:/srv <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>-v /etc/filebrowser/filebrowser.db:/database.db <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>-v /etc/filebrowser/.filebrowser.json:/.filebrowser.json <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>-p 9001:9001  filebrowser/filebrowser
-</code></pre></div><h1 id="代理网站">代理网站</h1>
-<h2 id="为什么要代理">为什么要代理</h2>
-<p>域名指向中国大陆境内服务器且开通Web服务时需要备案。域名指向中国大陆境外服务器（例如中国香港等大陆境外）不需要备案。首次备案时间需要一周到一个月才能完成，如果更换了服务器，需要修改备案信息。如果手里有境外服务器，域名绑定到境外服务器服务器，如果境外服务器性能较低，可以把网站部署在境内服务器，由境外服务器跳转到境内服务器。</p>
-<h2 id="代理配置">代理配置</h2>
-<p>境外服务器的代理依然使用强大的caddy，配置如下</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">ljc.space <span style="color:#f92672">{</span>
-    log /var/log/caddy/access.log <span style="color:#f92672">{</span>
-        rotate_size <span style="color:#ae81ff">50</span>  <span style="color:#75715e"># 50M以后轮转</span>
-    <span style="color:#f92672">}</span>
-    errors /var/log/caddy/errors.log <span style="color:#f92672">{</span>
-        rotate_size <span style="color:#ae81ff">50</span>  <span style="color:#75715e"># 50M以后轮转</span>
-    <span style="color:#f92672">}</span>
+容器里caddy监听外网无法访问 修改Caddyfile站点地址为<code>:9000</code></p><h2 id=filebrowser>filebrowser</h2><p>容器中的目录可以不必和例子相同，但是配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一（参考<a href=https://filebrowser.xyz/cli/filebrowser>.filebrowser </a>）</p><p>启动filebrowser</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>sudo docker run -d --restart<span style=color:#f92672>=</span>always --name filebrowser <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>-v /var/filebrowser/mysite:/srv <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>-v /etc/filebrowser/filebrowser.db:/database.db <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>-v /etc/filebrowser/.filebrowser.json:/.filebrowser.json <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>-p 9001:9001  filebrowser/filebrowser
+</code></pre></div><h1 id=代理网站>代理网站</h1><h2 id=为什么要代理>为什么要代理</h2><p>域名指向中国大陆境内服务器且开通Web服务时需要备案。域名指向中国大陆境外服务器（例如中国香港等大陆境外）不需要备案。首次备案时间需要一周到一个月才能完成，如果更换了服务器，需要修改备案信息。如果手里有境外服务器，域名绑定到境外服务器服务器，如果境外服务器性能较低，可以把网站部署在境内服务器，由境外服务器跳转到境内服务器。</p><h2 id=代理配置>代理配置</h2><p>境外服务器的代理依然使用强大的caddy，配置如下</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>ljc.space <span style=color:#f92672>{</span>
+    log /var/log/caddy/access.log <span style=color:#f92672>{</span>
+        rotate_size <span style=color:#ae81ff>50</span>  <span style=color:#75715e># 50M以后轮转</span>
+    <span style=color:#f92672>}</span>
+    errors /var/log/caddy/errors.log <span style=color:#f92672>{</span>
+        rotate_size <span style=color:#ae81ff>50</span>  <span style=color:#75715e># 50M以后轮转</span>
+    <span style=color:#f92672>}</span>
     proxy / https://windzhu0514.github.io
-    proxy /elf 国内ip:9200 <span style="color:#f92672">{</span>
+    proxy /elf 国内ip:9200 <span style=color:#f92672>{</span>
         without /elf
-    <span style="color:#f92672">}</span>
+    <span style=color:#f92672>}</span>
 
-    proxy /elf/ws 国内ip:9200 <span style="color:#f92672">{</span>
+    proxy /elf/ws 国内ip:9200 <span style=color:#f92672>{</span>
         without /elf
         websocket
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
 
-www.ljc.space <span style="color:#f92672">{</span>
-    redir https://ljc.space<span style="color:#f92672">{</span>uri<span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><h2 id="代理服务开机启动">代理服务开机启动</h2>
-<p>代理服务启动脚本修改自官方systemd启动脚本：https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd</p>
-<p>修改的内容：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">修改
-StartLimitIntervalSec<span style="color:#f92672">=</span><span style="color:#ae81ff">14400</span>
-StartLimitBurst<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
+www.ljc.space <span style=color:#f92672>{</span>
+    redir https://ljc.space<span style=color:#f92672>{</span>uri<span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h2 id=代理服务开机启动>代理服务开机启动</h2><p>代理服务启动脚本修改自官方systemd启动脚本：https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd</p><p>修改的内容：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>修改
+StartLimitIntervalSec<span style=color:#f92672>=</span><span style=color:#ae81ff>14400</span>
+StartLimitBurst<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>
 为
-StartLimitInterval<span style="color:#f92672">=</span><span style="color:#ae81ff">14400</span>
-StartLimitBurst<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
-并由<span style="color:#f92672">[</span>Unit<span style="color:#f92672">]</span>下移到<span style="color:#f92672">[</span>Service<span style="color:#f92672">]</span>下
+StartLimitInterval<span style=color:#f92672>=</span><span style=color:#ae81ff>14400</span>
+StartLimitBurst<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>
+并由<span style=color:#f92672>[</span>Unit<span style=color:#f92672>]</span>下移到<span style=color:#f92672>[</span>Service<span style=color:#f92672>]</span>下
 
 修改
 ; User and group the process will run as.
-User<span style="color:#f92672">=</span>www-data
-Group<span style="color:#f92672">=</span>www-data
+User<span style=color:#f92672>=</span>www-data
+Group<span style=color:#f92672>=</span>www-data
 为
 ; User and group the process will run as.
-User<span style="color:#f92672">=</span>root
-Group<span style="color:#f92672">=</span>root
+User<span style=color:#f92672>=</span>root
+Group<span style=color:#f92672>=</span>root
 
 修改
-ReadWritePaths<span style="color:#f92672">=</span>/etc/ssl/caddy
-ReadWriteDirectories<span style="color:#f92672">=</span>/etc/ssl/caddy
+ReadWritePaths<span style=color:#f92672>=</span>/etc/ssl/caddy
+ReadWriteDirectories<span style=color:#f92672>=</span>/etc/ssl/caddy
 为
-;ReadWritePaths<span style="color:#f92672">=</span>/etc/ssl/caddy
-ReadWriteDirectories<span style="color:#f92672">=</span>/etc/ssl/caddy
-</code></pre></div><p>代理服务开机启动脚本</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>Unit<span style="color:#f92672">]</span>
-Description<span style="color:#f92672">=</span>Caddy HTTP/2 web server
-Documentation<span style="color:#f92672">=</span>https://caddyserver.com/docs
-After<span style="color:#f92672">=</span>network-online.target
-Wants<span style="color:#f92672">=</span>network-online.target systemd-networkd-wait-online.service
+;ReadWritePaths<span style=color:#f92672>=</span>/etc/ssl/caddy
+ReadWriteDirectories<span style=color:#f92672>=</span>/etc/ssl/caddy
+</code></pre></div><p>代理服务开机启动脚本</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>Unit<span style=color:#f92672>]</span>
+Description<span style=color:#f92672>=</span>Caddy HTTP/2 web server
+Documentation<span style=color:#f92672>=</span>https://caddyserver.com/docs
+After<span style=color:#f92672>=</span>network-online.target
+Wants<span style=color:#f92672>=</span>network-online.target systemd-networkd-wait-online.service
 
-<span style="color:#f92672">[</span>Service<span style="color:#f92672">]</span>
-Restart<span style="color:#f92672">=</span>on-abnormal
+<span style=color:#f92672>[</span>Service<span style=color:#f92672>]</span>
+Restart<span style=color:#f92672>=</span>on-abnormal
 
 ; Do not allow the process to be restarted in a tight loop. If the
 ; process fails to start, something critical needs to be fixed.
-StartLimitInterval<span style="color:#f92672">=</span><span style="color:#ae81ff">14400</span>
-StartLimitBurst<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
+StartLimitInterval<span style=color:#f92672>=</span><span style=color:#ae81ff>14400</span>
+StartLimitBurst<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>
 
 ; User and group the process will run as.
-User<span style="color:#f92672">=</span>root
-Group<span style="color:#f92672">=</span>root
+User<span style=color:#f92672>=</span>root
+Group<span style=color:#f92672>=</span>root
 
 ; Letsencrypt-issued certificates will be written to this directory.
-Environment<span style="color:#f92672">=</span>CADDYPATH<span style="color:#f92672">=</span>/etc/ssl/caddy
+Environment<span style=color:#f92672>=</span>CADDYPATH<span style=color:#f92672>=</span>/etc/ssl/caddy
 
-; Always set <span style="color:#e6db74">&#34;-root&#34;</span> to something safe in <span style="color:#66d9ef">case</span> it gets forgotten in the Caddyfile.
-ExecStart<span style="color:#f92672">=</span>/usr/local/bin/caddy -log stdout -log-timestamps<span style="color:#f92672">=</span>false -agree<span style="color:#f92672">=</span>true -conf<span style="color:#f92672">=</span>/etc/caddy/Caddyfile -root<span style="color:#f92672">=</span>/var/tmp
-ExecReload<span style="color:#f92672">=</span>/bin/kill -USR1 $MAINPID
+; Always set <span style=color:#e6db74>&#34;-root&#34;</span> to something safe in <span style=color:#66d9ef>case</span> it gets forgotten in the Caddyfile.
+ExecStart<span style=color:#f92672>=</span>/usr/local/bin/caddy -log stdout -log-timestamps<span style=color:#f92672>=</span>false -agree<span style=color:#f92672>=</span>true -conf<span style=color:#f92672>=</span>/etc/caddy/Caddyfile -root<span style=color:#f92672>=</span>/var/tmp
+ExecReload<span style=color:#f92672>=</span>/bin/kill -USR1 $MAINPID
 
 ; Use graceful shutdown with a reasonable timeout
-KillMode<span style="color:#f92672">=</span>mixed
-KillSignal<span style="color:#f92672">=</span>SIGQUIT
-TimeoutStopSec<span style="color:#f92672">=</span>5s
+KillMode<span style=color:#f92672>=</span>mixed
+KillSignal<span style=color:#f92672>=</span>SIGQUIT
+TimeoutStopSec<span style=color:#f92672>=</span>5s
 
-; Limit the number of file descriptors; see <span style="color:#e6db74">`</span>man systemd.exec<span style="color:#e6db74">`</span> <span style="color:#66d9ef">for</span> more limit settings.
-LimitNOFILE<span style="color:#f92672">=</span><span style="color:#ae81ff">1048576</span>
+; Limit the number of file descriptors; see <span style=color:#e6db74>`</span>man systemd.exec<span style=color:#e6db74>`</span> <span style=color:#66d9ef>for</span> more limit settings.
+LimitNOFILE<span style=color:#f92672>=</span><span style=color:#ae81ff>1048576</span>
 ; Unmodified caddy is not expected to use more than that.
-LimitNPROC<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>
+LimitNPROC<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>
 
 ; Use private /tmp and /var/tmp, which are discarded after caddy stops.
-PrivateTmp<span style="color:#f92672">=</span>true
-; Use a minimal /dev <span style="color:#f92672">(</span>May bring additional security <span style="color:#66d9ef">if</span> switched to <span style="color:#e6db74">&#39;true&#39;</span>, but it may not work on Raspberry Pi<span style="color:#960050;background-color:#1e0010">&#39;</span>s or other devices, so it has been disabled in this dist.<span style="color:#f92672">)</span>
-PrivateDevices<span style="color:#f92672">=</span>false
+PrivateTmp<span style=color:#f92672>=</span>true
+; Use a minimal /dev <span style=color:#f92672>(</span>May bring additional security <span style=color:#66d9ef>if</span> switched to <span style=color:#e6db74>&#39;true&#39;</span>, but it may not work on Raspberry Pi<span style=color:#960050;background-color:#1e0010>&#39;</span>s or other devices, so it has been disabled in this dist.<span style=color:#f92672>)</span>
+PrivateDevices<span style=color:#f92672>=</span>false
 ; Hide /home, /root, and /run/user. Nobody will steal your SSH-keys.
-ProtectHome<span style="color:#f92672">=</span>true
+ProtectHome<span style=color:#f92672>=</span>true
 ; Make /usr, /boot, /etc and possibly some more folders read-only.
-ProtectSystem<span style="color:#f92672">=</span>full
+ProtectSystem<span style=color:#f92672>=</span>full
 ; 鈥?except /etc/ssl/caddy, because we want Letsencrypt-certificates there.
 ;   This merely retains r/w access rights, it does not add any new. Must still be writable on the host!
-;ReadWritePaths<span style="color:#f92672">=</span>/etc/ssl/caddy
-ReadWriteDirectories<span style="color:#f92672">=</span>/etc/ssl/caddy
+;ReadWritePaths<span style=color:#f92672>=</span>/etc/ssl/caddy
+ReadWriteDirectories<span style=color:#f92672>=</span>/etc/ssl/caddy
 
 ; The following additional security directives only work with systemd v229 or later.
-; They further restrict privileges that can be gained by caddy. Uncomment <span style="color:#66d9ef">if</span> you like.
+; They further restrict privileges that can be gained by caddy. Uncomment <span style=color:#66d9ef>if</span> you like.
 ; Note that you may have to add capabilities required by any plugins in use.
-;CapabilityBoundingSet<span style="color:#f92672">=</span>CAP_NET_BIND_SERVICE
-;AmbientCapabilities<span style="color:#f92672">=</span>CAP_NET_BIND_SERVICE
-;NoNewPrivileges<span style="color:#f92672">=</span>true
+;CapabilityBoundingSet<span style=color:#f92672>=</span>CAP_NET_BIND_SERVICE
+;AmbientCapabilities<span style=color:#f92672>=</span>CAP_NET_BIND_SERVICE
+;NoNewPrivileges<span style=color:#f92672>=</span>true
 
-<span style="color:#f92672">[</span>Install<span style="color:#f92672">]</span>
-WantedBy<span style="color:#f92672">=</span>multi-user.target
-</code></pre></div>
-        </div>
-
-        
-
-
-        
-
-<div class="post-archive">
-    <h2>See Also</h2>
-    <ul class="listing">
-        
-        <li><a href="../../post/go-vscode-remote-development/">VSCode Remote Development-go开发环境搭建</a></li>
-        
-        <li><a href="../../post/go-type-convert/">golang类型转换</a></li>
-        
-        <li><a href="../../post/go-goroutine-concurrent-control/">goroutine并发控制</a></li>
-        
-        <li><a href="../../post/go-get-progress/">go get添加进度</a></li>
-        
-        <li><a href="../../post/likaifu-10-gifts/">李开复：留学带给我的十件礼物，第一件是自信</a></li>
-        
-    </ul>
-</div>
-
-
-        <div class="post-meta meta-tags">
-            
-            <ul class="clearfix">
-                
-                <li><a href='../../tags/go'>go</a></li>
-                
-                <li><a href='../../tags/caddy'>caddy</a></li>
-                
-                <li><a href='../../tags/hugo'>hugo</a></li>
-                
-                <li><a href='../../tags/filebrowser'>filebrowser</a></li>
-                
-                <li><a href='../../tags/%E7%BD%91%E7%AB%99'>网站</a></li>
-                
-                <li><a href='../../tags/docker'>docker</a></li>
-                
-            </ul>
-            
-        </div>
-    </article>
-    
-    
-
-    
-    
-    <div class="post bg-white">
-      <script src="https://utteranc.es/client.js"
-            repo= "windzhu0514/windzhu0514.github.io"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-      </script>
-    </div>
-    
-</div>
-
-                </div>
-
-                <div id="secondary">
-    <section class="widget">
-        <form id="search" action='//www.google.com/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
-      
-      <input type="text" name="q" maxlength="20" placeholder="Search">
-      <input type="hidden" name="sitesearch" value="/">
-      <button type="submit" class="submit icon-search"></button>
-</form>
-    </section>
-    
-    <section class="widget">
-        <h3 class="widget-title">最近文章</h3>
-<ul class="widget-list">
-    
-    <li>
-        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析">Go Rate限流器代码分析</a>
-    </li>
-    
-    <li>
-        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a>
-    </li>
-    
-    <li>
-        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信">李开复：留学带给我的十件礼物，第一件是自信</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-type-convert/" title="golang类型转换">golang类型转换</a>
-    </li>
-    
-    <li>
-        <a href="../../post/multiple-git-account/" title="git多账户共存">git多账户共存</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制">goroutine并发控制</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-get-progress/" title="go get添加进度">go get添加进度</a>
-    </li>
-    
-    <li>
-        <a href="../../post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
-    </li>
-    
-</ul>
-    </section>
-
-    
-
-    <section class="widget">
-        <h3 class="widget-title">分类</h3>
-<ul class="widget-list">
-    
-    <li><a href="../../categories/git/">git (1)</a></li>
-    
-    <li><a href="../../categories/golang/">golang (6)</a></li>
-    
-    <li><a href="../../categories/markdown/">markdown (1)</a></li>
-    
-    <li><a href="../../categories/%E5%A5%BD%E6%96%87/">好文 (1)</a></li>
-    
-</ul>
-    </section>
-
-    <section class="widget">
-        <h3 class="widget-title">标签</h3>
-<div class="tagcloud">
-    
-    <a href="../../tags/caddy/">caddy</a>
-    
-    <a href="../../tags/docker/">docker</a>
-    
-    <a href="../../tags/filebrowser/">filebrowser</a>
-    
-    <a href="../../tags/git/">git</a>
-    
-    <a href="../../tags/go/">go</a>
-    
-    <a href="../../tags/golang/">golang</a>
-    
-    <a href="../../tags/goroutine/">goroutine</a>
-    
-    <a href="../../tags/hugo/">hugo</a>
-    
-    <a href="../../tags/markdown/">markdown</a>
-    
-    <a href="../../tags/rate/">rate</a>
-    
-    <a href="../../tags/ssh/">ssh</a>
-    
-    <a href="../../tags/%E4%BA%BA%E7%94%9F/">人生</a>
-    
-    <a href="../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/">令牌桶</a>
-    
-    <a href="../../tags/%E5%8A%B1%E5%BF%97/">励志</a>
-    
-    <a href="../../tags/%E5%B9%B6%E5%8F%91/">并发</a>
-    
-    <a href="../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">类型转换</a>
-    
-    <a href="../../tags/%E7%BD%91%E7%AB%99/">网站</a>
-    
-    <a href="../../tags/%E9%99%90%E6%B5%81%E5%99%A8/">限流器</a>
-    
-</div>
-    </section>
-
-    
-
-    <section class="widget">
-        <h3 class="widget-title">其它</h3>
-        <ul class="widget-list">
-            <li><a href="../../index.xml">文章 RSS</a></li>
-        </ul>
-    </section>
-</div>
-            </div>
-        </div>
-    </div>
-    <footer id="footer">
-    <div class="container">
-        &copy; 2020 <a href="../../">一蓑烟雨任平生 By 风竹</a>.
-        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
-        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/flysnow-org/maupassant-hugo" target="_blank">maupassant</a>.
-        
-    </div>
-</footer>
-
-
-    
-    <script type="text/javascript">
-        window.MathJax = {
-            tex2jax: {
-                inlineMath: [['$', '$']],
-                processEscapes: true
-                }
-            };
-    </script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
-
-
-<a id="rocket" href="#top"></a>
-<script type="text/javascript" src='../../js/totop.js?v=0.0.0' async=""></script>
-
-
-
-    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-
-
-
-
-</body>
-
-</html>
+<span style=color:#f92672>[</span>Install<span style=color:#f92672>]</span>
+WantedBy<span style=color:#f92672>=</span>multi-user.target
+</code></pre></div></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=../../post/go-vscode-remote-development/>VSCode Remote Development-go开发环境搭建</a></li><li><a href=../../post/go-type-convert/>golang类型转换</a></li><li><a href=../../post/go-goroutine-concurrent-control/>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/>go get添加进度</a></li><li><a href=../../post/likaifu-10-gifts/>李开复：留学带给我的十件礼物，第一件是自信</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=../../tags/go>go</a></li><li><a href=../../tags/caddy>caddy</a></li><li><a href=../../tags/hugo>hugo</a></li><li><a href=../../tags/filebrowser>filebrowser</a></li><li><a href=../../tags/%E7%BD%91%E7%AB%99>网站</a></li><li><a href=../../tags/docker>docker</a></li></ul></div></article><div class="post bg-white"><script src=https://utteranc.es/client.js repo=windzhu0514/windzhu0514.github.io issue-term=pathname theme=github-light crossorigin=anonymous async></script></div></div></div><div id=secondary><section class=widget><form id=search action=//www.google.com/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=../../post/go-time-rate/ title="Go Rate限流器代码分析">Go Rate限流器代码分析</a></li><li><a href=../../post/website-caddy-hugo-filebrowser/ title=caddy-hugo-filebrowser搭建个人网站和后台管理>caddy-hugo-filebrowser搭建个人网站和后台管理</a></li><li><a href=../../post/go-vscode-remote-development/ title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a></li><li><a href=../../post/likaifu-10-gifts/ title=李开复：留学带给我的十件礼物，第一件是自信>李开复：留学带给我的十件礼物，第一件是自信</a></li><li><a href=../../post/go-type-convert/ title=golang类型转换>golang类型转换</a></li><li><a href=../../post/multiple-git-account/ title=git多账户共存>git多账户共存</a></li><li><a href=../../post/go-goroutine-concurrent-control/ title=goroutine并发控制>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/ title="go get添加进度">go get添加进度</a></li><li><a href=../../post/markdown/ title="Markdown 基本语法">Markdown 基本语法</a></li></ul></section><section class=widget><h3 class=widget-title>分类</h3><ul class=widget-list><li><a href=../../categories/git/>git (1)</a></li><li><a href=../../categories/golang/>golang (6)</a></li><li><a href=../../categories/markdown/>markdown (1)</a></li><li><a href=../../categories/%E5%A5%BD%E6%96%87/>好文 (1)</a></li></ul></section><section class=widget><h3 class=widget-title>标签</h3><div class=tagcloud><a href=../../tags/caddy/>caddy</a>
+<a href=../../tags/docker/>docker</a>
+<a href=../../tags/filebrowser/>filebrowser</a>
+<a href=../../tags/git/>git</a>
+<a href=../../tags/go/>go</a>
+<a href=../../tags/golang/>golang</a>
+<a href=../../tags/goroutine/>goroutine</a>
+<a href=../../tags/hugo/>hugo</a>
+<a href=../../tags/markdown/>markdown</a>
+<a href=../../tags/rate/>rate</a>
+<a href=../../tags/ssh/>ssh</a>
+<a href=../../tags/%E4%BA%BA%E7%94%9F/>人生</a>
+<a href=../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/>令牌桶</a>
+<a href=../../tags/%E5%8A%B1%E5%BF%97/>励志</a>
+<a href=../../tags/%E5%B9%B6%E5%8F%91/>并发</a>
+<a href=../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/>类型转换</a>
+<a href=../../tags/%E7%BD%91%E7%AB%99/>网站</a>
+<a href=../../tags/%E9%99%90%E6%B5%81%E5%99%A8/>限流器</a></div></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=../../index.xml>文章 RSS</a></li></ul></section></div></div></div></div><footer id=footer><div class=container>&copy; 2021 <a href=../../>一蓑烟雨任平生 By 风竹</a>.
+Powered by <a rel="nofollow noreferer noopener" href=https://gohugo.io target=_blank>Hugo</a>.
+<a href=https://www.flysnow.org/ target=_blank>Theme</a> based on <a href=https://github.com/flysnow-org/maupassant-hugo target=_blank>maupassant</a>.</div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="../../js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script></body></html>

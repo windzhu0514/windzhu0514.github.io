@@ -1,418 +1,110 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>golang类型转换 | 一蓑烟雨任平生</title>
-    <meta property="og:title" content="golang类型转换 - 一蓑烟雨任平生">
-    <meta property="og:type" content="article">
-        
-    <meta property="article:published_time" content='2019-03-07T17:45:27&#43;08:00'>
-        
-        
-    <meta property="article:modified_time" content='2019-03-07T17:45:27&#43;08:00'>
-        
-    <meta name="Keywords" content="go,golang,go语言,博客,C,C&#43;&#43;,mfc">
-    <meta name="description" content="golang类型转换">
-        
-    <meta name="author" content="风竹">
-    <meta property="og:url" content="/post/go-type-convert/">
-    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
-
-    <link rel="stylesheet" href='../../css/normalize.css'>
-    <link rel="stylesheet" href='../../css/style.css'>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    
-
-
-    
-    
-</head>
-
-
-<body>
-    <header id="header" class="clearfix">
-    <div class="container">
-        <div class="col-group">
-            <div class="site-name ">
-                
-                    <a id="logo" href="../../">
-                        一蓑烟雨任平生
-                    </a>
-                
-                <p class="description">Go语言(golang)、C/C&#43;&#43;、MFC开发者</p>
-            </div>
-            <div>
-                <nav id="nav-menu" class="clearfix">
-                    <a class="current" href="../../">首页</a>
-                    
-                    <a  href="../../about/" title="关于">关于</a>
-                    
-                </nav>
-            </div>
-        </div>
-    </div>
-</header>
-
-    <div id="body">
-        <div class="container">
-            <div class="col-group">
-
-                <div class="col-8" id="main">
-                    
-<div class="res-cons">
-    
-    <article class="post">
-        <header>
-            <h1 class="post-title">golang类型转换</h1>
-        </header>
-        <date class="post-meta meta-date">
-            2019年3月7日
-        </date>
-        
-        <div class="post-meta">
-            <span>|</span>
-            
-            <span class="meta-category"><a href='../../categories/golang'>golang</a></span>
-            
-        </div>
-        
-        
-        <div class="post-meta">
-            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
-                    阅读</span></span>
-        </div>
-        
-        
-        <div class="post-content">
-            <h2 id="int----string">int &ndash;&gt; string</h2>
-<p>转换函数：</p>
-<p><a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
-<p><a href="https://golang.google.cn/pkg/strconv/#Itoa" title="strconv.Itoa">strconv.Itoa</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
-<p><a href="https://golang.google.cn/pkg/strconv/#FormatInt" title="strconv.FormatInt">strconv.FormatInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
-<p><a href="https://golang.google.cn/pkg/strconv/#FormatUint" title="strconv.FormatUint">strconv.FormatUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MinInt64</span>)
-<span style="color:#75715e">// &#34;-9223372036854775808&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxInt64</span>)
-<span style="color:#75715e">// &#34;9223372036854775807&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>)
-<span style="color:#75715e">// constant 18446744073709551615 overflows int
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MinInt64</span>)
-<span style="color:#75715e">// &#34;-9223372036854775808&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxInt64</span>)
-<span style="color:#75715e">// &#34;9223372036854775807&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>)
-<span style="color:#75715e">// constant 18446744073709551615 overflows int
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MinInt64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// &#34;-9223372036854775808&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxInt64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// &#34;9223372036854775807&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// constant 18446744073709551615 overflows int64
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatUint</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// &#34;18446744073709551615&#34;
-</span></code></pre></div><h2 id="string----int">string &ndash;&gt; int</h2>
-<p>转换函数：</p>
-<p><a href="https://golang.google.cn/pkg/fmt/#Sscanf" title="fmt.Sscanf">fmt.Sscanf</a>：格式化范围 math.MinInt64 -&gt; math.MaxUint64</p>
-<p><a href="https://golang.google.cn/pkg/strconv/#ParseInt" title="strconv.ParseInt">strconv.ParseInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
-<p><a href="https://golang.google.cn/pkg/strconv/#ParseUint" title="strconv.ParseUint">strconv.ParseUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;2147483647&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n</span>)
-<span style="color:#75715e">// 2147483647
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n32</span> <span style="color:#66d9ef">int32</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;2147483647&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n32</span>)
-<span style="color:#75715e">// 2147483647
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n64</span> <span style="color:#66d9ef">int64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;-9223372036854775808&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n64</span>)
-<span style="color:#75715e">// -9223372036854775808
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n64_2</span> <span style="color:#66d9ef">int64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;9223372036854775807&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n64_2</span>)
-<span style="color:#75715e">// 9223372036854775807
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">un64</span> <span style="color:#66d9ef">uint64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;18446744073709551615&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">un64</span>)
-<span style="color:#75715e">// 18446744073709551615
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">//  bitSize 0, 8, 16, 32, 和 64分别对应int, int8, int16, int32, 和 int64
-</span><span style="color:#75715e">// math.MaxUint64 18446744073709551615
-</span><span style="color:#75715e">// math.MaxInt64 9223372036854775807
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#e6db74">&#34;9223372036854775807&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 9223372036854775807
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseUint</span>(<span style="color:#e6db74">&#34;18446744073709551615&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 18446744073709551615
-</span></code></pre></div><h2 id="float64----string">float64 &ndash;&gt; string</h2>
-<p>float32 类型的浮点数可以提供大约 6 个十进制数的精度，而 float64 则可以提供约 15 个十进制数的精度；通常应该优先使用 float64 类型，因为 float32 类型的累计计算误差很容易扩散，并且 float32 能精确表示的正整数并不是很大（译注：因为 float32 的有效 bit 位只有 23 个，其它的 bit 位用于指数和符号；当整数大于 23bit 能表达的范围时，float32 的表示将出现误差）《The Go Programming Language》</p>
-<p>golang 浮点数舍入方式是按照<a href="https://zh.wikipedia.org/wiki/IEEE_754" title="IEEE 754">IEEE 754</a>进行的（区别于四舍五入）</p>
-<p>转换函数：<a href="https://golang.google.cn/pkg/strconv/#FormatFloat" title="strconv.FormatFloat">strconv.FormatFloat</a>、<a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutAmount</span> = <span style="color:#ae81ff">49.285</span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutTaxAmount</span> = <span style="color:#ae81ff">296.85</span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#a6e22e">discoutAmount</span><span style="color:#f92672">+</span><span style="color:#a6e22e">discoutTaxAmount</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 346.13
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%.2f&#34;</span>, <span style="color:#a6e22e">discoutAmount</span><span style="color:#f92672">+</span><span style="color:#a6e22e">discoutTaxAmount</span>)
-<span style="color:#75715e">// 346.13
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#ae81ff">1.45</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 1.4
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#ae81ff">1.445</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 1.45
-</span></code></pre></div><p>float64 四舍五入转 2 位小数字符串</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// java 小数四舍五入
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">double</span>  discoutAmount  <span style="color:#f92672">=</span>  252<span style="color:#f92672">.</span><span style="color:#a6e22e">945</span><span style="color:#f92672">;</span>
-<span style="color:#66d9ef">double</span>  discoutTaxAmount  <span style="color:#f92672">=</span>  41<span style="color:#f92672">.</span><span style="color:#a6e22e">989999999999995</span><span style="color:#f92672">;</span>
-<span style="color:#75715e">// BigDecimal.ROUND_HALF_UP 四舍五入
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">double</span>  price  <span style="color:#f92672">=</span>  <span style="color:#66d9ef">new</span>  BigDecimal<span style="color:#f92672">(</span>discoutAmount <span style="color:#f92672">+</span> discoutTaxAmount<span style="color:#f92672">).</span><span style="color:#a6e22e">setScale</span><span style="color:#f92672">(</span>2<span style="color:#f92672">,</span> BigDecimal<span style="color:#f92672">.</span><span style="color:#a6e22e">ROUND_HALF_UP</span><span style="color:#f92672">).</span><span style="color:#a6e22e">doubleValue</span><span style="color:#f92672">();</span>
-System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>price<span style="color:#f92672">);</span>
-<span style="color:#75715e">// output:
-</span><span style="color:#75715e"></span>294<span style="color:#f92672">.</span><span style="color:#a6e22e">94</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// go 四舍五入 转3位小数 *1000）/1000 依次类推
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutAmount</span> = <span style="color:#ae81ff">252.945</span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutTaxAmount</span> = <span style="color:#ae81ff">41.989999999999995</span>
-<span style="color:#a6e22e">price</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Round</span>((<span style="color:#a6e22e">discoutAmount</span><span style="color:#f92672">+</span><span style="color:#a6e22e">discoutTaxAmount</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#a6e22e">price</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>))
-<span style="color:#75715e">// 294.94
-</span></code></pre></div><h2 id="string----float64">string &ndash;&gt; float64</h2>
-<p>转换函数：<a href="https://golang.google.cn/pkg/fmt/#Sscanf" title="fmt.Sscanf">fmt.Sscanf</a> <a href="https://golang.google.cn/pkg/strconv/#ParseFloat" title="strconv.ParseFloat">strconv.ParseFloat</a></p>
-<p>strconv.ParseFloat：如果字符串合乎语法规则，函数会返回最为接近 s 表示值的一个浮点数（使用 IEEE754 规范舍入）。bitSize 指定了期望的接收类型，32 是 float32（返回值的赋值给 float32 时可以不改变精确度），64 是 float64；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f32</span> <span style="color:#66d9ef">float32</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#e6db74">&#34;%f&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">f32</span>)
-<span style="color:#75715e">// 41.99
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f64</span> <span style="color:#66d9ef">float64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#e6db74">&#34;%f&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">f64</span>)
-<span style="color:#75715e">// 41.989999999999995
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseFloat</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 41.989999999999995
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseFloat</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#ae81ff">32</span>)
-<span style="color:#75715e">// 41.9900016784668
-</span></code></pre></div><p><strong>备注：</strong></p>
-<ul>
-<li>strconv 包的函数不需要格式化，比 fmt 包的函数更加高效。</li>
-</ul>
-
-        </div>
-
-        
-
-
-        
-
-<div class="post-archive">
-    <h2>See Also</h2>
-    <ul class="listing">
-        
-        <li><a href="../../post/go-goroutine-concurrent-control/">goroutine并发控制</a></li>
-        
-        <li><a href="../../post/go-get-progress/">go get添加进度</a></li>
-        
-        <li><a href="../../post/multiple-git-account/">git多账户共存</a></li>
-        
-        <li><a href="../../post/markdown/">Markdown 基本语法</a></li>
-        
-        <li><a href="../../about/">关于我</a></li>
-        
-    </ul>
-</div>
-
-
-        <div class="post-meta meta-tags">
-            
-            <ul class="clearfix">
-                
-                <li><a href='../../tags/go'>go</a></li>
-                
-                <li><a href='../../tags/golang'>golang</a></li>
-                
-                <li><a href='../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2'>类型转换</a></li>
-                
-            </ul>
-            
-        </div>
-    </article>
-    
-    
-
-    
-    
-    <div class="post bg-white">
-      <script src="https://utteranc.es/client.js"
-            repo= "windzhu0514/windzhu0514.github.io"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-      </script>
-    </div>
-    
-</div>
-
-                </div>
-
-                <div id="secondary">
-    <section class="widget">
-        <form id="search" action='//www.google.com/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
-      
-      <input type="text" name="q" maxlength="20" placeholder="Search">
-      <input type="hidden" name="sitesearch" value="/">
-      <button type="submit" class="submit icon-search"></button>
-</form>
-    </section>
-    
-    <section class="widget">
-        <h3 class="widget-title">最近文章</h3>
-<ul class="widget-list">
-    
-    <li>
-        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析">Go Rate限流器代码分析</a>
-    </li>
-    
-    <li>
-        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a>
-    </li>
-    
-    <li>
-        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信">李开复：留学带给我的十件礼物，第一件是自信</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-type-convert/" title="golang类型转换">golang类型转换</a>
-    </li>
-    
-    <li>
-        <a href="../../post/multiple-git-account/" title="git多账户共存">git多账户共存</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制">goroutine并发控制</a>
-    </li>
-    
-    <li>
-        <a href="../../post/go-get-progress/" title="go get添加进度">go get添加进度</a>
-    </li>
-    
-    <li>
-        <a href="../../post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
-    </li>
-    
-</ul>
-    </section>
-
-    
-
-    <section class="widget">
-        <h3 class="widget-title">分类</h3>
-<ul class="widget-list">
-    
-    <li><a href="../../categories/git/">git (1)</a></li>
-    
-    <li><a href="../../categories/golang/">golang (6)</a></li>
-    
-    <li><a href="../../categories/markdown/">markdown (1)</a></li>
-    
-    <li><a href="../../categories/%E5%A5%BD%E6%96%87/">好文 (1)</a></li>
-    
-</ul>
-    </section>
-
-    <section class="widget">
-        <h3 class="widget-title">标签</h3>
-<div class="tagcloud">
-    
-    <a href="../../tags/caddy/">caddy</a>
-    
-    <a href="../../tags/docker/">docker</a>
-    
-    <a href="../../tags/filebrowser/">filebrowser</a>
-    
-    <a href="../../tags/git/">git</a>
-    
-    <a href="../../tags/go/">go</a>
-    
-    <a href="../../tags/golang/">golang</a>
-    
-    <a href="../../tags/goroutine/">goroutine</a>
-    
-    <a href="../../tags/hugo/">hugo</a>
-    
-    <a href="../../tags/markdown/">markdown</a>
-    
-    <a href="../../tags/rate/">rate</a>
-    
-    <a href="../../tags/ssh/">ssh</a>
-    
-    <a href="../../tags/%E4%BA%BA%E7%94%9F/">人生</a>
-    
-    <a href="../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/">令牌桶</a>
-    
-    <a href="../../tags/%E5%8A%B1%E5%BF%97/">励志</a>
-    
-    <a href="../../tags/%E5%B9%B6%E5%8F%91/">并发</a>
-    
-    <a href="../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">类型转换</a>
-    
-    <a href="../../tags/%E7%BD%91%E7%AB%99/">网站</a>
-    
-    <a href="../../tags/%E9%99%90%E6%B5%81%E5%99%A8/">限流器</a>
-    
-</div>
-    </section>
-
-    
-
-    <section class="widget">
-        <h3 class="widget-title">其它</h3>
-        <ul class="widget-list">
-            <li><a href="../../index.xml">文章 RSS</a></li>
-        </ul>
-    </section>
-</div>
-            </div>
-        </div>
-    </div>
-    <footer id="footer">
-    <div class="container">
-        &copy; 2020 <a href="../../">一蓑烟雨任平生 By 风竹</a>.
-        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
-        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/flysnow-org/maupassant-hugo" target="_blank">maupassant</a>.
-        
-    </div>
-</footer>
-
-
-    
-    <script type="text/javascript">
-        window.MathJax = {
-            tex2jax: {
-                inlineMath: [['$', '$']],
-                processEscapes: true
-                }
-            };
-    </script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
-
-
-<a id="rocket" href="#top"></a>
-<script type="text/javascript" src='../../js/totop.js?v=0.0.0' async=""></script>
-
-
-
-    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-
-
-
-
-</body>
-
-</html>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>golang类型转换 | 一蓑烟雨任平生</title><meta property="og:title" content="golang类型转换 - 一蓑烟雨任平生"><meta property="og:type" content="article"><meta property="article:published_time" content="2019-03-07T17:45:27+08:00"><meta property="article:modified_time" content="2019-03-07T17:45:27+08:00"><meta name=Keywords content="go,golang,go语言,博客,C,C++,mfc"><meta name=description content="golang类型转换"><meta name=author content="风竹"><meta property="og:url" content="/post/go-type-convert/"><link rel="shortcut icon" href=../../favicon.ico type=image/x-icon><link rel=stylesheet href=../../css/normalize.css><link rel=stylesheet href=../../css/style.css><script type=text/javascript src=//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js></script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=../../>一蓑烟雨任平生</a><p class=description>Go语言(golang)、C/C++、MFC开发者</p></div><div><nav id=nav-menu class=clearfix><a class=current href=../../>首页</a>
+<a href=../../about/ title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><article class=post><header><h1 class=post-title>golang类型转换</h1></header><date class="post-meta meta-date">2019年3月7日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=../../categories/golang>golang</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h2 id=int----string>int &ndash;> string</h2><p>转换函数：</p><p><a href=https://golang.google.cn/pkg/fmt/#Sprintf title=fmt.Sprintf>fmt.Sprintf</a>：格式化范围 math.MinInt64 -> math.MaxInt64</p><p><a href=https://golang.google.cn/pkg/strconv/#Itoa title=strconv.Itoa>strconv.Itoa</a>：格式化范围 math.MinInt64 -> math.MaxInt64</p><p><a href=https://golang.google.cn/pkg/strconv/#FormatInt title=strconv.FormatInt>strconv.FormatInt</a>：格式化范围 math.MinInt64 -> math.MaxInt64</p><p><a href=https://golang.google.cn/pkg/strconv/#FormatUint title=strconv.FormatUint>strconv.FormatUint</a>：格式化范围 0 -> math.MaxUint64</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MinInt64</span>)
+<span style=color:#75715e>// &#34;-9223372036854775808&#34;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxInt64</span>)
+<span style=color:#75715e>// &#34;9223372036854775807&#34;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxUint64</span>)
+<span style=color:#75715e>// constant 18446744073709551615 overflows int
+</span><span style=color:#75715e></span>
+<span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MinInt64</span>)
+<span style=color:#75715e>// &#34;-9223372036854775808&#34;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxInt64</span>)
+<span style=color:#75715e>// &#34;9223372036854775807&#34;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxUint64</span>)
+<span style=color:#75715e>// constant 18446744073709551615 overflows int
+</span><span style=color:#75715e></span>
+<span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatInt</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MinInt64</span>, <span style=color:#ae81ff>10</span>)
+<span style=color:#75715e>// &#34;-9223372036854775808&#34;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatInt</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxInt64</span>, <span style=color:#ae81ff>10</span>)
+<span style=color:#75715e>// &#34;9223372036854775807&#34;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatInt</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxUint64</span>, <span style=color:#ae81ff>10</span>)
+<span style=color:#75715e>// constant 18446744073709551615 overflows int64
+</span><span style=color:#75715e></span>
+<span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatUint</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxUint64</span>, <span style=color:#ae81ff>10</span>)
+<span style=color:#75715e>// &#34;18446744073709551615&#34;
+</span></code></pre></div><h2 id=string----int>string &ndash;> int</h2><p>转换函数：</p><p><a href=https://golang.google.cn/pkg/fmt/#Sscanf title=fmt.Sscanf>fmt.Sscanf</a>：格式化范围 math.MinInt64 -> math.MaxUint64</p><p><a href=https://golang.google.cn/pkg/strconv/#ParseInt title=strconv.ParseInt>strconv.ParseInt</a>：格式化范围 math.MinInt64 -> math.MaxInt64</p><p><a href=https://golang.google.cn/pkg/strconv/#ParseUint title=strconv.ParseUint>strconv.ParseUint</a>：格式化范围 0 -> math.MaxUint64</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;2147483647&#34;</span>, <span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>n</span>)
+<span style=color:#75715e>// 2147483647
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n32</span> <span style=color:#66d9ef>int32</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;2147483647&#34;</span>, <span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>n32</span>)
+<span style=color:#75715e>// 2147483647
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n64</span> <span style=color:#66d9ef>int64</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;-9223372036854775808&#34;</span>, <span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>n64</span>)
+<span style=color:#75715e>// -9223372036854775808
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n64_2</span> <span style=color:#66d9ef>int64</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;9223372036854775807&#34;</span>, <span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>n64_2</span>)
+<span style=color:#75715e>// 9223372036854775807
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>un64</span> <span style=color:#66d9ef>uint64</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;18446744073709551615&#34;</span>, <span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>un64</span>)
+<span style=color:#75715e>// 18446744073709551615
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>//  bitSize 0, 8, 16, 32, 和 64分别对应int, int8, int16, int32, 和 int64
+</span><span style=color:#75715e>// math.MaxUint64 18446744073709551615
+</span><span style=color:#75715e>// math.MaxInt64 9223372036854775807
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseInt</span>(<span style=color:#e6db74>&#34;9223372036854775807&#34;</span>, <span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>64</span>)
+<span style=color:#75715e>// 9223372036854775807
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseUint</span>(<span style=color:#e6db74>&#34;18446744073709551615&#34;</span>, <span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>64</span>)
+<span style=color:#75715e>// 18446744073709551615
+</span></code></pre></div><h2 id=float64----string>float64 &ndash;> string</h2><p>float32 类型的浮点数可以提供大约 6 个十进制数的精度，而 float64 则可以提供约 15 个十进制数的精度；通常应该优先使用 float64 类型，因为 float32 类型的累计计算误差很容易扩散，并且 float32 能精确表示的正整数并不是很大（译注：因为 float32 的有效 bit 位只有 23 个，其它的 bit 位用于指数和符号；当整数大于 23bit 能表达的范围时，float32 的表示将出现误差）《The Go Programming Language》</p><p>golang 浮点数舍入方式是按照<a href=https://zh.wikipedia.org/wiki/IEEE_754 title="IEEE 754">IEEE 754</a>进行的（区别于四舍五入）</p><p>转换函数：<a href=https://golang.google.cn/pkg/strconv/#FormatFloat title=strconv.FormatFloat>strconv.FormatFloat</a>、<a href=https://golang.google.cn/pkg/fmt/#Sprintf title=fmt.Sprintf>fmt.Sprintf</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>discoutAmount</span> = <span style=color:#ae81ff>49.285</span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>discoutTaxAmount</span> = <span style=color:#ae81ff>296.85</span>
+<span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatFloat</span>(<span style=color:#a6e22e>discoutAmount</span><span style=color:#f92672>+</span><span style=color:#a6e22e>discoutTaxAmount</span>, <span style=color:#e6db74>&#39;f&#39;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>64</span>)
+<span style=color:#75715e>// 346.13
+</span><span style=color:#75715e></span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%.2f&#34;</span>, <span style=color:#a6e22e>discoutAmount</span><span style=color:#f92672>+</span><span style=color:#a6e22e>discoutTaxAmount</span>)
+<span style=color:#75715e>// 346.13
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatFloat</span>(<span style=color:#ae81ff>1.45</span>, <span style=color:#e6db74>&#39;f&#39;</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>64</span>)
+<span style=color:#75715e>// 1.4
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatFloat</span>(<span style=color:#ae81ff>1.445</span>, <span style=color:#e6db74>&#39;f&#39;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>64</span>)
+<span style=color:#75715e>// 1.45
+</span></code></pre></div><p>float64 四舍五入转 2 位小数字符串</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#75715e>// java 小数四舍五入
+</span><span style=color:#75715e></span><span style=color:#66d9ef>double</span>  discoutAmount  <span style=color:#f92672>=</span>  252<span style=color:#f92672>.</span><span style=color:#a6e22e>945</span><span style=color:#f92672>;</span>
+<span style=color:#66d9ef>double</span>  discoutTaxAmount  <span style=color:#f92672>=</span>  41<span style=color:#f92672>.</span><span style=color:#a6e22e>989999999999995</span><span style=color:#f92672>;</span>
+<span style=color:#75715e>// BigDecimal.ROUND_HALF_UP 四舍五入
+</span><span style=color:#75715e></span><span style=color:#66d9ef>double</span>  price  <span style=color:#f92672>=</span>  <span style=color:#66d9ef>new</span>  BigDecimal<span style=color:#f92672>(</span>discoutAmount <span style=color:#f92672>+</span> discoutTaxAmount<span style=color:#f92672>).</span><span style=color:#a6e22e>setScale</span><span style=color:#f92672>(</span>2<span style=color:#f92672>,</span> BigDecimal<span style=color:#f92672>.</span><span style=color:#a6e22e>ROUND_HALF_UP</span><span style=color:#f92672>).</span><span style=color:#a6e22e>doubleValue</span><span style=color:#f92672>();</span>
+System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>price<span style=color:#f92672>);</span>
+<span style=color:#75715e>// output:
+</span><span style=color:#75715e></span>294<span style=color:#f92672>.</span><span style=color:#a6e22e>94</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// go 四舍五入 转3位小数 *1000）/1000 依次类推
+</span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>discoutAmount</span> = <span style=color:#ae81ff>252.945</span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>discoutTaxAmount</span> = <span style=color:#ae81ff>41.989999999999995</span>
+<span style=color:#a6e22e>price</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>Round</span>((<span style=color:#a6e22e>discoutAmount</span><span style=color:#f92672>+</span><span style=color:#a6e22e>discoutTaxAmount</span>)<span style=color:#f92672>*</span><span style=color:#ae81ff>100</span>) <span style=color:#f92672>/</span> <span style=color:#ae81ff>100</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatFloat</span>(<span style=color:#a6e22e>price</span>, <span style=color:#e6db74>&#39;f&#39;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>64</span>))
+<span style=color:#75715e>// 294.94
+</span></code></pre></div><h2 id=string----float64>string &ndash;> float64</h2><p>转换函数：<a href=https://golang.google.cn/pkg/fmt/#Sscanf title=fmt.Sscanf>fmt.Sscanf</a> <a href=https://golang.google.cn/pkg/strconv/#ParseFloat title=strconv.ParseFloat>strconv.ParseFloat</a></p><p>strconv.ParseFloat：如果字符串合乎语法规则，函数会返回最为接近 s 表示值的一个浮点数（使用 IEEE754 规范舍入）。bitSize 指定了期望的接收类型，32 是 float32（返回值的赋值给 float32 时可以不改变精确度），64 是 float64；</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>f32</span> <span style=color:#66d9ef>float32</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;41.989999999999995&#34;</span>, <span style=color:#e6db74>&#34;%f&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>f32</span>)
+<span style=color:#75715e>// 41.99
+</span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>f64</span> <span style=color:#66d9ef>float64</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sscanf</span>(<span style=color:#e6db74>&#34;41.989999999999995&#34;</span>, <span style=color:#e6db74>&#34;%f&#34;</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>f64</span>)
+<span style=color:#75715e>// 41.989999999999995
+</span><span style=color:#75715e></span>
+<span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseFloat</span>(<span style=color:#e6db74>&#34;41.989999999999995&#34;</span>, <span style=color:#ae81ff>64</span>)
+<span style=color:#75715e>// 41.989999999999995
+</span><span style=color:#75715e></span><span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseFloat</span>(<span style=color:#e6db74>&#34;41.989999999999995&#34;</span>, <span style=color:#ae81ff>32</span>)
+<span style=color:#75715e>// 41.9900016784668
+</span></code></pre></div><p><strong>备注：</strong></p><ul><li>strconv 包的函数不需要格式化，比 fmt 包的函数更加高效。</li></ul></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=../../post/go-goroutine-concurrent-control/>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/>go get添加进度</a></li><li><a href=../../post/multiple-git-account/>git多账户共存</a></li><li><a href=../../post/markdown/>Markdown 基本语法</a></li><li><a href=../../about/>关于我</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=../../tags/go>go</a></li><li><a href=../../tags/golang>golang</a></li><li><a href=../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2>类型转换</a></li></ul></div></article><div class="post bg-white"><script src=https://utteranc.es/client.js repo=windzhu0514/windzhu0514.github.io issue-term=pathname theme=github-light crossorigin=anonymous async></script></div></div></div><div id=secondary><section class=widget><form id=search action=//www.google.com/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=../../post/go-time-rate/ title="Go Rate限流器代码分析">Go Rate限流器代码分析</a></li><li><a href=../../post/website-caddy-hugo-filebrowser/ title=caddy-hugo-filebrowser搭建个人网站和后台管理>caddy-hugo-filebrowser搭建个人网站和后台管理</a></li><li><a href=../../post/go-vscode-remote-development/ title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a></li><li><a href=../../post/likaifu-10-gifts/ title=李开复：留学带给我的十件礼物，第一件是自信>李开复：留学带给我的十件礼物，第一件是自信</a></li><li><a href=../../post/go-type-convert/ title=golang类型转换>golang类型转换</a></li><li><a href=../../post/multiple-git-account/ title=git多账户共存>git多账户共存</a></li><li><a href=../../post/go-goroutine-concurrent-control/ title=goroutine并发控制>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/ title="go get添加进度">go get添加进度</a></li><li><a href=../../post/markdown/ title="Markdown 基本语法">Markdown 基本语法</a></li></ul></section><section class=widget><h3 class=widget-title>分类</h3><ul class=widget-list><li><a href=../../categories/git/>git (1)</a></li><li><a href=../../categories/golang/>golang (6)</a></li><li><a href=../../categories/markdown/>markdown (1)</a></li><li><a href=../../categories/%E5%A5%BD%E6%96%87/>好文 (1)</a></li></ul></section><section class=widget><h3 class=widget-title>标签</h3><div class=tagcloud><a href=../../tags/caddy/>caddy</a>
+<a href=../../tags/docker/>docker</a>
+<a href=../../tags/filebrowser/>filebrowser</a>
+<a href=../../tags/git/>git</a>
+<a href=../../tags/go/>go</a>
+<a href=../../tags/golang/>golang</a>
+<a href=../../tags/goroutine/>goroutine</a>
+<a href=../../tags/hugo/>hugo</a>
+<a href=../../tags/markdown/>markdown</a>
+<a href=../../tags/rate/>rate</a>
+<a href=../../tags/ssh/>ssh</a>
+<a href=../../tags/%E4%BA%BA%E7%94%9F/>人生</a>
+<a href=../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/>令牌桶</a>
+<a href=../../tags/%E5%8A%B1%E5%BF%97/>励志</a>
+<a href=../../tags/%E5%B9%B6%E5%8F%91/>并发</a>
+<a href=../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/>类型转换</a>
+<a href=../../tags/%E7%BD%91%E7%AB%99/>网站</a>
+<a href=../../tags/%E9%99%90%E6%B5%81%E5%99%A8/>限流器</a></div></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=../../index.xml>文章 RSS</a></li></ul></section></div></div></div></div><footer id=footer><div class=container>&copy; 2021 <a href=../../>一蓑烟雨任平生 By 风竹</a>.
+Powered by <a rel="nofollow noreferer noopener" href=https://gohugo.io target=_blank>Hugo</a>.
+<a href=https://www.flysnow.org/ target=_blank>Theme</a> based on <a href=https://github.com/flysnow-org/maupassant-hugo target=_blank>maupassant</a>.</div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="../../js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script></body></html>
