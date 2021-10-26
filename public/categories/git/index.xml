@@ -6,11 +6,7 @@
     <description>Recent content in git on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 12 Jan 2019 22:48:32 +0800</lastBuildDate>
-    
-	<atom:link href="/categories/git/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 12 Jan 2019 22:48:32 +0800</lastBuildDate><atom:link href="/categories/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>git多账户共存</title>
       <link>/post/multiple-git-account/</link>

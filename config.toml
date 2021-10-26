@@ -19,16 +19,18 @@ defaultContentLanguage = "zh"
   busuanzi = true
   # 自定义摘要默认是70
   summaryLength = 140
+  # 全局开关，你也可以在每一篇内容的 front matter 中针对单篇内容关闭或开启某些功能
+  toc = true  # 是否开启目录
 
-# [markup]
-#   [markup.highlight]
-#     lineNos = true
+[markup]
+  [markup.highlight]
+    lineNos = true
     #style = "github"
 
 # 开启版权声明
-#[params.cc]
-#    name = "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
-#    link = "https://creativecommons.org/licenses/by-nc-nd/4.0/" 
+[params.cc]
+  name = "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
+  link = "https://creativecommons.org/licenses/by-nc-nd/4.0/" 
 
 [params.utteranc]
     enable = true
@@ -41,8 +43,7 @@ defaultContentLanguage = "zh"
     theme = "github-light" # 样式主题，有github-light和github-dark两种
 
   [menu]
-
-  [[menu.main]]
+   [[menu.main]]
     identifier = "about"
     name = "关于"
     url = "/about/"
