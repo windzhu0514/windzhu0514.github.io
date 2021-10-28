@@ -1,7 +1,7 @@
 <!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>Go Rate限流器代码分析 | 一蓑烟雨任平生</title><meta property="og:title" content="Go Rate限流器代码分析 - 一蓑烟雨任平生"><meta property="og:type" content="article"><meta property="article:published_time" content="2020-08-30T23:49:05+08:00"><meta property="article:modified_time" content="2020-08-30T23:49:05+08:00"><meta name=Keywords content="go,golang,go语言,博客,C,C++,mfc"><meta name=description content="Go Rate限流器代码分析"><meta name=author content="风竹"><meta property="og:url" content="/post/go-time-rate/"><link rel="shortcut icon" href=../../favicon.ico type=image/x-icon><link rel=stylesheet href=../../css/normalize.css><link rel=stylesheet href=../../css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=../../>一蓑烟雨任平生</a><p class=description>Go语言(golang)、C/C++、MFC开发者</p></div><div><nav id=nav-menu class=clearfix><a class=current href=../../>首页</a>
 <a href=../../about/ title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents></nav></div></div><script type=text/javascript>$(document).ready(function(){var a=$(".post-toc"),b,c,d;a.length&&(b=$("#main").offset().left,b<220&&a.css({width:b-10,"margin-left":0-b}),c=a.offset().top-20,d={start:{position:"absolute",top:c},process:{position:"fixed",top:20}},$(window).scroll(function(){var b=$(window).scrollTop();b<c?a.css(d.start):a.css(d.process)}))})</script><article class=post><header><h1 class=post-title>Go Rate限流器代码分析</h1></header><date class="post-meta meta-date">2020年8月30日</date><div class=post-meta><span>|</span>
 <span class=meta-category><a href=../../categories/golang>golang</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
-阅读</span></span></div><div class=post-content><h1 id=go-rate-限流器代码分析>Go Rate 限流器代码分析</h1><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+阅读</span></span></div><div class=post-content><h1 id=go-rate-限流器代码分析>Go Rate 限流器代码分析</h1><div class=highlight><div style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
@@ -486,494 +486,494 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">483
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">484
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">485
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// Copyright 2015 The Go Authors. All rights reserved.
-</span><span style=color:#75715e>// Use of this source code is governed by a BSD-style
-</span><span style=color:#75715e>// license that can be found in the LICENSE file.
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// Package rate 基于令牌桶算法实现了一个速率限制器。
-</span><span style=color:#75715e>// Package rate provides a rate limiter.
-</span><span style=color:#75715e></span><span style=color:#f92672>package</span> <span style=color:#a6e22e>rate</span>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Copyright 2015 The Go Authors. All rights reserved.
+</span><span style=color:#6272a4>// Use of this source code is governed by a BSD-style
+</span><span style=color:#6272a4>// license that can be found in the LICENSE file.
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// Package rate 基于令牌桶算法实现了一个速率限制器。
+</span><span style=color:#6272a4>// Package rate provides a rate limiter.
+</span><span style=color:#6272a4></span><span style=color:#ff79c6>package</span> rate
 
-<span style=color:#f92672>import</span> (
-	<span style=color:#e6db74>&#34;context&#34;</span>
-	<span style=color:#e6db74>&#34;fmt&#34;</span>
-	<span style=color:#e6db74>&#34;math&#34;</span>
-	<span style=color:#e6db74>&#34;sync&#34;</span>
-	<span style=color:#e6db74>&#34;time&#34;</span>
+<span style=color:#ff79c6>import</span> (
+	<span style=color:#f1fa8c>&#34;context&#34;</span>
+	<span style=color:#f1fa8c>&#34;fmt&#34;</span>
+	<span style=color:#f1fa8c>&#34;math&#34;</span>
+	<span style=color:#f1fa8c>&#34;sync&#34;</span>
+	<span style=color:#f1fa8c>&#34;time&#34;</span>
 )
 
-<span style=color:#75715e>//  Limit 定义事件发生的最大速率，代表每秒事件发生的次数。0表示事件不会发生
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// Limit defines the maximum frequency of some events.
-</span><span style=color:#75715e>// Limit is represented as number of events per second.
-</span><span style=color:#75715e>// A zero Limit allows no events.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Limit</span> <span style=color:#66d9ef>float64</span>
+<span style=color:#6272a4>//  Limit 定义事件发生的最大速率，代表每秒事件发生的次数。0表示事件不会发生
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// Limit defines the maximum frequency of some events.
+</span><span style=color:#6272a4>// Limit is represented as number of events per second.
+</span><span style=color:#6272a4>// A zero Limit allows no events.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>type</span> Limit <span style=color:#8be9fd>float64</span>
 
-<span style=color:#75715e>// Inf 代表没有速率限制，始终允许事件发生
-</span><span style=color:#75715e>// Inf is the infinite rate limit; it allows all events (even if burst is zero).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Inf</span> = <span style=color:#a6e22e>Limit</span>(<span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>MaxFloat64</span>)
+<span style=color:#6272a4>// Inf 代表没有速率限制，始终允许事件发生
+</span><span style=color:#6272a4>// Inf is the infinite rate limit; it allows all events (even if burst is zero).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>const</span> Inf = <span style=color:#50fa7b>Limit</span>(math.MaxFloat64)
 
-<span style=color:#75715e>// Every 把事件发生的最小时间间隔转换为Limit变量
-</span><span style=color:#75715e>// 比如interval=5s，表示5s一次，每秒的速率为1/5=0.2
-</span><span style=color:#75715e>// Every converts a minimum time interval between events to a Limit.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Every</span>(<span style=color:#a6e22e>interval</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>) <span style=color:#a6e22e>Limit</span> {
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>interval</span> <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>0</span> {
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>Inf</span>
+<span style=color:#6272a4>// Every 把事件发生的最小时间间隔转换为Limit变量
+</span><span style=color:#6272a4>// 比如interval=5s，表示5s一次，每秒的速率为1/5=0.2
+</span><span style=color:#6272a4>// Every converts a minimum time interval between events to a Limit.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>Every</span>(interval time.Duration) Limit {
+	<span style=color:#ff79c6>if</span> interval <span style=color:#ff79c6>&lt;=</span> <span style=color:#bd93f9>0</span> {
+		<span style=color:#ff79c6>return</span> Inf
 	}
-	<span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>/</span> <span style=color:#a6e22e>Limit</span>(<span style=color:#a6e22e>interval</span>.<span style=color:#a6e22e>Seconds</span>())
+	<span style=color:#ff79c6>return</span> <span style=color:#bd93f9>1</span> <span style=color:#ff79c6>/</span> <span style=color:#50fa7b>Limit</span>(interval.<span style=color:#50fa7b>Seconds</span>())
 }
 
-<span style=color:#75715e>// Limiter 控制事件发生的频率。实现了一个大小为b，初始为满，每秒填充r个令牌的令牌桶。
-</span><span style=color:#75715e>// 在随便一个很大的时间间隔内，Limiter限制令牌的产生速率为每秒r个令牌，同时发生的事件数量为b个。
-</span><span style=color:#75715e>// 如果r==Inf（预定的的值，代表无限制的速率），Limiter忽略同时发生的事件数量b的值。
-</span><span style=color:#75715e>// 零值的Limiter是一个有效Limiter，但是会拒绝任何事件的发生。使用NewLimiter创建非零值的Limiter
-</span><span style=color:#75715e>// Limiter有三个主要的方法，Allow、Reserve、Wait。大多数调用都应该使用Wait。
-</span><span style=color:#75715e>// 这三个方法每次都只消费一个令牌。他们的不同之处在于当令牌桶里没有令牌时不同行为：
-</span><span style=color:#75715e>// 如果令牌桶里没有令牌，Allow返回false
-</span><span style=color:#75715e>// 如果令牌桶里没有令牌,Reserve返回
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// A Limiter controls how frequently events are allowed to happen.
-</span><span style=color:#75715e>// It implements a &#34;token bucket&#34; of size b, initially full and refilled
-</span><span style=color:#75715e>// at rate r tokens per second.
-</span><span style=color:#75715e>// Informally, in any large enough time interval, the Limiter limits the
-</span><span style=color:#75715e>// rate to r tokens per second, with a maximum burst size of b events.
-</span><span style=color:#75715e>// As a special case, if r == Inf (the infinite rate), b is ignored.
-</span><span style=color:#75715e>// See https://en.wikipedia.org/wiki/Token_bucket for more about token buckets.
-</span><span style=color:#75715e>//
-</span><span style=color:#75715e>// The zero value is a valid Limiter, but it will reject all events.
-</span><span style=color:#75715e>// Use NewLimiter to create non-zero Limiters.
-</span><span style=color:#75715e>//
-</span><span style=color:#75715e>// Limiter has three main methods, Allow, Reserve, and Wait.
-</span><span style=color:#75715e>// Most callers should use Wait.
-</span><span style=color:#75715e>//
-</span><span style=color:#75715e>// Each of the three methods consumes a single token.
-</span><span style=color:#75715e>// They differ in their behavior when no token is available.
-</span><span style=color:#75715e>// If no token is available, Allow returns false.
-</span><span style=color:#75715e>// If no token is available, Reserve returns a reservation for a future token
-</span><span style=color:#75715e>// and the amount of time the caller must wait before using it.
-</span><span style=color:#75715e>// If no token is available, Wait blocks until one can be obtained
-</span><span style=color:#75715e>// or its associated context.Context is canceled.
-</span><span style=color:#75715e>//
-</span><span style=color:#75715e>// The methods AllowN, ReserveN, and WaitN consume n tokens.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Limiter</span> <span style=color:#66d9ef>struct</span> {
-	<span style=color:#a6e22e>mu</span>     <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Mutex</span>
-	<span style=color:#a6e22e>limit</span>  <span style=color:#a6e22e>Limit</span>   <span style=color:#75715e>// 放入桶中的token的产生速率
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>burst</span>  <span style=color:#66d9ef>int</span>     <span style=color:#75715e>// 同一时刻支持的最大突发事件的数量，也是令牌桶的最大容量
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>tokens</span> <span style=color:#66d9ef>float64</span> <span style=color:#75715e>// token的数量 使用float64类型是因为指定时间内产生的令牌数量可能不是整数个
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// last字段是tokens字段最后一次更新的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// last is the last time the limiter&#39;s tokens field was updated
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>last</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>
-	<span style=color:#75715e>// lastEvent 上一个事件发生的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// lastEvent is the latest time of a rate-limited event (past or future)
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>lastEvent</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>
+<span style=color:#6272a4>// Limiter 控制事件发生的频率。实现了一个大小为b，初始为满，每秒填充r个令牌的令牌桶。
+</span><span style=color:#6272a4>// 在随便一个很大的时间间隔内，Limiter限制令牌的产生速率为每秒r个令牌，同时发生的事件数量为b个。
+</span><span style=color:#6272a4>// 如果r==Inf（预定的的值，代表无限制的速率），Limiter忽略同时发生的事件数量b的值。
+</span><span style=color:#6272a4>// 零值的Limiter是一个有效Limiter，但是会拒绝任何事件的发生。使用NewLimiter创建非零值的Limiter
+</span><span style=color:#6272a4>// Limiter有三个主要的方法，Allow、Reserve、Wait。大多数调用都应该使用Wait。
+</span><span style=color:#6272a4>// 这三个方法每次都只消费一个令牌。他们的不同之处在于当令牌桶里没有令牌时不同行为：
+</span><span style=color:#6272a4>// 如果令牌桶里没有令牌，Allow返回false
+</span><span style=color:#6272a4>// 如果令牌桶里没有令牌,Reserve返回
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// A Limiter controls how frequently events are allowed to happen.
+</span><span style=color:#6272a4>// It implements a &#34;token bucket&#34; of size b, initially full and refilled
+</span><span style=color:#6272a4>// at rate r tokens per second.
+</span><span style=color:#6272a4>// Informally, in any large enough time interval, the Limiter limits the
+</span><span style=color:#6272a4>// rate to r tokens per second, with a maximum burst size of b events.
+</span><span style=color:#6272a4>// As a special case, if r == Inf (the infinite rate), b is ignored.
+</span><span style=color:#6272a4>// See https://en.wikipedia.org/wiki/Token_bucket for more about token buckets.
+</span><span style=color:#6272a4>//
+</span><span style=color:#6272a4>// The zero value is a valid Limiter, but it will reject all events.
+</span><span style=color:#6272a4>// Use NewLimiter to create non-zero Limiters.
+</span><span style=color:#6272a4>//
+</span><span style=color:#6272a4>// Limiter has three main methods, Allow, Reserve, and Wait.
+</span><span style=color:#6272a4>// Most callers should use Wait.
+</span><span style=color:#6272a4>//
+</span><span style=color:#6272a4>// Each of the three methods consumes a single token.
+</span><span style=color:#6272a4>// They differ in their behavior when no token is available.
+</span><span style=color:#6272a4>// If no token is available, Allow returns false.
+</span><span style=color:#6272a4>// If no token is available, Reserve returns a reservation for a future token
+</span><span style=color:#6272a4>// and the amount of time the caller must wait before using it.
+</span><span style=color:#6272a4>// If no token is available, Wait blocks until one can be obtained
+</span><span style=color:#6272a4>// or its associated context.Context is canceled.
+</span><span style=color:#6272a4>//
+</span><span style=color:#6272a4>// The methods AllowN, ReserveN, and WaitN consume n tokens.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>type</span> Limiter <span style=color:#8be9fd;font-style:italic>struct</span> {
+	mu     sync.Mutex
+	limit  Limit   <span style=color:#6272a4>// 放入桶中的token的产生速率
+</span><span style=color:#6272a4></span>	burst  <span style=color:#8be9fd>int</span>     <span style=color:#6272a4>// 同一时刻支持的最大突发事件的数量，也是令牌桶的最大容量
+</span><span style=color:#6272a4></span>	tokens <span style=color:#8be9fd>float64</span> <span style=color:#6272a4>// token的数量 使用float64类型是因为指定时间内产生的令牌数量可能不是整数个
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// last字段是tokens字段最后一次更新的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// last is the last time the limiter&#39;s tokens field was updated
+</span><span style=color:#6272a4></span>	last time.Time
+	<span style=color:#6272a4>// lastEvent 上一个事件发生的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// lastEvent is the latest time of a rate-limited event (past or future)
+</span><span style=color:#6272a4></span>	lastEvent time.Time
 }
 
-<span style=color:#75715e>// Limit returns the maximum overall event rate.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>Limit</span>() <span style=color:#a6e22e>Limit</span> {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
-	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span>
+<span style=color:#6272a4>// Limit returns the maximum overall event rate.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>Limit</span>() Limit {
+	lim.mu.<span style=color:#50fa7b>Lock</span>()
+	<span style=color:#ff79c6>defer</span> lim.mu.<span style=color:#50fa7b>Unlock</span>()
+	<span style=color:#ff79c6>return</span> lim.limit
 }
 
-<span style=color:#75715e>// Burst returns the maximum burst size. Burst is the maximum number of tokens
-</span><span style=color:#75715e>// that can be consumed in a single call to Allow, Reserve, or Wait, so higher
-</span><span style=color:#75715e>// Burst values allow more events to happen at once.
-</span><span style=color:#75715e>// A zero Burst allows no events, unless limit == Inf.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>Burst</span>() <span style=color:#66d9ef>int</span> {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
-	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span>
+<span style=color:#6272a4>// Burst returns the maximum burst size. Burst is the maximum number of tokens
+</span><span style=color:#6272a4>// that can be consumed in a single call to Allow, Reserve, or Wait, so higher
+</span><span style=color:#6272a4>// Burst values allow more events to happen at once.
+</span><span style=color:#6272a4>// A zero Burst allows no events, unless limit == Inf.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>Burst</span>() <span style=color:#8be9fd>int</span> {
+	lim.mu.<span style=color:#50fa7b>Lock</span>()
+	<span style=color:#ff79c6>defer</span> lim.mu.<span style=color:#50fa7b>Unlock</span>()
+	<span style=color:#ff79c6>return</span> lim.burst
 }
 
-<span style=color:#75715e>//
-</span><span style=color:#75715e>// NewLimiter returns a new Limiter that allows events up to rate r and permits
-</span><span style=color:#75715e>// bursts of at most b tokens.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewLimiter</span>(<span style=color:#a6e22e>r</span> <span style=color:#a6e22e>Limit</span>, <span style=color:#a6e22e>b</span> <span style=color:#66d9ef>int</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span> {
-	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Limiter</span>{
-		<span style=color:#a6e22e>limit</span>: <span style=color:#a6e22e>r</span>,
-		<span style=color:#a6e22e>burst</span>: <span style=color:#a6e22e>b</span>,
+<span style=color:#6272a4>//
+</span><span style=color:#6272a4>// NewLimiter returns a new Limiter that allows events up to rate r and permits
+</span><span style=color:#6272a4>// bursts of at most b tokens.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>NewLimiter</span>(r Limit, b <span style=color:#8be9fd>int</span>) <span style=color:#ff79c6>*</span>Limiter {
+	<span style=color:#ff79c6>return</span> <span style=color:#ff79c6>&amp;</span>Limiter{
+		limit: r,
+		burst: b,
 	}
 }
 
-<span style=color:#75715e>// Allow 判断是否允许发生一个事件
-</span><span style=color:#75715e>// Allow is shorthand for AllowN(time.Now(), 1).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>Allow</span>() <span style=color:#66d9ef>bool</span> {
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>AllowN</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>(), <span style=color:#ae81ff>1</span>)
+<span style=color:#6272a4>// Allow 判断是否允许发生一个事件
+</span><span style=color:#6272a4>// Allow is shorthand for AllowN(time.Now(), 1).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>Allow</span>() <span style=color:#8be9fd>bool</span> {
+	<span style=color:#ff79c6>return</span> lim.<span style=color:#50fa7b>AllowN</span>(time.<span style=color:#50fa7b>Now</span>(), <span style=color:#bd93f9>1</span>)
 }
 
-<span style=color:#75715e>// AllowN reports whether n events may happen at time now.
-</span><span style=color:#75715e>// Use this method if you intend to drop / skip events that exceed the rate limit.
-</span><span style=color:#75715e>// Otherwise use Reserve or Wait.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>AllowN</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>bool</span> {
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>reserveN</span>(<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>n</span>, <span style=color:#ae81ff>0</span>).<span style=color:#a6e22e>ok</span>
+<span style=color:#6272a4>// AllowN reports whether n events may happen at time now.
+</span><span style=color:#6272a4>// Use this method if you intend to drop / skip events that exceed the rate limit.
+</span><span style=color:#6272a4>// Otherwise use Reserve or Wait.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>AllowN</span>(now time.Time, n <span style=color:#8be9fd>int</span>) <span style=color:#8be9fd>bool</span> {
+	<span style=color:#ff79c6>return</span> lim.<span style=color:#50fa7b>reserveN</span>(now, n, <span style=color:#bd93f9>0</span>).ok
 }
 
-<span style=color:#75715e>// Reservation 保存在一定时间延迟后Limiter允许执行的事件信息。
-</span><span style=color:#75715e>// Reservation可以被取消，取消后Limiter可以执行剩下的事件。
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// A Reservation holds information about events that are permitted by a Limiter to happen after a delay.
-</span><span style=color:#75715e>// A Reservation may be canceled, which may enable the Limiter to permit additional events.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Reservation</span> <span style=color:#66d9ef>struct</span> {
-	<span style=color:#a6e22e>ok</span>        <span style=color:#66d9ef>bool</span>      <span style=color:#75715e>// 令牌桶是否可以提供需要的令牌数量
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>lim</span>       <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>  <span style=color:#75715e>// Limiter本省
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>tokens</span>    <span style=color:#66d9ef>int</span>       <span style=color:#75715e>// 预定的令牌数量
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>timeToAct</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span> <span style=color:#75715e>// 令牌桶可以提供满足需要的令牌数量的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 预订时的限制速率，后续可以改变
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// This is the Limit at reservation time, it can change later.
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>limit</span> <span style=color:#a6e22e>Limit</span>
+<span style=color:#6272a4>// Reservation 保存在一定时间延迟后Limiter允许执行的事件信息。
+</span><span style=color:#6272a4>// Reservation可以被取消，取消后Limiter可以执行剩下的事件。
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// A Reservation holds information about events that are permitted by a Limiter to happen after a delay.
+</span><span style=color:#6272a4>// A Reservation may be canceled, which may enable the Limiter to permit additional events.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>type</span> Reservation <span style=color:#8be9fd;font-style:italic>struct</span> {
+	ok        <span style=color:#8be9fd>bool</span>      <span style=color:#6272a4>// 令牌桶是否可以提供需要的令牌数量
+</span><span style=color:#6272a4></span>	lim       <span style=color:#ff79c6>*</span>Limiter  <span style=color:#6272a4>// Limiter本省
+</span><span style=color:#6272a4></span>	tokens    <span style=color:#8be9fd>int</span>       <span style=color:#6272a4>// 预定的令牌数量
+</span><span style=color:#6272a4></span>	timeToAct time.Time <span style=color:#6272a4>// 令牌桶可以提供满足需要的令牌数量的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 预订时的限制速率，后续可以改变
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// This is the Limit at reservation time, it can change later.
+</span><span style=color:#6272a4></span>	limit Limit
 }
 
-<span style=color:#75715e>// OK returns whether the limiter can provide the requested number of tokens
-</span><span style=color:#75715e>// within the maximum wait time.  If OK is false, Delay returns InfDuration, and
-</span><span style=color:#75715e>// Cancel does nothing.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span>) <span style=color:#a6e22e>OK</span>() <span style=color:#66d9ef>bool</span> {
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>ok</span>
+<span style=color:#6272a4>// OK returns whether the limiter can provide the requested number of tokens
+</span><span style=color:#6272a4>// within the maximum wait time.  If OK is false, Delay returns InfDuration, and
+</span><span style=color:#6272a4>// Cancel does nothing.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (r <span style=color:#ff79c6>*</span>Reservation) <span style=color:#50fa7b>OK</span>() <span style=color:#8be9fd>bool</span> {
+	<span style=color:#ff79c6>return</span> r.ok
 }
 
-<span style=color:#75715e>// Delay is shorthand for DelayFrom(time.Now()).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span>) <span style=color:#a6e22e>Delay</span>() <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span> {
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>DelayFrom</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>())
+<span style=color:#6272a4>// Delay is shorthand for DelayFrom(time.Now()).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (r <span style=color:#ff79c6>*</span>Reservation) <span style=color:#50fa7b>Delay</span>() time.Duration {
+	<span style=color:#ff79c6>return</span> r.<span style=color:#50fa7b>DelayFrom</span>(time.<span style=color:#50fa7b>Now</span>())
 }
 
-<span style=color:#75715e>// InfDuration is the duration returned by Delay when a Reservation is not OK.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>InfDuration</span> = <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>(<span style=color:#ae81ff>1</span><span style=color:#f92672>&lt;&lt;</span><span style=color:#ae81ff>63</span> <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>)
+<span style=color:#6272a4>// InfDuration is the duration returned by Delay when a Reservation is not OK.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>const</span> InfDuration = time.<span style=color:#50fa7b>Duration</span>(<span style=color:#bd93f9>1</span><span style=color:#ff79c6>&lt;&lt;</span><span style=color:#bd93f9>63</span> <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>)
 
-<span style=color:#75715e>// DelayFrom 返回满足预定条件前预定持有者必须要等待的时间。
-</span><span style=color:#75715e>// 0表示立刻可以满足。InfDuration表示限流器在最大的等待时间内无法满足此次预订的令牌数量。
-</span><span style=color:#75715e>// DelayFrom returns the duration for which the reservation holder must wait
-</span><span style=color:#75715e>// before taking the reserved action.  Zero duration means act immediately.
-</span><span style=color:#75715e>// InfDuration means the limiter cannot grant the tokens requested in this
-</span><span style=color:#75715e>// Reservation within the maximum wait time.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span>) <span style=color:#a6e22e>DelayFrom</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>) <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span> {
-	<span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>ok</span> {
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>InfDuration</span>
+<span style=color:#6272a4>// DelayFrom 返回满足预定条件前预定持有者必须要等待的时间。
+</span><span style=color:#6272a4>// 0表示立刻可以满足。InfDuration表示限流器在最大的等待时间内无法满足此次预订的令牌数量。
+</span><span style=color:#6272a4>// DelayFrom returns the duration for which the reservation holder must wait
+</span><span style=color:#6272a4>// before taking the reserved action.  Zero duration means act immediately.
+</span><span style=color:#6272a4>// InfDuration means the limiter cannot grant the tokens requested in this
+</span><span style=color:#6272a4>// Reservation within the maximum wait time.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (r <span style=color:#ff79c6>*</span>Reservation) <span style=color:#50fa7b>DelayFrom</span>(now time.Time) time.Duration {
+	<span style=color:#ff79c6>if</span> !r.ok {
+		<span style=color:#ff79c6>return</span> InfDuration
 	}
-	<span style=color:#a6e22e>delay</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span>.<span style=color:#a6e22e>Sub</span>(<span style=color:#a6e22e>now</span>)
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>delay</span> &lt; <span style=color:#ae81ff>0</span> {
-		<span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>
+	delay <span style=color:#ff79c6>:=</span> r.timeToAct.<span style=color:#50fa7b>Sub</span>(now)
+	<span style=color:#ff79c6>if</span> delay &lt; <span style=color:#bd93f9>0</span> {
+		<span style=color:#ff79c6>return</span> <span style=color:#bd93f9>0</span>
 	}
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>delay</span>
+	<span style=color:#ff79c6>return</span> delay
 }
 
-<span style=color:#75715e>// Cancel is shorthand for CancelAt(time.Now()).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span>) <span style=color:#a6e22e>Cancel</span>() {
-	<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>CancelAt</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>())
-	<span style=color:#66d9ef>return</span>
+<span style=color:#6272a4>// Cancel is shorthand for CancelAt(time.Now()).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (r <span style=color:#ff79c6>*</span>Reservation) <span style=color:#50fa7b>Cancel</span>() {
+	r.<span style=color:#50fa7b>CancelAt</span>(time.<span style=color:#50fa7b>Now</span>())
+	<span style=color:#ff79c6>return</span>
 }
 
-<span style=color:#75715e>// CancelAt 表示预订持有者将不会继续保留预订的令牌，并且尽可能的弥补此次预订对速率限制的影响，
-</span><span style=color:#75715e>// 因为一些预订的令牌可能已经被使用。
-</span><span style=color:#75715e>// CancelAt indicates that the reservation holder will not perform the reserved action
-</span><span style=color:#75715e>// and reverses the effects of this Reservation on the rate limit as much as possible,
-</span><span style=color:#75715e>// considering that other reservations may have already been made.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span>) <span style=color:#a6e22e>CancelAt</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>) {
-	<span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>ok</span> { <span style=color:#75715e>// 预订失败的不需用操作
-</span><span style=color:#75715e></span>		<span style=color:#66d9ef>return</span>
-	}
-
-	<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
-	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
-
-	<span style=color:#75715e>// 速率无限制、令牌数量为0、已过预定等待时间的无需操作
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>Inf</span> <span style=color:#f92672>||</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>tokens</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>||</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span>.<span style=color:#a6e22e>Before</span>(<span style=color:#a6e22e>now</span>) {
-		<span style=color:#66d9ef>return</span>
+<span style=color:#6272a4>// CancelAt 表示预订持有者将不会继续保留预订的令牌，并且尽可能的弥补此次预订对速率限制的影响，
+</span><span style=color:#6272a4>// 因为一些预订的令牌可能已经被使用。
+</span><span style=color:#6272a4>// CancelAt indicates that the reservation holder will not perform the reserved action
+</span><span style=color:#6272a4>// and reverses the effects of this Reservation on the rate limit as much as possible,
+</span><span style=color:#6272a4>// considering that other reservations may have already been made.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (r <span style=color:#ff79c6>*</span>Reservation) <span style=color:#50fa7b>CancelAt</span>(now time.Time) {
+	<span style=color:#ff79c6>if</span> !r.ok { <span style=color:#6272a4>// 预订失败的不需用操作
+</span><span style=color:#6272a4></span>		<span style=color:#ff79c6>return</span>
 	}
 
-	<span style=color:#75715e>// 先计算取消后last和tokens的值
-</span><span style=color:#75715e></span>
-	<span style=color:#75715e>// 计算需要恢复的令牌
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// r.lim.lastEvent的值是返回Reservation对象时的值
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// r.timeToAct是此次满足预定条件时事件发生的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// lastEvent始终是大于等于（也就是等于或晚于）timeToAct
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// r.lim.lastEvent-r.timeToAct表示从前一个事件发生的时间到此次预订成功后事件发生的时间之间的差值，然后计算在这个
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 时间段产生了多少令牌，即已经消耗掉的令牌数量，这些令牌不需要恢复
-</span><span style=color:#75715e></span>
-	<span style=color:#75715e>// calculate tokens to restore
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// The duration between lim.lastEvent and r.timeToAct tells us how many tokens were reserved
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// after r was obtained. These tokens should not be restored.
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>restoreTokens</span> <span style=color:#f92672>:=</span> float64(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>tokens</span>) <span style=color:#f92672>-</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>limit</span>.<span style=color:#a6e22e>tokensFromDuration</span>(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>lastEvent</span>.<span style=color:#a6e22e>Sub</span>(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span>))
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>restoreTokens</span> <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>0</span> {
-		<span style=color:#66d9ef>return</span>
+	r.lim.mu.<span style=color:#50fa7b>Lock</span>()
+	<span style=color:#ff79c6>defer</span> r.lim.mu.<span style=color:#50fa7b>Unlock</span>()
+
+	<span style=color:#6272a4>// 速率无限制、令牌数量为0、已过预定等待时间的无需操作
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> r.lim.limit <span style=color:#ff79c6>==</span> Inf <span style=color:#ff79c6>||</span> r.tokens <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span> <span style=color:#ff79c6>||</span> r.timeToAct.<span style=color:#50fa7b>Before</span>(now) {
+		<span style=color:#ff79c6>return</span>
 	}
 
-	<span style=color:#75715e>// 计算lim上一次修改令牌数量后到现在应该产生的令牌的数量
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// advance time to now
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tokens</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>advance</span>(<span style=color:#a6e22e>now</span>)
-	<span style=color:#75715e>// calculate new number of tokens
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>tokens</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>restoreTokens</span>                            <span style=color:#75715e>// 当前的令牌数量
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>burst</span> <span style=color:#f92672>:=</span> float64(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span>); <span style=color:#a6e22e>tokens</span> &gt; <span style=color:#a6e22e>burst</span> { <span style=color:#75715e>// 限制不超过最大令牌数量
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>burst</span>
+	<span style=color:#6272a4>// 先计算取消后last和tokens的值
+</span><span style=color:#6272a4></span>
+	<span style=color:#6272a4>// 计算需要恢复的令牌
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// r.lim.lastEvent的值是返回Reservation对象时的值
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// r.timeToAct是此次满足预定条件时事件发生的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// lastEvent始终是大于等于（也就是等于或晚于）timeToAct
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// r.lim.lastEvent-r.timeToAct表示从前一个事件发生的时间到此次预订成功后事件发生的时间之间的差值，然后计算在这个
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 时间段产生了多少令牌，即已经消耗掉的令牌数量，这些令牌不需要恢复
+</span><span style=color:#6272a4></span>
+	<span style=color:#6272a4>// calculate tokens to restore
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// The duration between lim.lastEvent and r.timeToAct tells us how many tokens were reserved
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// after r was obtained. These tokens should not be restored.
+</span><span style=color:#6272a4></span>	restoreTokens <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>float64</span>(r.tokens) <span style=color:#ff79c6>-</span> r.limit.<span style=color:#50fa7b>tokensFromDuration</span>(r.lim.lastEvent.<span style=color:#50fa7b>Sub</span>(r.timeToAct))
+	<span style=color:#ff79c6>if</span> restoreTokens <span style=color:#ff79c6>&lt;=</span> <span style=color:#bd93f9>0</span> {
+		<span style=color:#ff79c6>return</span>
 	}
 
-	<span style=color:#75715e>// update state
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>last</span> = <span style=color:#a6e22e>now</span>
-	<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>tokens</span>
+	<span style=color:#6272a4>// 计算lim上一次修改令牌数量后到现在应该产生的令牌的数量
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// advance time to now
+</span><span style=color:#6272a4></span>	now, _, tokens <span style=color:#ff79c6>:=</span> r.lim.<span style=color:#50fa7b>advance</span>(now)
+	<span style=color:#6272a4>// calculate new number of tokens
+</span><span style=color:#6272a4></span>	tokens <span style=color:#ff79c6>+=</span> restoreTokens                            <span style=color:#6272a4>// 当前的令牌数量
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> burst <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>float64</span>(r.lim.burst); tokens &gt; burst { <span style=color:#6272a4>// 限制不超过最大令牌数量
+</span><span style=color:#6272a4></span>		tokens = burst
+	}
 
-	<span style=color:#75715e>// 计算取消后lastEvent的值
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 相等说明预约成功后没有任何事件发生，即没到预约事件发生的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 把reserveN函数里修改的lastEvent还原为reserveN调用前的上一个事件发生的时间，
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 即上次调用reserveN函数并且预订成功时lastEvent的值，此次预订成功时事件发生的
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 时间减去该值就是产生此次预订的令牌数量所消耗的时间。所以前一个事件的时间=此次预订成功事件发生的时间-产生此次预订的令牌数量的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// reserveN函数timeToAct的计算反操作
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>lastEvent</span> {
-		<span style=color:#a6e22e>prevEvent</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>limit</span>.<span style=color:#a6e22e>durationFromTokens</span>(float64(<span style=color:#f92672>-</span><span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>tokens</span>)))
-		<span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>prevEvent</span>.<span style=color:#a6e22e>Before</span>(<span style=color:#a6e22e>now</span>) {
-			<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>lastEvent</span> = <span style=color:#a6e22e>prevEvent</span>
+	<span style=color:#6272a4>// update state
+</span><span style=color:#6272a4></span>	r.lim.last = now
+	r.lim.tokens = tokens
+
+	<span style=color:#6272a4>// 计算取消后lastEvent的值
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 相等说明预约成功后没有任何事件发生，即没到预约事件发生的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 把reserveN函数里修改的lastEvent还原为reserveN调用前的上一个事件发生的时间，
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 即上次调用reserveN函数并且预订成功时lastEvent的值，此次预订成功时事件发生的
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 时间减去该值就是产生此次预订的令牌数量所消耗的时间。所以前一个事件的时间=此次预订成功事件发生的时间-产生此次预订的令牌数量的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// reserveN函数timeToAct的计算反操作
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> r.timeToAct <span style=color:#ff79c6>==</span> r.lim.lastEvent {
+		prevEvent <span style=color:#ff79c6>:=</span> r.timeToAct.<span style=color:#50fa7b>Add</span>(r.limit.<span style=color:#50fa7b>durationFromTokens</span>(<span style=color:#8be9fd;font-style:italic>float64</span>(<span style=color:#ff79c6>-</span>r.tokens)))
+		<span style=color:#ff79c6>if</span> !prevEvent.<span style=color:#50fa7b>Before</span>(now) {
+			r.lim.lastEvent = prevEvent
 		}
 	}
 
-	<span style=color:#66d9ef>return</span>
+	<span style=color:#ff79c6>return</span>
 }
 
-<span style=color:#75715e>// Reserve is shorthand for ReserveN(time.Now(), 1).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>Reserve</span>() <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span> {
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>ReserveN</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>(), <span style=color:#ae81ff>1</span>)
+<span style=color:#6272a4>// Reserve is shorthand for ReserveN(time.Now(), 1).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>Reserve</span>() <span style=color:#ff79c6>*</span>Reservation {
+	<span style=color:#ff79c6>return</span> lim.<span style=color:#50fa7b>ReserveN</span>(time.<span style=color:#50fa7b>Now</span>(), <span style=color:#bd93f9>1</span>)
 }
 
-<span style=color:#75715e>// ReserveN returns a Reservation that indicates how long the caller must wait before n events happen.
-</span><span style=color:#75715e>// The Limiter takes this Reservation into account when allowing future events.
-</span><span style=color:#75715e>// The returned Reservation’s OK() method returns false if n exceeds the Limiter&#39;s burst size.
-</span><span style=color:#75715e>// Usage example:
-</span><span style=color:#75715e>//   r := lim.ReserveN(time.Now(), 1)
-</span><span style=color:#75715e>//   if !r.OK() {
-</span><span style=color:#75715e>//     // Not allowed to act! Did you remember to set lim.burst to be &gt; 0 ?
-</span><span style=color:#75715e>//     return
-</span><span style=color:#75715e>//   }
-</span><span style=color:#75715e>//   time.Sleep(r.Delay())
-</span><span style=color:#75715e>//   Act()
-</span><span style=color:#75715e>// Use this method if you wish to wait and slow down in accordance with the rate limit without dropping events.
-</span><span style=color:#75715e>// If you need to respect a deadline or cancel the delay, use Wait instead.
-</span><span style=color:#75715e>// To drop or skip events exceeding rate limit, use Allow instead.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>ReserveN</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>Reservation</span> {
-	<span style=color:#a6e22e>r</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>reserveN</span>(<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>InfDuration</span>)
-	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>r</span>
+<span style=color:#6272a4>// ReserveN returns a Reservation that indicates how long the caller must wait before n events happen.
+</span><span style=color:#6272a4>// The Limiter takes this Reservation into account when allowing future events.
+</span><span style=color:#6272a4>// The returned Reservation’s OK() method returns false if n exceeds the Limiter&#39;s burst size.
+</span><span style=color:#6272a4>// Usage example:
+</span><span style=color:#6272a4>//   r := lim.ReserveN(time.Now(), 1)
+</span><span style=color:#6272a4>//   if !r.OK() {
+</span><span style=color:#6272a4>//     // Not allowed to act! Did you remember to set lim.burst to be &gt; 0 ?
+</span><span style=color:#6272a4>//     return
+</span><span style=color:#6272a4>//   }
+</span><span style=color:#6272a4>//   time.Sleep(r.Delay())
+</span><span style=color:#6272a4>//   Act()
+</span><span style=color:#6272a4>// Use this method if you wish to wait and slow down in accordance with the rate limit without dropping events.
+</span><span style=color:#6272a4>// If you need to respect a deadline or cancel the delay, use Wait instead.
+</span><span style=color:#6272a4>// To drop or skip events exceeding rate limit, use Allow instead.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>ReserveN</span>(now time.Time, n <span style=color:#8be9fd>int</span>) <span style=color:#ff79c6>*</span>Reservation {
+	r <span style=color:#ff79c6>:=</span> lim.<span style=color:#50fa7b>reserveN</span>(now, n, InfDuration)
+	<span style=color:#ff79c6>return</span> <span style=color:#ff79c6>&amp;</span>r
 }
 
-<span style=color:#75715e>// Wait is shorthand for WaitN(ctx, 1).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>Wait</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) (<span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>) {
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>WaitN</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#ae81ff>1</span>)
+<span style=color:#6272a4>// Wait is shorthand for WaitN(ctx, 1).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>Wait</span>(ctx context.Context) (err <span style=color:#8be9fd>error</span>) {
+	<span style=color:#ff79c6>return</span> lim.<span style=color:#50fa7b>WaitN</span>(ctx, <span style=color:#bd93f9>1</span>)
 }
 
-<span style=color:#75715e>// WaitN blocks until lim permits n events to happen.
-</span><span style=color:#75715e>// It returns an error if n exceeds the Limiter&#39;s burst size, the Context is
-</span><span style=color:#75715e>// canceled, or the expected wait time exceeds the Context&#39;s Deadline.
-</span><span style=color:#75715e>// The burst limit is ignored if the rate limit is Inf.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>WaitN</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) (<span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>) {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
-	<span style=color:#a6e22e>burst</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span>
-	<span style=color:#a6e22e>limit</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span>
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
+<span style=color:#6272a4>// WaitN blocks until lim permits n events to happen.
+</span><span style=color:#6272a4>// It returns an error if n exceeds the Limiter&#39;s burst size, the Context is
+</span><span style=color:#6272a4>// canceled, or the expected wait time exceeds the Context&#39;s Deadline.
+</span><span style=color:#6272a4>// The burst limit is ignored if the rate limit is Inf.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>WaitN</span>(ctx context.Context, n <span style=color:#8be9fd>int</span>) (err <span style=color:#8be9fd>error</span>) {
+	lim.mu.<span style=color:#50fa7b>Lock</span>()
+	burst <span style=color:#ff79c6>:=</span> lim.burst
+	limit <span style=color:#ff79c6>:=</span> lim.limit
+	lim.mu.<span style=color:#50fa7b>Unlock</span>()
 
-	<span style=color:#75715e>// 等待的令牌数量为什么不可以超过最大令牌数量？
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 限流器是不阻塞的，只计算当前是否可满足需要的令牌数量，如果超过最大值，必定要等待一段时间
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>n</span> &gt; <span style=color:#a6e22e>burst</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>limit</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>Inf</span> {
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;rate: Wait(n=%d) exceeds limiter&#39;s burst %d&#34;</span>, <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>burst</span>)
+	<span style=color:#6272a4>// 等待的令牌数量为什么不可以超过最大令牌数量？
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 限流器是不阻塞的，只计算当前是否可满足需要的令牌数量，如果超过最大值，必定要等待一段时间
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> n &gt; burst <span style=color:#ff79c6>&amp;&amp;</span> limit <span style=color:#ff79c6>!=</span> Inf {
+		<span style=color:#ff79c6>return</span> fmt.<span style=color:#50fa7b>Errorf</span>(<span style=color:#f1fa8c>&#34;rate: Wait(n=%d) exceeds limiter&#39;s burst %d&#34;</span>, n, burst)
 	}
-	<span style=color:#75715e>// Check if ctx is already cancelled
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>select</span> {
-	<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Done</span>():
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Err</span>()
-	<span style=color:#66d9ef>default</span>:
-	}
-
-	<span style=color:#75715e>// 等待时间不能超过context的截止时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Determine wait limit
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>now</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>()
-	<span style=color:#a6e22e>waitLimit</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>InfDuration</span>
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>deadline</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Deadline</span>(); <span style=color:#a6e22e>ok</span> {
-		<span style=color:#a6e22e>waitLimit</span> = <span style=color:#a6e22e>deadline</span>.<span style=color:#a6e22e>Sub</span>(<span style=color:#a6e22e>now</span>)
+	<span style=color:#6272a4>// Check if ctx is already cancelled
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>select</span> {
+	<span style=color:#ff79c6>case</span> <span style=color:#ff79c6>&lt;-</span>ctx.<span style=color:#50fa7b>Done</span>():
+		<span style=color:#ff79c6>return</span> ctx.<span style=color:#50fa7b>Err</span>()
+	<span style=color:#ff79c6>default</span>:
 	}
 
-	<span style=color:#75715e>// 预定指定数量的令牌
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Reserve
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>r</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>reserveN</span>(<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>waitLimit</span>)
-	<span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>ok</span> {
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;rate: Wait(n=%d) would exceed context deadline&#34;</span>, <span style=color:#a6e22e>n</span>)
+	<span style=color:#6272a4>// 等待时间不能超过context的截止时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Determine wait limit
+</span><span style=color:#6272a4></span>	now <span style=color:#ff79c6>:=</span> time.<span style=color:#50fa7b>Now</span>()
+	waitLimit <span style=color:#ff79c6>:=</span> InfDuration
+	<span style=color:#ff79c6>if</span> deadline, ok <span style=color:#ff79c6>:=</span> ctx.<span style=color:#50fa7b>Deadline</span>(); ok {
+		waitLimit = deadline.<span style=color:#50fa7b>Sub</span>(now)
 	}
-	<span style=color:#75715e>// Wait if necessary
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>delay</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>DelayFrom</span>(<span style=color:#a6e22e>now</span>)
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>delay</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> {
-		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+
+	<span style=color:#6272a4>// 预定指定数量的令牌
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Reserve
+</span><span style=color:#6272a4></span>	r <span style=color:#ff79c6>:=</span> lim.<span style=color:#50fa7b>reserveN</span>(now, n, waitLimit)
+	<span style=color:#ff79c6>if</span> !r.ok {
+		<span style=color:#ff79c6>return</span> fmt.<span style=color:#50fa7b>Errorf</span>(<span style=color:#f1fa8c>&#34;rate: Wait(n=%d) would exceed context deadline&#34;</span>, n)
 	}
-	<span style=color:#a6e22e>t</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>NewTimer</span>(<span style=color:#a6e22e>delay</span>)
-	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Stop</span>()
-	<span style=color:#66d9ef>select</span> {
-	<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>C</span>:
-		<span style=color:#75715e>// We can proceed.
-</span><span style=color:#75715e></span>		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
-	<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Done</span>():
-		<span style=color:#75715e>// 如果在满足预订条件前，context取消了，就取消此次预订。
-</span><span style=color:#75715e></span>		<span style=color:#75715e>// Context was canceled before we could proceed.  Cancel the
-</span><span style=color:#75715e></span>		<span style=color:#75715e>// reservation, which may permit other events to proceed sooner.
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>Cancel</span>()
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Err</span>()
+	<span style=color:#6272a4>// Wait if necessary
+</span><span style=color:#6272a4></span>	delay <span style=color:#ff79c6>:=</span> r.<span style=color:#50fa7b>DelayFrom</span>(now)
+	<span style=color:#ff79c6>if</span> delay <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span> {
+		<span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span>
+	}
+	t <span style=color:#ff79c6>:=</span> time.<span style=color:#50fa7b>NewTimer</span>(delay)
+	<span style=color:#ff79c6>defer</span> t.<span style=color:#50fa7b>Stop</span>()
+	<span style=color:#ff79c6>select</span> {
+	<span style=color:#ff79c6>case</span> <span style=color:#ff79c6>&lt;-</span>t.C:
+		<span style=color:#6272a4>// We can proceed.
+</span><span style=color:#6272a4></span>		<span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span>
+	<span style=color:#ff79c6>case</span> <span style=color:#ff79c6>&lt;-</span>ctx.<span style=color:#50fa7b>Done</span>():
+		<span style=color:#6272a4>// 如果在满足预订条件前，context取消了，就取消此次预订。
+</span><span style=color:#6272a4></span>		<span style=color:#6272a4>// Context was canceled before we could proceed.  Cancel the
+</span><span style=color:#6272a4></span>		<span style=color:#6272a4>// reservation, which may permit other events to proceed sooner.
+</span><span style=color:#6272a4></span>		r.<span style=color:#50fa7b>Cancel</span>()
+		<span style=color:#ff79c6>return</span> ctx.<span style=color:#50fa7b>Err</span>()
 	}
 }
 
-<span style=color:#75715e>// SetLimit is shorthand for SetLimitAt(time.Now(), newLimit).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>SetLimit</span>(<span style=color:#a6e22e>newLimit</span> <span style=color:#a6e22e>Limit</span>) {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>SetLimitAt</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>(), <span style=color:#a6e22e>newLimit</span>)
+<span style=color:#6272a4>// SetLimit is shorthand for SetLimitAt(time.Now(), newLimit).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>SetLimit</span>(newLimit Limit) {
+	lim.<span style=color:#50fa7b>SetLimitAt</span>(time.<span style=color:#50fa7b>Now</span>(), newLimit)
 }
 
-<span style=color:#75715e>// SetLimitAt 修改Limit的速率值。在SetLimitAt调用前使用Reserve或者Wait预定的并且还未发生的Reservation可能不会使用到新的速率和新的桶大小。
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// SetLimitAt sets a new Limit for the limiter. The new Limit, and Burst, may be violated
-</span><span style=color:#75715e>// or underutilized by those which reserved (using Reserve or Wait) but did not yet act
-</span><span style=color:#75715e>// before SetLimitAt was called.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>SetLimitAt</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>newLimit</span> <span style=color:#a6e22e>Limit</span>) {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
-	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
+<span style=color:#6272a4>// SetLimitAt 修改Limit的速率值。在SetLimitAt调用前使用Reserve或者Wait预定的并且还未发生的Reservation可能不会使用到新的速率和新的桶大小。
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// SetLimitAt sets a new Limit for the limiter. The new Limit, and Burst, may be violated
+</span><span style=color:#6272a4>// or underutilized by those which reserved (using Reserve or Wait) but did not yet act
+</span><span style=color:#6272a4>// before SetLimitAt was called.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>SetLimitAt</span>(now time.Time, newLimit Limit) {
+	lim.mu.<span style=color:#50fa7b>Lock</span>()
+	<span style=color:#ff79c6>defer</span> lim.mu.<span style=color:#50fa7b>Unlock</span>()
 
-	<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tokens</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>advance</span>(<span style=color:#a6e22e>now</span>)
+	now, _, tokens <span style=color:#ff79c6>:=</span> lim.<span style=color:#50fa7b>advance</span>(now)
 
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>last</span> = <span style=color:#a6e22e>now</span>
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>tokens</span>
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span> = <span style=color:#a6e22e>newLimit</span>
+	lim.last = now
+	lim.tokens = tokens
+	lim.limit = newLimit
 }
 
-<span style=color:#75715e>// SetBurst is shorthand for SetBurstAt(time.Now(), newBurst).
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>SetBurst</span>(<span style=color:#a6e22e>newBurst</span> <span style=color:#66d9ef>int</span>) {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>SetBurstAt</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>(), <span style=color:#a6e22e>newBurst</span>)
+<span style=color:#6272a4>// SetBurst is shorthand for SetBurstAt(time.Now(), newBurst).
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>SetBurst</span>(newBurst <span style=color:#8be9fd>int</span>) {
+	lim.<span style=color:#50fa7b>SetBurstAt</span>(time.<span style=color:#50fa7b>Now</span>(), newBurst)
 }
 
-<span style=color:#75715e>// SetBurstAt 设置Limiter的值，也就是令牌桶的大小
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// SetBurstAt sets a new burst size for the limiter.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>SetBurstAt</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>newBurst</span> <span style=color:#66d9ef>int</span>) {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
-	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
+<span style=color:#6272a4>// SetBurstAt 设置Limiter的值，也就是令牌桶的大小
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// SetBurstAt sets a new burst size for the limiter.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>SetBurstAt</span>(now time.Time, newBurst <span style=color:#8be9fd>int</span>) {
+	lim.mu.<span style=color:#50fa7b>Lock</span>()
+	<span style=color:#ff79c6>defer</span> lim.mu.<span style=color:#50fa7b>Unlock</span>()
 
-	<span style=color:#75715e>// 修改的同时更新一下当前时间桶内的令牌数量
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tokens</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>advance</span>(<span style=color:#a6e22e>now</span>)
+	<span style=color:#6272a4>// 修改的同时更新一下当前时间桶内的令牌数量
+</span><span style=color:#6272a4></span>	now, _, tokens <span style=color:#ff79c6>:=</span> lim.<span style=color:#50fa7b>advance</span>(now)
 
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>last</span> = <span style=color:#a6e22e>now</span>
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>tokens</span>
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span> = <span style=color:#a6e22e>newBurst</span>
+	lim.last = now
+	lim.tokens = tokens
+	lim.burst = newBurst
 }
 
-<span style=color:#75715e>// reserveN是AllowN, ReserveN和WaitN方法的辅助方法
-</span><span style=color:#75715e>// maxFutureReserve 指定最大的等待时间
-</span><span style=color:#75715e>// reserveN返回Reservation类型的值而不是指针，这样其他函数调用时不会在堆上分配内存（一个指针变量大小的内存）
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// reserveN is a helper method for AllowN, ReserveN, and WaitN.
-</span><span style=color:#75715e>// maxFutureReserve specifies the maximum reservation wait duration allowed.
-</span><span style=color:#75715e>// reserveN returns Reservation, not *Reservation, to avoid allocation in AllowN and WaitN.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>reserveN</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>, <span style=color:#a6e22e>maxFutureReserve</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>) <span style=color:#a6e22e>Reservation</span> {
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
+<span style=color:#6272a4>// reserveN是AllowN, ReserveN和WaitN方法的辅助方法
+</span><span style=color:#6272a4>// maxFutureReserve 指定最大的等待时间
+</span><span style=color:#6272a4>// reserveN返回Reservation类型的值而不是指针，这样其他函数调用时不会在堆上分配内存（一个指针变量大小的内存）
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// reserveN is a helper method for AllowN, ReserveN, and WaitN.
+</span><span style=color:#6272a4>// maxFutureReserve specifies the maximum reservation wait duration allowed.
+</span><span style=color:#6272a4>// reserveN returns Reservation, not *Reservation, to avoid allocation in AllowN and WaitN.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>reserveN</span>(now time.Time, n <span style=color:#8be9fd>int</span>, maxFutureReserve time.Duration) Reservation {
+	lim.mu.<span style=color:#50fa7b>Lock</span>()
 
-	<span style=color:#75715e>// 如果速率无限制，返回true，要多少有多少
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>Inf</span> {
-		<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
-		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>Reservation</span>{
-			<span style=color:#a6e22e>ok</span>:        <span style=color:#66d9ef>true</span>,
-			<span style=color:#a6e22e>lim</span>:       <span style=color:#a6e22e>lim</span>,
-			<span style=color:#a6e22e>tokens</span>:    <span style=color:#a6e22e>n</span>,
-			<span style=color:#a6e22e>timeToAct</span>: <span style=color:#a6e22e>now</span>,
+	<span style=color:#6272a4>// 如果速率无限制，返回true，要多少有多少
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> lim.limit <span style=color:#ff79c6>==</span> Inf {
+		lim.mu.<span style=color:#50fa7b>Unlock</span>()
+		<span style=color:#ff79c6>return</span> Reservation{
+			ok:        <span style=color:#ff79c6>true</span>,
+			lim:       lim,
+			tokens:    n,
+			timeToAct: now,
 		}
 	}
 
-	<span style=color:#75715e>// 计算从上一次令牌变化到当前时间令牌的数量
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>last</span>, <span style=color:#a6e22e>tokens</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>advance</span>(<span style=color:#a6e22e>now</span>)
+	<span style=color:#6272a4>// 计算从上一次令牌变化到当前时间令牌的数量
+</span><span style=color:#6272a4></span>	now, last, tokens <span style=color:#ff79c6>:=</span> lim.<span style=color:#50fa7b>advance</span>(now)
 
-	<span style=color:#75715e>// 计算满足预订请求后还剩余的令牌数量
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Calculate the remaining number of tokens resulting from the request.
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>tokens</span> <span style=color:#f92672>-=</span> float64(<span style=color:#a6e22e>n</span>)
+	<span style=color:#6272a4>// 计算满足预订请求后还剩余的令牌数量
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Calculate the remaining number of tokens resulting from the request.
+</span><span style=color:#6272a4></span>	tokens <span style=color:#ff79c6>-=</span> <span style=color:#8be9fd;font-style:italic>float64</span>(n)
 
-	<span style=color:#75715e>// 计算预订指定的令牌数量需要等待的时间，如果tokens大于0，表示不用等待。
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 如果tokens小于0，则需要等待产生tokens个令牌的时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Calculate the wait duration
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>waitDuration</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>tokens</span> &lt; <span style=color:#ae81ff>0</span> {
-		<span style=color:#a6e22e>waitDuration</span> = <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span>.<span style=color:#a6e22e>durationFromTokens</span>(<span style=color:#f92672>-</span><span style=color:#a6e22e>tokens</span>)
+	<span style=color:#6272a4>// 计算预订指定的令牌数量需要等待的时间，如果tokens大于0，表示不用等待。
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 如果tokens小于0，则需要等待产生tokens个令牌的时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Calculate the wait duration
+</span><span style=color:#6272a4></span>	<span style=color:#8be9fd;font-style:italic>var</span> waitDuration time.Duration
+	<span style=color:#ff79c6>if</span> tokens &lt; <span style=color:#bd93f9>0</span> {
+		waitDuration = lim.limit.<span style=color:#50fa7b>durationFromTokens</span>(<span style=color:#ff79c6>-</span>tokens)
 	}
 
-	<span style=color:#75715e>// 如果需要的令牌数量大于令牌桶的最大容量，必定是不能一次满足的
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 如果等待时间大于最大等待时间，说明在最大等待时间内无法满足需要的令牌数量
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Decide result
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>n</span> <span style=color:#f92672>&lt;=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>waitDuration</span> <span style=color:#f92672>&lt;=</span> <span style=color:#a6e22e>maxFutureReserve</span>
+	<span style=color:#6272a4>// 如果需要的令牌数量大于令牌桶的最大容量，必定是不能一次满足的
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 如果等待时间大于最大等待时间，说明在最大等待时间内无法满足需要的令牌数量
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Decide result
+</span><span style=color:#6272a4></span>	ok <span style=color:#ff79c6>:=</span> n <span style=color:#ff79c6>&lt;=</span> lim.burst <span style=color:#ff79c6>&amp;&amp;</span> waitDuration <span style=color:#ff79c6>&lt;=</span> maxFutureReserve
 
-	<span style=color:#75715e>// Prepare reservation
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>r</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Reservation</span>{
-		<span style=color:#a6e22e>ok</span>:    <span style=color:#a6e22e>ok</span>,
-		<span style=color:#a6e22e>lim</span>:   <span style=color:#a6e22e>lim</span>,
-		<span style=color:#a6e22e>limit</span>: <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span>,
+	<span style=color:#6272a4>// Prepare reservation
+</span><span style=color:#6272a4></span>	r <span style=color:#ff79c6>:=</span> Reservation{
+		ok:    ok,
+		lim:   lim,
+		limit: lim.limit,
 	}
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>ok</span> { <span style=color:#75715e>// 如果可以提供需要的令牌数量
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>n</span>                        <span style=color:#75715e>// 记录预订的令牌数量
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span> = <span style=color:#a6e22e>now</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>waitDuration</span>) <span style=color:#75715e>// timetoaction 记录满足所有需要的令牌数量时的时间，也即是满足后事件发生的时间
-</span><span style=color:#75715e></span>	}
+	<span style=color:#ff79c6>if</span> ok { <span style=color:#6272a4>// 如果可以提供需要的令牌数量
+</span><span style=color:#6272a4></span>		r.tokens = n                        <span style=color:#6272a4>// 记录预订的令牌数量
+</span><span style=color:#6272a4></span>		r.timeToAct = now.<span style=color:#50fa7b>Add</span>(waitDuration) <span style=color:#6272a4>// timetoaction 记录满足所有需要的令牌数量时的时间，也即是满足后事件发生的时间
+</span><span style=color:#6272a4></span>	}
 
-	<span style=color:#75715e>// Update state
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>ok</span> {
-		<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>last</span> = <span style=color:#a6e22e>now</span>              <span style=color:#75715e>// 桶内令牌数量的改变时间
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>tokens</span>         <span style=color:#75715e>// 当前桶内的令牌数量
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>lastEvent</span> = <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>timeToAct</span> <span style=color:#75715e>// 满足预订需求后事件发生的时间
-</span><span style=color:#75715e></span>	} <span style=color:#66d9ef>else</span> {
-		<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>last</span> = <span style=color:#a6e22e>last</span> <span style=color:#75715e>// 如果预订满足不了，则只记录最后一次token数量变化的时间
-</span><span style=color:#75715e></span>	}
+	<span style=color:#6272a4>// Update state
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> ok {
+		lim.last = now              <span style=color:#6272a4>// 桶内令牌数量的改变时间
+</span><span style=color:#6272a4></span>		lim.tokens = tokens         <span style=color:#6272a4>// 当前桶内的令牌数量
+</span><span style=color:#6272a4></span>		lim.lastEvent = r.timeToAct <span style=color:#6272a4>// 满足预订需求后事件发生的时间
+</span><span style=color:#6272a4></span>	} <span style=color:#ff79c6>else</span> {
+		lim.last = last <span style=color:#6272a4>// 如果预订满足不了，则只记录最后一次token数量变化的时间
+</span><span style=color:#6272a4></span>	}
 
-	<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>r</span>
+	lim.mu.<span style=color:#50fa7b>Unlock</span>()
+	<span style=color:#ff79c6>return</span> r
 }
 
-<span style=color:#75715e>// advance 计算并返回在经过的时间内lim的变化结果值（token数量的变化、更新时间）
-</span><span style=color:#75715e>// lim保持不变，调用advance函数时lim需要持有锁
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// advance calculates and returns an updated state for lim resulting from the passage of time.
-</span><span style=color:#75715e>// lim is not changed.
-</span><span style=color:#75715e>// advance requires that lim.mu is held.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>lim</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Limiter</span>) <span style=color:#a6e22e>advance</span>(<span style=color:#a6e22e>now</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>) (<span style=color:#a6e22e>newNow</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>newLast</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>, <span style=color:#a6e22e>newTokens</span> <span style=color:#66d9ef>float64</span>) {
-	<span style=color:#75715e>// 如果计算的时间早于最后一次令牌修改的时间
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>last</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>last</span>
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>now</span>.<span style=color:#a6e22e>Before</span>(<span style=color:#a6e22e>last</span>) {
-		<span style=color:#a6e22e>last</span> = <span style=color:#a6e22e>now</span>
+<span style=color:#6272a4>// advance 计算并返回在经过的时间内lim的变化结果值（token数量的变化、更新时间）
+</span><span style=color:#6272a4>// lim保持不变，调用advance函数时lim需要持有锁
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// advance calculates and returns an updated state for lim resulting from the passage of time.
+</span><span style=color:#6272a4>// lim is not changed.
+</span><span style=color:#6272a4>// advance requires that lim.mu is held.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (lim <span style=color:#ff79c6>*</span>Limiter) <span style=color:#50fa7b>advance</span>(now time.Time) (newNow time.Time, newLast time.Time, newTokens <span style=color:#8be9fd>float64</span>) {
+	<span style=color:#6272a4>// 如果计算的时间早于最后一次令牌修改的时间
+</span><span style=color:#6272a4></span>	last <span style=color:#ff79c6>:=</span> lim.last
+	<span style=color:#ff79c6>if</span> now.<span style=color:#50fa7b>Before</span>(last) {
+		last = now
 	}
 
-	<span style=color:#75715e>// 计算剩下的token产生所需要的最大时间
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// 当last是一个很久之前的时间时，避免使下面的delta变量溢出
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Avoid making delta overflow below when last is very old.
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>maxElapsed</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span>.<span style=color:#a6e22e>durationFromTokens</span>(float64(<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span>) <span style=color:#f92672>-</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>tokens</span>)
-	<span style=color:#a6e22e>elapsed</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>now</span>.<span style=color:#a6e22e>Sub</span>(<span style=color:#a6e22e>last</span>) <span style=color:#75715e>// 时间段
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>elapsed</span> &gt; <span style=color:#a6e22e>maxElapsed</span> {
-		<span style=color:#a6e22e>elapsed</span> = <span style=color:#a6e22e>maxElapsed</span>
+	<span style=color:#6272a4>// 计算剩下的token产生所需要的最大时间
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// 当last是一个很久之前的时间时，避免使下面的delta变量溢出
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Avoid making delta overflow below when last is very old.
+</span><span style=color:#6272a4></span>	maxElapsed <span style=color:#ff79c6>:=</span> lim.limit.<span style=color:#50fa7b>durationFromTokens</span>(<span style=color:#8be9fd;font-style:italic>float64</span>(lim.burst) <span style=color:#ff79c6>-</span> lim.tokens)
+	elapsed <span style=color:#ff79c6>:=</span> now.<span style=color:#50fa7b>Sub</span>(last) <span style=color:#6272a4>// 时间段
+</span><span style=color:#6272a4></span>	<span style=color:#ff79c6>if</span> elapsed &gt; maxElapsed {
+		elapsed = maxElapsed
 	}
 
-	<span style=color:#75715e>// 计算在elapsed时间段内产生的token数量
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// Calculate the new number of tokens, due to time that passed.
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>delta</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>limit</span>.<span style=color:#a6e22e>tokensFromDuration</span>(<span style=color:#a6e22e>elapsed</span>)
-	<span style=color:#a6e22e>tokens</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>tokens</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>delta</span>
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>burst</span> <span style=color:#f92672>:=</span> float64(<span style=color:#a6e22e>lim</span>.<span style=color:#a6e22e>burst</span>); <span style=color:#a6e22e>tokens</span> &gt; <span style=color:#a6e22e>burst</span> { <span style=color:#75715e>// token数量最大不超过burst
-</span><span style=color:#75715e></span>		<span style=color:#a6e22e>tokens</span> = <span style=color:#a6e22e>burst</span>
+	<span style=color:#6272a4>// 计算在elapsed时间段内产生的token数量
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// Calculate the new number of tokens, due to time that passed.
+</span><span style=color:#6272a4></span>	delta <span style=color:#ff79c6>:=</span> lim.limit.<span style=color:#50fa7b>tokensFromDuration</span>(elapsed)
+	tokens <span style=color:#ff79c6>:=</span> lim.tokens <span style=color:#ff79c6>+</span> delta
+	<span style=color:#ff79c6>if</span> burst <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>float64</span>(lim.burst); tokens &gt; burst { <span style=color:#6272a4>// token数量最大不超过burst
+</span><span style=color:#6272a4></span>		tokens = burst
 	}
 
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>last</span>, <span style=color:#a6e22e>tokens</span>
+	<span style=color:#ff79c6>return</span> now, last, tokens
 }
 
-<span style=color:#75715e>// durationFromTokens 是个单位转换函数，计算以每秒limit个token的速率产生tokens个token的时间。
-</span><span style=color:#75715e>// tokens支持负值
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// durationFromTokens is a unit conversion function from the number of tokens to the duration
-</span><span style=color:#75715e>// of time it takes to accumulate them at a rate of limit tokens per second.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>limit</span> <span style=color:#a6e22e>Limit</span>) <span style=color:#a6e22e>durationFromTokens</span>(<span style=color:#a6e22e>tokens</span> <span style=color:#66d9ef>float64</span>) <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span> {
-	<span style=color:#a6e22e>seconds</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tokens</span> <span style=color:#f92672>/</span> float64(<span style=color:#a6e22e>limit</span>)
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Nanosecond</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>(<span style=color:#ae81ff>1e9</span><span style=color:#f92672>*</span><span style=color:#a6e22e>seconds</span>)
+<span style=color:#6272a4>// durationFromTokens 是个单位转换函数，计算以每秒limit个token的速率产生tokens个token的时间。
+</span><span style=color:#6272a4>// tokens支持负值
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// durationFromTokens is a unit conversion function from the number of tokens to the duration
+</span><span style=color:#6272a4>// of time it takes to accumulate them at a rate of limit tokens per second.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (limit Limit) <span style=color:#50fa7b>durationFromTokens</span>(tokens <span style=color:#8be9fd>float64</span>) time.Duration {
+	seconds <span style=color:#ff79c6>:=</span> tokens <span style=color:#ff79c6>/</span> <span style=color:#8be9fd;font-style:italic>float64</span>(limit)
+	<span style=color:#ff79c6>return</span> time.Nanosecond <span style=color:#ff79c6>*</span> time.<span style=color:#50fa7b>Duration</span>(<span style=color:#bd93f9>1e9</span><span style=color:#ff79c6>*</span>seconds)
 }
 
-<span style=color:#75715e>// tokensFromDuration 是个单位转换函数，计算在指定的时间隔间内以每秒limit个token的速率产生的token数量。
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>// tokensFromDuration is a unit conversion function from a time duration to the number of tokens
-</span><span style=color:#75715e>// which could be accumulated during that duration at a rate of limit tokens per second.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>limit</span> <span style=color:#a6e22e>Limit</span>) <span style=color:#a6e22e>tokensFromDuration</span>(<span style=color:#a6e22e>d</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>) <span style=color:#66d9ef>float64</span> {
-	<span style=color:#75715e>// Split the integer and fractional parts ourself to minimize rounding errors.
-</span><span style=color:#75715e></span>	<span style=color:#75715e>// See golang.org/issues/34861.
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>sec</span> <span style=color:#f92672>:=</span> float64(<span style=color:#a6e22e>d</span><span style=color:#f92672>/</span><span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>) <span style=color:#f92672>*</span> float64(<span style=color:#a6e22e>limit</span>)
-	<span style=color:#a6e22e>nsec</span> <span style=color:#f92672>:=</span> float64(<span style=color:#a6e22e>d</span><span style=color:#f92672>%</span><span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>) <span style=color:#f92672>*</span> float64(<span style=color:#a6e22e>limit</span>)
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>sec</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>nsec</span><span style=color:#f92672>/</span><span style=color:#ae81ff>1e9</span>
+<span style=color:#6272a4>// tokensFromDuration 是个单位转换函数，计算在指定的时间隔间内以每秒limit个token的速率产生的token数量。
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// tokensFromDuration is a unit conversion function from a time duration to the number of tokens
+</span><span style=color:#6272a4>// which could be accumulated during that duration at a rate of limit tokens per second.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (limit Limit) <span style=color:#50fa7b>tokensFromDuration</span>(d time.Duration) <span style=color:#8be9fd>float64</span> {
+	<span style=color:#6272a4>// Split the integer and fractional parts ourself to minimize rounding errors.
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// See golang.org/issues/34861.
+</span><span style=color:#6272a4></span>	sec <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>float64</span>(d<span style=color:#ff79c6>/</span>time.Second) <span style=color:#ff79c6>*</span> <span style=color:#8be9fd;font-style:italic>float64</span>(limit)
+	nsec <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>float64</span>(d<span style=color:#ff79c6>%</span>time.Second) <span style=color:#ff79c6>*</span> <span style=color:#8be9fd;font-style:italic>float64</span>(limit)
+	<span style=color:#ff79c6>return</span> sec <span style=color:#ff79c6>+</span> nsec<span style=color:#ff79c6>/</span><span style=color:#bd93f9>1e9</span>
 }
 
 </code></pre></td></tr></table></div></div><h1 id=参考资料>参考资料：</h1><p><a href=https://zhuanlan.zhihu.com/p/90206074>Golang 限流器 time/rate 实现剖析</a></p><p><a href=https://zhuanlan.zhihu.com/p/89820414>Golang 限流器 time/rate 使用介绍</a></p><p><a href=https://blog.luojilab.com/2019/12/16/zeroteam/You_have_to_know_the_rate_limit_of_the_series/>不得不了解系列之限流</a></p><p><a href=https://techbeacon.com/app-dev-testing/how-handle-api-rate-limits-do-your-integrations-work-scale>How to handle API rate limits: Do your integrations work at scale?</a></p><p><a href=http://xiaorui.cc/archives/5930>Golang rate 无法延迟重排的 BUG</a></p></div><div class=post-archive><ul class=post-copyright><li><strong>原文作者：</strong><a rel=author href=../../>风竹</a></li><li style=word-break:break-all><strong>原文链接：</strong><a href=../../post/go-time-rate/>/post/go-time-rate/</a></li><li><strong>版权声明：</strong>本作品采用<a rel=license href=https://creativecommons.org/licenses/by-nc-nd/4.0/>知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li></ul></div><br><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=../../post/go-type-convert/>golang类型转换</a></li><li><a href=../../post/website-caddy-hugo-filebrowser/>caddy-hugo-filebrowser搭建个人网站和后台管理</a></li><li><a href=../../post/go-vscode-remote-development/>VSCode Remote Development-go开发环境搭建</a></li><li><a href=../../post/go-goroutine-concurrent-control/>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/>go get添加进度</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=../../tags/go>go</a></li><li><a href=../../tags/golang>golang</a></li><li><a href=../../tags/rate>rate</a></li><li><a href=../../tags/%E9%99%90%E6%B5%81%E5%99%A8>限流器</a></li><li><a href=../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6>令牌桶</a></li></ul></div></article><div class="post bg-white"><script src=https://utteranc.es/client.js repo=windzhu0514/windzhu0514.github.io issue-term=pathname theme=github-light crossorigin=anonymous async></script></div></div><footer id=footer><div>&copy; 2021 <a href=../../>一蓑烟雨任平生 By 风竹</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="../../js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script></div><div id=secondary><section class=widget><form id=search action=//www.google.com/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
 <input type=hidden name=sitesearch value=/>
-<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=../../post/go-time-rate/ title="Go Rate限流器代码分析">Go Rate限流器代码分析</a></li><li><a href=../../post/website-caddy-hugo-filebrowser/ title=caddy-hugo-filebrowser搭建个人网站和后台管理>caddy-hugo-filebrowser搭建个人网站和后台管理</a></li><li><a href=../../post/go-vscode-remote-development/ title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a></li><li><a href=../../post/likaifu-10-gifts/ title=李开复：留学带给我的十件礼物，第一件是自信>李开复：留学带给我的十件礼物，第一件是自信</a></li><li><a href=../../post/go-type-convert/ title=golang类型转换>golang类型转换</a></li><li><a href=../../post/multiple-git-account/ title=git多账户共存>git多账户共存</a></li><li><a href=../../post/go-goroutine-concurrent-control/ title=goroutine并发控制>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/ title="go get添加进度">go get添加进度</a></li><li><a href=../../post/markdown/ title="Markdown 基本语法">Markdown 基本语法</a></li></ul></section><section class=widget><h3 class=widget-title><a href=../../categories/>分类</a></h3><ul class=widget-list><li><a href=../../categories/git/>git (1)</a></li><li><a href=../../categories/golang/>golang (6)</a></li><li><a href=../../categories/markdown/>markdown (1)</a></li><li><a href=../../categories/%E5%A5%BD%E6%96%87/>好文 (1)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=../../tags/>标签</a></h3><div class=tagcloud><a href=../../tags/caddy/>caddy</a>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=../../post/use-windows-as-linux/ title=听说你想把windows当作linux用？>听说你想把windows当作linux用？</a></li><li><a href=../../post/go-time-rate/ title="Go Rate限流器代码分析">Go Rate限流器代码分析</a></li><li><a href=../../post/website-caddy-hugo-filebrowser/ title=caddy-hugo-filebrowser搭建个人网站和后台管理>caddy-hugo-filebrowser搭建个人网站和后台管理</a></li><li><a href=../../post/go-vscode-remote-development/ title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a></li><li><a href=../../post/likaifu-10-gifts/ title=李开复：留学带给我的十件礼物，第一件是自信>李开复：留学带给我的十件礼物，第一件是自信</a></li><li><a href=../../post/go-type-convert/ title=golang类型转换>golang类型转换</a></li><li><a href=../../post/multiple-git-account/ title=git多账户共存>git多账户共存</a></li><li><a href=../../post/go-goroutine-concurrent-control/ title=goroutine并发控制>goroutine并发控制</a></li><li><a href=../../post/go-get-progress/ title="go get添加进度">go get添加进度</a></li><li><a href=../../post/markdown/ title="Markdown 基本语法">Markdown 基本语法</a></li></ul></section><section class=widget><h3 class=widget-title><a href=../../categories/>分类</a></h3><ul class=widget-list><li><a href=../../categories/git/>git (1)</a></li><li><a href=../../categories/golang/>golang (6)</a></li><li><a href=../../categories/markdown/>markdown (1)</a></li><li><a href=../../categories/%E5%A5%BD%E6%96%87/>好文 (1)</a></li><li><a href=../../categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/>开发环境 (1)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=../../tags/>标签</a></h3><div class=tagcloud><a href=../../tags/caddy/>caddy</a>
 <a href=../../tags/docker/>docker</a>
 <a href=../../tags/filebrowser/>filebrowser</a>
 <a href=../../tags/git/>git</a>
@@ -981,13 +981,18 @@
 <a href=../../tags/golang/>golang</a>
 <a href=../../tags/goroutine/>goroutine</a>
 <a href=../../tags/hugo/>hugo</a>
+<a href=../../tags/linux/>linux</a>
 <a href=../../tags/markdown/>markdown</a>
+<a href=../../tags/openssh/>openssh</a>
 <a href=../../tags/rate/>rate</a>
 <a href=../../tags/ssh/>ssh</a>
+<a href=../../tags/windows/>windows</a>
+<a href=../../tags/wsl/>wsl</a>
 <a href=../../tags/%E4%BA%BA%E7%94%9F/>人生</a>
 <a href=../../tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/>令牌桶</a>
 <a href=../../tags/%E5%8A%B1%E5%BF%97/>励志</a>
 <a href=../../tags/%E5%B9%B6%E5%8F%91/>并发</a>
+<a href=../../tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/>开发环境</a>
 <a href=../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/>类型转换</a>
 <a href=../../tags/%E7%BD%91%E7%AB%99/>网站</a>
 <a href=../../tags/%E9%99%90%E6%B5%81%E5%99%A8/>限流器</a></div></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=../../index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>
