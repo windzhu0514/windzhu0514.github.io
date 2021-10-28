@@ -6,7 +6,61 @@
     <description>Recent content in Tags on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 30 Aug 2020 23:49:05 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Oct 2021 13:52:45 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux</title>
+      <link>/tags/linux/</link>
+      <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
+      
+      <guid>/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openssh</title>
+      <link>/tags/openssh/</link>
+      <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
+      
+      <guid>/tags/openssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ssh</title>
+      <link>/tags/ssh/</link>
+      <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
+      
+      <guid>/tags/ssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windows</title>
+      <link>/tags/windows/</link>
+      <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
+      
+      <guid>/tags/windows/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wsl</title>
+      <link>/tags/wsl/</link>
+      <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
+      
+      <guid>/tags/wsl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>开发环境</title>
+      <link>/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
+      
+      <guid>/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>go</title>
       <link>/tags/go/</link>
@@ -94,15 +148,6 @@
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
       
       <guid>/tags/%E7%BD%91%E7%AB%99/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ssh</title>
-      <link>/tags/ssh/</link>
-      <pubDate>Mon, 19 Aug 2019 18:54:39 +0800</pubDate>
-      
-      <guid>/tags/ssh/</guid>
       <description></description>
     </item>
     

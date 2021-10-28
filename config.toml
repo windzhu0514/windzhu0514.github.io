@@ -25,7 +25,9 @@ defaultContentLanguage = "zh"
 [markup]
   [markup.highlight]
     lineNos = true
-    #style = "github"
+    # style = "github"
+    # style = "dracula"
+    style = "dracula"
 
 # 开启版权声明
 [params.cc]
