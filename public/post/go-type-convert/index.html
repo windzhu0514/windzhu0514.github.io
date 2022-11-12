@@ -37,7 +37,6 @@
     
 </head>
 
-
 <body>
     <header id="header" class="clearfix">
     <div class="container">
@@ -52,7 +51,7 @@
             </div>
             <div>
                 <nav id="nav-menu" class="clearfix">
-                    <a class="current" href="../../">首页</a>
+                    <a class="current" href="../../"></a>
                     
                     <a  href="../../about/" title="关于">关于</a>
                     
@@ -131,7 +130,7 @@
     }
 </style>
 <div class="post-toc" style="position: absolute; top: 188px;">
-    <h2 class="post-toc-title">文章目录</h2>
+    <h2 class="post-toc-title"></h2>
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
@@ -148,8 +147,8 @@
         var postToc = $(".post-toc");
         if (postToc.length) {
             var leftPos = $("#main").offset().left;
-            if(leftPos<220){
-                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
             }
 
             var t = postToc.offset().top - 20,
@@ -168,27 +167,35 @@
                 e < t ? postToc.css(a.start) : postToc.css(a.process)
             })
         }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
     })
 </script>
     <article class="post">
         <header>
             <h1 class="post-title">golang类型转换</h1>
         </header>
-        <date class="post-meta meta-date">
-            2019年3月7日
-        </date>
+        
+  <time datetime="2019-03-07T09:45:27Z" class="post-meta meta-date dt-published">
+    
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='../../categories/golang' target="_blank">golang</a>
+  
+</div>
+
+
         
         <div class="post-meta">
-            <span>|</span>
-            
-            <span class="meta-category"><a href='../../categories/golang'>golang</a></span>
-            
-        </div>
-        
-        
-        <div class="post-meta">
-            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
-                    阅读</span></span>
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span></span>
+            </span>
         </div>
         
         
@@ -199,224 +206,224 @@
 <p><a href="https://golang.google.cn/pkg/strconv/#Itoa" title="strconv.Itoa">strconv.Itoa</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
 <p><a href="https://golang.google.cn/pkg/strconv/#FormatInt" title="strconv.FormatInt">strconv.FormatInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
 <p><a href="https://golang.google.cn/pkg/strconv/#FormatUint" title="strconv.FormatUint">strconv.FormatUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MinInt64</span>)
-<span style="color:#75715e">// &#34;-9223372036854775808&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxInt64</span>)
-<span style="color:#75715e">// &#34;9223372036854775807&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>)
-<span style="color:#75715e">// constant 18446744073709551615 overflows int
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MinInt64</span>)
-<span style="color:#75715e">// &#34;-9223372036854775808&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxInt64</span>)
-<span style="color:#75715e">// &#34;9223372036854775807&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>)
-<span style="color:#75715e">// constant 18446744073709551615 overflows int
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MinInt64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// &#34;-9223372036854775808&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxInt64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// &#34;9223372036854775807&#34;
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// constant 18446744073709551615 overflows int64
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatUint</span>(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxUint64</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#75715e">// &#34;18446744073709551615&#34;
-</span></code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sprintf</span>(<span style="color:#f1fa8c">&#34;%d&#34;</span>, math.MinInt64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;-9223372036854775808&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>fmt.<span style="color:#50fa7b">Sprintf</span>(<span style="color:#f1fa8c">&#34;%d&#34;</span>, math.MaxInt64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;9223372036854775807&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>fmt.<span style="color:#50fa7b">Sprintf</span>(<span style="color:#f1fa8c">&#34;%d&#34;</span>, math.MaxUint64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// constant 18446744073709551615 overflows int
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>strconv.<span style="color:#50fa7b">Itoa</span>(math.MinInt64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;-9223372036854775808&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">Itoa</span>(math.MaxInt64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;9223372036854775807&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">Itoa</span>(math.MaxUint64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// constant 18446744073709551615 overflows int
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>strconv.<span style="color:#50fa7b">FormatInt</span>(math.MinInt64, <span style="color:#bd93f9">10</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;-9223372036854775808&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">FormatInt</span>(math.MaxInt64, <span style="color:#bd93f9">10</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;9223372036854775807&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">FormatInt</span>(math.MaxUint64, <span style="color:#bd93f9">10</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// constant 18446744073709551615 overflows int64
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>strconv.<span style="color:#50fa7b">FormatUint</span>(math.MaxUint64, <span style="color:#bd93f9">10</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// &#34;18446744073709551615&#34;
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="string----int">string &ndash;&gt; int</h2>
 <p>转换函数：</p>
 <p><a href="https://golang.google.cn/pkg/fmt/#Sscanf" title="fmt.Sscanf">fmt.Sscanf</a>：格式化范围 math.MinInt64 -&gt; math.MaxUint64</p>
 <p><a href="https://golang.google.cn/pkg/strconv/#ParseInt" title="strconv.ParseInt">strconv.ParseInt</a>：格式化范围 math.MinInt64 -&gt; math.MaxInt64</p>
 <p><a href="https://golang.google.cn/pkg/strconv/#ParseUint" title="strconv.ParseUint">strconv.ParseUint</a>：格式化范围 0 -&gt; math.MaxUint64</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;2147483647&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n</span>)
-<span style="color:#75715e">// 2147483647
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n32</span> <span style="color:#66d9ef">int32</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;2147483647&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n32</span>)
-<span style="color:#75715e">// 2147483647
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n64</span> <span style="color:#66d9ef">int64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;-9223372036854775808&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n64</span>)
-<span style="color:#75715e">// -9223372036854775808
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">n64_2</span> <span style="color:#66d9ef">int64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;9223372036854775807&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n64_2</span>)
-<span style="color:#75715e">// 9223372036854775807
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">un64</span> <span style="color:#66d9ef">uint64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;18446744073709551615&#34;</span>, <span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">un64</span>)
-<span style="color:#75715e">// 18446744073709551615
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">//  bitSize 0, 8, 16, 32, 和 64分别对应int, int8, int16, int32, 和 int64
-</span><span style="color:#75715e">// math.MaxUint64 18446744073709551615
-</span><span style="color:#75715e">// math.MaxInt64 9223372036854775807
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#e6db74">&#34;9223372036854775807&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 9223372036854775807
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseUint</span>(<span style="color:#e6db74">&#34;18446744073709551615&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 18446744073709551615
-</span></code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> n <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;2147483647&#34;</span>, <span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 2147483647
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> n32 <span style="color:#8be9fd">int32</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;2147483647&#34;</span>, <span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n32)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 2147483647
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> n64 <span style="color:#8be9fd">int64</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;-9223372036854775808&#34;</span>, <span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// -9223372036854775808
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> n64_2 <span style="color:#8be9fd">int64</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;9223372036854775807&#34;</span>, <span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n64_2)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 9223372036854775807
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> un64 <span style="color:#8be9fd">uint64</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;18446744073709551615&#34;</span>, <span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>un64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 18446744073709551615
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//  bitSize 0, 8, 16, 32, 和 64分别对应int, int8, int16, int32, 和 int64
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// math.MaxUint64 18446744073709551615
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// math.MaxInt64 9223372036854775807
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">ParseInt</span>(<span style="color:#f1fa8c">&#34;9223372036854775807&#34;</span>, <span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">64</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 9223372036854775807
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">ParseUint</span>(<span style="color:#f1fa8c">&#34;18446744073709551615&#34;</span>, <span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">64</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 18446744073709551615
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="float64----string">float64 &ndash;&gt; string</h2>
 <p>float32 类型的浮点数可以提供大约 6 个十进制数的精度，而 float64 则可以提供约 15 个十进制数的精度；通常应该优先使用 float64 类型，因为 float32 类型的累计计算误差很容易扩散，并且 float32 能精确表示的正整数并不是很大（译注：因为 float32 的有效 bit 位只有 23 个，其它的 bit 位用于指数和符号；当整数大于 23bit 能表达的范围时，float32 的表示将出现误差）《The Go Programming Language》</p>
 <p>golang 浮点数舍入方式是按照<a href="https://zh.wikipedia.org/wiki/IEEE_754" title="IEEE 754">IEEE 754</a>进行的（区别于四舍五入）</p>
 <p>转换函数：<a href="https://golang.google.cn/pkg/strconv/#FormatFloat" title="strconv.FormatFloat">strconv.FormatFloat</a>、<a href="https://golang.google.cn/pkg/fmt/#Sprintf" title="fmt.Sprintf">fmt.Sprintf</a></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutAmount</span> = <span style="color:#ae81ff">49.285</span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutTaxAmount</span> = <span style="color:#ae81ff">296.85</span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#a6e22e">discoutAmount</span><span style="color:#f92672">+</span><span style="color:#a6e22e">discoutTaxAmount</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 346.13
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%.2f&#34;</span>, <span style="color:#a6e22e">discoutAmount</span><span style="color:#f92672">+</span><span style="color:#a6e22e">discoutTaxAmount</span>)
-<span style="color:#75715e">// 346.13
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#ae81ff">1.45</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 1.4
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#ae81ff">1.445</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 1.45
-</span></code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> discoutAmount = <span style="color:#bd93f9">49.285</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> discoutTaxAmount = <span style="color:#bd93f9">296.85</span>
+</span></span><span style="display:flex;"><span>strconv.<span style="color:#50fa7b">FormatFloat</span>(discoutAmount<span style="color:#ff79c6">+</span>discoutTaxAmount, <span style="color:#f1fa8c">&#39;f&#39;</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">64</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 346.13
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>fmt.<span style="color:#50fa7b">Sprintf</span>(<span style="color:#f1fa8c">&#34;%.2f&#34;</span>, discoutAmount<span style="color:#ff79c6">+</span>discoutTaxAmount)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 346.13
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">FormatFloat</span>(<span style="color:#bd93f9">1.45</span>, <span style="color:#f1fa8c">&#39;f&#39;</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">64</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 1.4
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">FormatFloat</span>(<span style="color:#bd93f9">1.445</span>, <span style="color:#f1fa8c">&#39;f&#39;</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">64</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 1.45
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>float64 四舍五入转 2 位小数字符串</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// java 小数四舍五入
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">double</span>  discoutAmount  <span style="color:#f92672">=</span>  252<span style="color:#f92672">.</span><span style="color:#a6e22e">945</span><span style="color:#f92672">;</span>
-<span style="color:#66d9ef">double</span>  discoutTaxAmount  <span style="color:#f92672">=</span>  41<span style="color:#f92672">.</span><span style="color:#a6e22e">989999999999995</span><span style="color:#f92672">;</span>
-<span style="color:#75715e">// BigDecimal.ROUND_HALF_UP 四舍五入
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">double</span>  price  <span style="color:#f92672">=</span>  <span style="color:#66d9ef">new</span>  BigDecimal<span style="color:#f92672">(</span>discoutAmount <span style="color:#f92672">+</span> discoutTaxAmount<span style="color:#f92672">).</span><span style="color:#a6e22e">setScale</span><span style="color:#f92672">(</span>2<span style="color:#f92672">,</span> BigDecimal<span style="color:#f92672">.</span><span style="color:#a6e22e">ROUND_HALF_UP</span><span style="color:#f92672">).</span><span style="color:#a6e22e">doubleValue</span><span style="color:#f92672">();</span>
-System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>price<span style="color:#f92672">);</span>
-<span style="color:#75715e">// output:
-</span><span style="color:#75715e"></span>294<span style="color:#f92672">.</span><span style="color:#a6e22e">94</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// java 小数四舍五入
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">double</span>  discoutAmount  <span style="color:#ff79c6">=</span>  252<span style="color:#ff79c6">.</span><span style="color:#50fa7b">945</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">double</span>  discoutTaxAmount  <span style="color:#ff79c6">=</span>  41<span style="color:#ff79c6">.</span><span style="color:#50fa7b">989999999999995</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// BigDecimal.ROUND_HALF_UP 四舍五入
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">double</span>  price  <span style="color:#ff79c6">=</span>  <span style="color:#ff79c6">new</span>  BigDecimal<span style="color:#ff79c6">(</span>discoutAmount <span style="color:#ff79c6">+</span> discoutTaxAmount<span style="color:#ff79c6">).</span><span style="color:#50fa7b">setScale</span><span style="color:#ff79c6">(</span>2<span style="color:#ff79c6">,</span> BigDecimal<span style="color:#ff79c6">.</span><span style="color:#50fa7b">ROUND_HALF_UP</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">doubleValue</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>price<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// output:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>294<span style="color:#ff79c6">.</span><span style="color:#50fa7b">94</span>
+</span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// go 四舍五入 转3位小数 *1000）/1000 依次类推
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutAmount</span> = <span style="color:#ae81ff">252.945</span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">discoutTaxAmount</span> = <span style="color:#ae81ff">41.989999999999995</span>
-<span style="color:#a6e22e">price</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Round</span>((<span style="color:#a6e22e">discoutAmount</span><span style="color:#f92672">+</span><span style="color:#a6e22e">discoutTaxAmount</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatFloat</span>(<span style="color:#a6e22e">price</span>, <span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>))
-<span style="color:#75715e">// 294.94
-</span></code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// go 四舍五入 转3位小数 *1000）/1000 依次类推
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> discoutAmount = <span style="color:#bd93f9">252.945</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> discoutTaxAmount = <span style="color:#bd93f9">41.989999999999995</span>
+</span></span><span style="display:flex;"><span>price <span style="color:#ff79c6">:=</span> math.<span style="color:#50fa7b">Round</span>((discoutAmount<span style="color:#ff79c6">+</span>discoutTaxAmount)<span style="color:#ff79c6">*</span><span style="color:#bd93f9">100</span>) <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">100</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Println</span>(strconv.<span style="color:#50fa7b">FormatFloat</span>(price, <span style="color:#f1fa8c">&#39;f&#39;</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">64</span>))
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 294.94
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="string----float64">string &ndash;&gt; float64</h2>
 <p>转换函数：<a href="https://golang.google.cn/pkg/fmt/#Sscanf" title="fmt.Sscanf">fmt.Sscanf</a> <a href="https://golang.google.cn/pkg/strconv/#ParseFloat" title="strconv.ParseFloat">strconv.ParseFloat</a></p>
 <p>strconv.ParseFloat：如果字符串合乎语法规则，函数会返回最为接近 s 表示值的一个浮点数（使用 IEEE754 规范舍入）。bitSize 指定了期望的接收类型，32 是 float32（返回值的赋值给 float32 时可以不改变精确度），64 是 float64；</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f32</span> <span style="color:#66d9ef">float32</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#e6db74">&#34;%f&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">f32</span>)
-<span style="color:#75715e">// 41.99
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f64</span> <span style="color:#66d9ef">float64</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sscanf</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#e6db74">&#34;%f&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">f64</span>)
-<span style="color:#75715e">// 41.989999999999995
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseFloat</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#ae81ff">64</span>)
-<span style="color:#75715e">// 41.989999999999995
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseFloat</span>(<span style="color:#e6db74">&#34;41.989999999999995&#34;</span>, <span style="color:#ae81ff">32</span>)
-<span style="color:#75715e">// 41.9900016784668
-</span></code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> f32 <span style="color:#8be9fd">float32</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;41.989999999999995&#34;</span>, <span style="color:#f1fa8c">&#34;%f&#34;</span>, <span style="color:#ff79c6">&amp;</span>f32)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 41.99
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> f64 <span style="color:#8be9fd">float64</span>
+</span></span><span style="display:flex;"><span>fmt.<span style="color:#50fa7b">Sscanf</span>(<span style="color:#f1fa8c">&#34;41.989999999999995&#34;</span>, <span style="color:#f1fa8c">&#34;%f&#34;</span>, <span style="color:#ff79c6">&amp;</span>f64)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 41.989999999999995
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>strconv.<span style="color:#50fa7b">ParseFloat</span>(<span style="color:#f1fa8c">&#34;41.989999999999995&#34;</span>, <span style="color:#bd93f9">64</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 41.989999999999995
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>strconv.<span style="color:#50fa7b">ParseFloat</span>(<span style="color:#f1fa8c">&#34;41.989999999999995&#34;</span>, <span style="color:#bd93f9">32</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 41.9900016784668
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>备注：</strong></p>
 <ul>
@@ -428,9 +435,9 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
         
 <div class="post-archive">
     <ul class="post-copyright">
-        <li><strong>原文作者：</strong><a rel="author" href="../../">风竹</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="../../post/go-type-convert/">/post/go-type-convert/</a></li>
-        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+        <li><strong></strong><a rel="author" href="../../">风竹</a></li>
+        <li style="word-break:break-all"><strong></strong><a href="../../post/go-type-convert/">/post/go-type-convert/</a></li>
+        <li><strong></strong><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. </li>
     </ul>
 </div>
 <br/>
@@ -440,7 +447,7 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
         
 
 <div class="post-archive">
-    <h2>See Also</h2>
+    <h2></h2>
     <ul class="listing">
         
         <li><a href="../../post/go-goroutine-concurrent-control/">goroutine并发控制</a></li>
@@ -461,11 +468,11 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
             
             <ul class="clearfix">
                 
-                <li><a href='../../tags/go'>go</a></li>
+                <li><a href='../../tags/go' target="_blank">go</a></li>
                 
-                <li><a href='../../tags/golang'>golang</a></li>
+                <li><a href='../../tags/golang' target="_blank">golang</a></li>
                 
-                <li><a href='../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2'>类型转换</a></li>
+                <li><a href='../../tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2' target="_blank">类型转换</a></li>
                 
             </ul>
             
@@ -486,11 +493,14 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
       </script>
     </div>
     
+    
+    
+
 </div>
 
                     <footer id="footer">
     <div>
-        &copy; 2021 <a href="../../">一蓑烟雨任平生 By 风竹</a>
+        &copy; 2022 <a href="../../">一蓑烟雨任平生 By 风竹</a>
         
     </div>
     <br />
@@ -509,6 +519,7 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
 
 
     
+    
     <script type="text/javascript">
         window.MathJax = {
             tex2jax: {
@@ -517,11 +528,84 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
                 }
             };
     </script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 <a id="rocket" href="#top"></a>
 <script type="text/javascript" src='../../js/totop.js?v=0.0.0' async=""></script>
+<style type="text/css">
+div.highlight {
+    position: relative;
+    margin: 1em 0px;
+}
 
+.copy-code {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(78, 78, 78, 0.8);
+    border-radius: var(--radius);
+    padding: 0 5px;
+    font: inherit;
+    user-select: none;
+    cursor: pointer;
+    border: 0;
+    --radius: 8px;
+}
+
+div.highlight:hover .copy-code,pre:hover .copy-code {
+    display: block;
+}
+
+</style>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
 
 
     <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
@@ -540,49 +624,49 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
       <button type="submit" class="submit icon-search"></button>
 </form>
     </section>
-    
+
     <section class="widget">
-        <h3 class="widget-title">最近文章</h3>
+        <h3 class="widget-title"></h3>
 <ul class="widget-list">
     
     <li>
-        <a href="../../post/use-windows-as-linux/" title="Use Windows as Linux">Use Windows as Linux</a>
+        <a href="../../post/use-windows-as-linux/" title="听说你想把windows当作linux用？" target="_blank">听说你想把windows当作linux用？</a>
     </li>
     
     <li>
-        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析">Go Rate限流器代码分析</a>
+        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析" target="_blank">Go Rate限流器代码分析</a>
     </li>
     
     <li>
-        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
+        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理" target="_blank">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
     </li>
     
     <li>
-        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a>
+        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建" target="_blank">VSCode Remote Development-go开发环境搭建</a>
     </li>
     
     <li>
-        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信">李开复：留学带给我的十件礼物，第一件是自信</a>
+        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信" target="_blank">李开复：留学带给我的十件礼物，第一件是自信</a>
     </li>
     
     <li>
-        <a href="../../post/go-type-convert/" title="golang类型转换">golang类型转换</a>
+        <a href="../../post/go-type-convert/" title="golang类型转换" target="_blank">golang类型转换</a>
     </li>
     
     <li>
-        <a href="../../post/multiple-git-account/" title="git多账户共存">git多账户共存</a>
+        <a href="../../post/multiple-git-account/" title="git多账户共存" target="_blank">git多账户共存</a>
     </li>
     
     <li>
-        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制">goroutine并发控制</a>
+        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制" target="_blank">goroutine并发控制</a>
     </li>
     
     <li>
-        <a href="../../post/go-get-progress/" title="go get添加进度">go get添加进度</a>
+        <a href="../../post/go-get-progress/" title="go get添加进度" target="_blank">go get添加进度</a>
     </li>
     
     <li>
-        <a href="../../post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
+        <a href="../../post/markdown/" title="Markdown 基本语法" target="_blank">Markdown 基本语法</a>
     </li>
     
 </ul>
@@ -591,7 +675,7 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
     
 
     <section class="widget">
-        <h3 class="widget-title"><a href='../../categories/'>分类</a></h3>
+        <h3 class="widget-title"><a href='../../categories/'></a></h3>
 <ul class="widget-list">
     
     <li><a href="../../categories/git/">git (1)</a></li>
@@ -608,7 +692,7 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
     </section>
 
     <section class="widget">
-        <h3 class="widget-title"><a href='../../tags/'>标签</a></h3>
+        <h3 class="widget-title"><a href='../../tags/'></a></h3>
 <div class="tagcloud">
     
     <a href="../../tags/caddy/">caddy</a>
@@ -663,9 +747,9 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
     
 
     <section class="widget">
-        <h3 class="widget-title">其它</h3>
+        <h3 class="widget-title"></h3>
         <ul class="widget-list">
-            <li><a href="../../index.xml">文章 RSS</a></li>
+            <li><a href="../../index.xml"></a></li>
         </ul>
     </section>
 </div>

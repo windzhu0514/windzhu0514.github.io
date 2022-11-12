@@ -8,12 +8,12 @@
     <language>zh-CN</language>
     <lastBuildDate>Thu, 28 Oct 2021 13:52:45 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Use Windows as Linux</title>
+      <title>听说你想把windows当作linux用？</title>
       <link>/post/use-windows-as-linux/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
       
       <guid>/post/use-windows-as-linux/</guid>
-      <description>需求 如果你有一台闲置的PC，而且安装了win10或win11，又想把这台PC当做linux服务用，比如做开发机、跑服务。 安装和启用wsl 安装</description>
+      <description>需求 如果你有一台闲置的PC，而且安装了win10或win11，又想把这台PC当做linux服务用，比如做开发机、跑服务。 安装前提 从应用商店安</description>
     </item>
     
     <item>

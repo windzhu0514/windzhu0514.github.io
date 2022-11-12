@@ -20,22 +20,22 @@
     <loc>/tags/</loc>
     <lastmod>2021-10-28T13:52:45+08:00</lastmod>
   </url><url>
-    <loc>/post/use-windows-as-linux/</loc>
-    <lastmod>2021-10-28T13:52:45+08:00</lastmod>
-  </url><url>
     <loc>/tags/windows/</loc>
     <lastmod>2021-10-28T13:52:45+08:00</lastmod>
   </url><url>
     <loc>/tags/wsl/</loc>
     <lastmod>2021-10-28T13:52:45+08:00</lastmod>
   </url><url>
-    <loc>/</loc>
-    <lastmod>2021-10-28T13:52:45+08:00</lastmod>
-  </url><url>
     <loc>/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
     <lastmod>2021-10-28T13:52:45+08:00</lastmod>
   </url><url>
     <loc>/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2021-10-28T13:52:45+08:00</lastmod>
+  </url><url>
+    <loc>/post/use-windows-as-linux/</loc>
+    <lastmod>2021-10-28T13:52:45+08:00</lastmod>
+  </url><url>
+    <loc>/</loc>
     <lastmod>2021-10-28T13:52:45+08:00</lastmod>
   </url><url>
     <loc>/tags/go/</loc>
@@ -80,16 +80,16 @@
     <loc>/post/go-vscode-remote-development/</loc>
     <lastmod>2019-08-19T18:54:39+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E4%BA%BA%E7%94%9F/</loc>
+    <loc>/categories/%E5%A5%BD%E6%96%87/</loc>
     <lastmod>2019-03-11T23:10:32+08:00</lastmod>
   </url><url>
     <loc>/tags/%E5%8A%B1%E5%BF%97/</loc>
     <lastmod>2019-03-11T23:10:32+08:00</lastmod>
   </url><url>
-    <loc>/categories/%E5%A5%BD%E6%96%87/</loc>
+    <loc>/post/likaifu-10-gifts/</loc>
     <lastmod>2019-03-11T23:10:32+08:00</lastmod>
   </url><url>
-    <loc>/post/likaifu-10-gifts/</loc>
+    <loc>/tags/%E4%BA%BA%E7%94%9F/</loc>
     <lastmod>2019-03-11T23:10:32+08:00</lastmod>
   </url><url>
     <loc>/post/go-type-convert/</loc>

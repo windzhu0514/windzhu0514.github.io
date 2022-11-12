@@ -9,8 +9,8 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>Use Windows as Linux | 一蓑烟雨任平生</title>
-    <meta property="og:title" content="Use Windows as Linux - 一蓑烟雨任平生">
+    <title>听说你想把windows当作linux用？ | 一蓑烟雨任平生</title>
+    <meta property="og:title" content="听说你想把windows当作linux用？ - 一蓑烟雨任平生">
     <meta property="og:type" content="article">
         
     <meta property="article:published_time" content='2021-10-28T13:52:45&#43;08:00'>
@@ -19,7 +19,7 @@
     <meta property="article:modified_time" content='2021-10-28T13:52:45&#43;08:00'>
         
     <meta name="Keywords" content="go,golang,go语言,博客,C,C&#43;&#43;,mfc">
-    <meta name="description" content="Use Windows as Linux">
+    <meta name="description" content="听说你想把windows当作linux用？">
         
     <meta name="author" content="风竹">
     <meta property="og:url" content="/post/use-windows-as-linux/">
@@ -37,7 +37,6 @@
     
 </head>
 
-
 <body>
     <header id="header" class="clearfix">
     <div class="container">
@@ -52,7 +51,7 @@
             </div>
             <div>
                 <nav id="nav-menu" class="clearfix">
-                    <a class="current" href="../../">首页</a>
+                    <a class="current" href="../../"></a>
                     
                     <a  href="../../about/" title="关于">关于</a>
                     
@@ -131,18 +130,18 @@
     }
 </style>
 <div class="post-toc" style="position: absolute; top: 188px;">
-    <h2 class="post-toc-title">文章目录</h2>
+    <h2 class="post-toc-title"></h2>
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
     <li><a href="#需求">需求</a></li>
+    <li><a href="#安装前提">安装前提</a></li>
     <li><a href="#安装和启用wsl">安装和启用wsl</a>
       <ul>
         <li><a href="#开启硬件虚拟化支持">开启硬件虚拟化支持</a></li>
         <li><a href="#新版本系统安装wsl">新版本系统安装wsl</a></li>
         <li><a href="#旧版系统安装wsl">旧版系统安装wsl</a></li>
         <li><a href="#使用系统设置启用虚拟机平台和适用于-linux-的-windows-子系统功能">使用系统设置启用虚拟机平台和适用于 Linux 的 Windows 子系统功能</a></li>
-        <li><a href="#安装过程中的问题">安装过程中的问题</a></li>
       </ul>
     </li>
     <li><a href="#wsl安装启用ssh服务">wsl安装启用ssh服务</a></li>
@@ -167,8 +166,8 @@
         var postToc = $(".post-toc");
         if (postToc.length) {
             var leftPos = $("#main").offset().left;
-            if(leftPos<220){
-                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
             }
 
             var t = postToc.offset().top - 20,
@@ -187,35 +186,50 @@
                 e < t ? postToc.css(a.start) : postToc.css(a.process)
             })
         }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
     })
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">Use Windows as Linux</h1>
+            <h1 class="post-title">听说你想把windows当作linux用？</h1>
         </header>
-        <date class="post-meta meta-date">
-            2021年10月28日
-        </date>
+        
+  <time datetime="2021-10-28T05:52:45Z" class="post-meta meta-date dt-published">
+    
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='../../categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83' target="_blank">开发环境</a>
+  
+</div>
+
+
         
         <div class="post-meta">
-            <span>|</span>
-            
-            <span class="meta-category"><a href='../../categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83'>开发环境</a></span>
-            
-        </div>
-        
-        
-        <div class="post-meta">
-            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
-                    阅读</span></span>
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span></span>
+            </span>
         </div>
         
         
         <div class="post-content">
             <h2 id="需求">需求</h2>
 <p>如果你有一台闲置的PC，而且安装了win10或win11，又想把这台PC当做linux服务用，比如做开发机、跑服务。</p>
+<h2 id="安装前提">安装前提</h2>
+<ol>
+<li>从应用商店安装应用，需要使用微软账号进行登录，提前注册好微软账号。</li>
+<li>系统必须是windows10或windows11</li>
+<li>公司内部网络会限制系统的更新和从应用商店安装应用，联系IT部门开通对应权限。</li>
+<li>安装过程计算机需要重启，安装前保存好重要文件</li>
+</ol>
 <h2 id="安装和启用wsl">安装和启用wsl</h2>
-<p>安装过程计算机需要重启，安装前保存好重要文件。wsl2和wsl1区别详见 <a href="https://docs.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a></p>
+<p>wsl2和wsl1区别详见 <a href="https://docs.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a></p>
 <h3 id="开启硬件虚拟化支持">开启硬件虚拟化支持</h3>
 <p>计算机必须支持虚拟化才能安装wsl，不同的主板进入BIOS设置的方式不同，具体参照该主板操作文档。在菜单中找到虚拟化相关设置，开启虚拟化支持。Intel的一般是<code>Intel Virtual Technology</code>，简称<code>IVT</code>，开启后，在<code>任务管理器</code>-<code>性能</code>-<code>CPU</code>中可以看到虚拟化<code>已启用</code>。</p>
 <h3 id="新版本系统安装wsl">新版本系统安装wsl</h3>
@@ -237,38 +251,33 @@
 
         <img class="mx-auto" alt="" src="https://cdn.jsdelivr.net/gh/windzhu0514/imagehost@master/images/1635336917450%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%B9%B3%E5%8F%B0.png" />   
     </p>
-<h3 id="安装过程中的问题">安装过程中的问题</h3>
-<ol>
-<li>从应用商店安装应用，需要使用微软账号进行登录，提前注册号微软账号。</li>
-<li>公司内部网络会限制系统的更新和从应用商店安装应用，联系IT部门开通对应权限。</li>
-</ol>
 <h2 id="wsl安装启用ssh服务">wsl安装启用ssh服务</h2>
 <p>以下命令假设wsl使用<code>ubuntu</code>linux发行版</p>
 <ol>
 <li>更新wsl的包库<code> apt update -y &amp;&amp; apt upgrade -y</code></li>
 <li>安装<code>openssh-server</code></li>
 </ol>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 搜索openssh-server</span>
-$ apt search openssh-server
-Sorting... Done
-Full Text Search... Done
-openssh-server/focal-updates,now 1:8.2p1-4ubuntu0.3 amd64 <span style="color:#f92672">[</span>installed<span style="color:#f92672">]</span>
-  secure shell <span style="color:#f92672">(</span>SSH<span style="color:#f92672">)</span> server, <span style="color:#66d9ef">for</span> secure access from remote machines
-<span style="color:#75715e"># 安装 openssh-server</span>
-$ sudo apt install openssh-server 
-</code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#6272a4"># 搜索openssh-server</span>
+</span></span><span style="display:flex;"><span>$ apt search openssh-server
+</span></span><span style="display:flex;"><span>Sorting... Done
+</span></span><span style="display:flex;"><span>Full Text Search... Done
+</span></span><span style="display:flex;"><span>openssh-server/focal-updates,now 1:8.2p1-4ubuntu0.3 amd64 <span style="color:#ff79c6">[</span>installed<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>  secure shell <span style="color:#ff79c6">(</span>SSH<span style="color:#ff79c6">)</span> server, <span style="color:#ff79c6">for</span> secure access from remote machines
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 安装 openssh-server</span>
+</span></span><span style="display:flex;"><span>$ sudo apt install openssh-server 
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="3">
 <li>ssh服务配置调整</li>
@@ -277,35 +286,49 @@ $ sudo apt install openssh-server
 <ol start="4">
 <li>启动ssh服务</li>
 </ol>
-<pre><code># 查看sshd服务状态
-sudo service ssh status
-# 启动sshd服务
-sudo service ssh start
-# 停止sshd服务
-sudo service ssh sttop
-# 重新启动sshd服务
-sudo service ssh restart
-</code></pre><ol start="5">
-<li>设置wsl ssh服务开机启动
-wsl启动时，ssh服务默认不会自动开启，可以手动开启或配置为开机启动。</li>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#6272a4"># 查看sshd服务状态</span>
+</span></span><span style="display:flex;"><span>sudo service ssh status
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 启动sshd服务</span>
+</span></span><span style="display:flex;"><span>sudo service ssh start
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 停止sshd服务</span>
+</span></span><span style="display:flex;"><span>sudo service ssh sttop
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 重新启动sshd服务</span>
+</span></span><span style="display:flex;"><span>sudo service ssh restart
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>设置wsl ssh服务开机启动</li>
 </ol>
+<p>wsl启动时，ssh服务默认不会自动开启，可以手动开启或配置为开机启动。</p>
 <ul>
 <li>添加wsl用户名为sudo用户，并设置不需要密码
 <ol>
 <li><code>sudo visudo</code>打开<code>/etc/sudoers</code>文件</li>
 <li>添加以下修改</li>
 </ol>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">root    ALL<span style="color:#f92672">=(</span>ALL:ALL<span style="color:#f92672">)</span> ALL
-在上面一行下面添加
-<span style="color:#f92672">{</span>wsl-username<span style="color:#f92672">}</span> ALL<span style="color:#f92672">=(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD:ALL
-</code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>root    <span style="color:#8be9fd;font-style:italic">ALL</span><span style="color:#ff79c6">=(</span>ALL:ALL<span style="color:#ff79c6">)</span> ALL
+</span></span><span style="display:flex;"><span>在上面一行下面添加
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">{</span>wsl-username<span style="color:#ff79c6">}</span> <span style="color:#8be9fd;font-style:italic">ALL</span><span style="color:#ff79c6">=(</span>ALL:ALL<span style="color:#ff79c6">)</span> NOPASSWD:ALL
+</span></span></code></pre></td></tr></table>
 </div>
 </div></li>
 <li>在windows系统新建文件<code>wsl-ssh-start.bat</code></li>
@@ -317,11 +340,21 @@ wsl启动时，ssh服务默认不会自动开启，可以手动开启或配置�
 <ol>
 <li>新建文件<code>batch-add-portproxy.ps1</code>添加以下代码</li>
 </ol>
-<pre><code># 添加wsl端口转发
-$wsl_ip = (wsl hostname -I).trim()
-Write-Host &quot;WSL Machine IP: &quot;&quot;$wsl_ip&quot;&quot;&quot;
-netsh interface portproxy add v4tov4 listenport={对外端口} connectport={wsl-ssh-port} connectaddress=$wsl_ip
-</code></pre><ol start="2">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#6272a4"># 添加wsl端口转发</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$wsl_ip</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>wsl hostname -I<span style="color:#ff79c6">)</span>.trim<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#f1fa8c">&#34;WSL Machine IP: &#34;&#34;</span><span style="color:#8be9fd;font-style:italic">$wsl_ip</span><span style="color:#f1fa8c">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>netsh interface portproxy add v4tov4 <span style="color:#8be9fd;font-style:italic">listenport</span><span style="color:#ff79c6">={</span>对外端口<span style="color:#ff79c6">}</span> <span style="color:#8be9fd;font-style:italic">connectport</span><span style="color:#ff79c6">={</span>wsl-ssh-port<span style="color:#ff79c6">}</span> <span style="color:#8be9fd;font-style:italic">connectaddress</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$wsl_ip</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
 <li>添加开机启动任务
 打开<code>任务计划程序</code>，左边列表里选择<code>任务计划程序库</code>，右键<code>创建基本任务</code>，填写任务名，下一步后选择<code>计算机启动时</code>,下一步选择<code>启动程序</code>，下一步选择脚本路径，下一步完成。</li>
 </ol>
@@ -329,31 +362,42 @@ netsh interface portproxy add v4tov4 listenport={对外端口} connectport={wsl-
 <p>windows防火墙默认关闭任何对外端口，局域网访问需要开放端口。
 防火墙开放端口：<code>设置</code>-<code>更新和安全</code>-<code>Windows安全中心</code>-<code>防火墙和网络保护</code>-<code>高级设置</code>-<code>入站规则</code>-<code>新建规则</code>-<code>端口</code>-<code>下一页</code>-选择<code>TCP</code>和<code>特定本地端口</code>，后面填写ssh服务的对外端口-<code>下一页</code>-<code>允许连接</code>-继续下一页-最后一页填写名称</p>
 <h2 id="局域网机器ssh连接wsl">局域网机器ssh连接wsl</h2>
-<pre><code>ssh -p {对外端口} wsl-username@windows-ip
-</code></pre><h2 id="配置ssh公钥登录">配置ssh公钥登录</h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ssh -p <span style="color:#ff79c6">{</span>对外端口<span style="color:#ff79c6">}</span> wsl-username@windows-ip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置ssh公钥登录">配置ssh公钥登录</h2>
 <p>公钥登录可参照<a href="https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_keymanagement">Windows OpenSSH 密钥管理</a></p>
 <h2 id="错误和问题">错误和问题</h2>
 <h3 id="wsl使用windows代理">wsl使用windows代理</h3>
 <p>windows cmd运行<code>ipconfig</code>，找到本地IP地址，在wsl里设置代理</p>
-<pre><code>export ALL_PROXY=&quot;http://{windows-ip}:{代理端口}&quot;
-</code></pre><h3 id="windows安装和启动ssh服务">windows安装和启动ssh服务</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">ALL_PROXY</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;http://{windows-ip}:{代理端口}&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="windows安装和启动ssh服务">windows安装和启动ssh服务</h3>
 <p>windows ssh安装和启用参照微软官方文档 <a href="https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse"> OpenSSH 入门</a></p>
 <p>在 Windows 中，ssh服务的名称也是<code>sshd</code>， 默认从<code>%ProgramData%\ssh\sshd_config</code> 中读取配置数据，该文件相当于linux下sshd服务的配置文件·/etc/ssh/sshd_config`。可以修改文件配置ssh服务的端口，认证方式等。</p>
 <h3 id="使用公钥访问windows-ssh服务非wsl出现permission-denied">使用公钥访问windows ssh服务（非wsl）出现Permission denied</h3>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ssh pc-win-ssh
-ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>publickey,keyboard-interactive<span style="color:#f92672">)</span>.
-</code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ssh pc-win-ssh
+</span></span><span style="display:flex;"><span>ljc43026@10.181.24.27: Permission denied <span style="color:#ff79c6">(</span>publickey,keyboard-interactive<span style="color:#ff79c6">)</span>.
+</span></span></code></pre></td></tr></table>
 </div>
-</div><p><strong>问题原因：</strong></p>
-<ul>
-<li>windows用户是管理员用户</li>
-</ul>
+</div><p><strong>问题原因：</strong> windows用户是管理员用户</p>
 <p>如果用户是<a href="https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_keymanagement#administrative-user">管理员用户</a>，客户端的公钥应该添加到<code>administrators_authorized_keys</code>，该文件路径为<code>%ProgramData%\ssh\administrators_authorized_keys</code>，并且此文件上的 ACL 需要配置为仅允许访问管理员和系统，设置方法参见<a href="https://github.com/PowerShell/Win32-OpenSSH/wiki/Security-protection-of-various-files-in-Win32-OpenSSH#administrators_authorized_keys">修复administrators_authorized_keys文件权限</a>。</p>
 <h2 id="参考资料">参考资料：</h2>
 <blockquote>
@@ -370,9 +414,9 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
         
 <div class="post-archive">
     <ul class="post-copyright">
-        <li><strong>原文作者：</strong><a rel="author" href="../../">风竹</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="../../post/use-windows-as-linux/">/post/use-windows-as-linux/</a></li>
-        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+        <li><strong></strong><a rel="author" href="../../">风竹</a></li>
+        <li style="word-break:break-all"><strong></strong><a href="../../post/use-windows-as-linux/">/post/use-windows-as-linux/</a></li>
+        <li><strong></strong><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. </li>
     </ul>
 </div>
 <br/>
@@ -382,7 +426,7 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
         
 
 <div class="post-archive">
-    <h2>See Also</h2>
+    <h2></h2>
     <ul class="listing">
         
         <li><a href="../../post/go-vscode-remote-development/">VSCode Remote Development-go开发环境搭建</a></li>
@@ -403,17 +447,17 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
             
             <ul class="clearfix">
                 
-                <li><a href='../../tags/windows'>windows</a></li>
+                <li><a href='../../tags/windows' target="_blank">windows</a></li>
                 
-                <li><a href='../../tags/wsl'>wsl</a></li>
+                <li><a href='../../tags/wsl' target="_blank">wsl</a></li>
                 
-                <li><a href='../../tags/linux'>linux</a></li>
+                <li><a href='../../tags/linux' target="_blank">linux</a></li>
                 
-                <li><a href='../../tags/ssh'>ssh</a></li>
+                <li><a href='../../tags/ssh' target="_blank">ssh</a></li>
                 
-                <li><a href='../../tags/openssh'>openssh</a></li>
+                <li><a href='../../tags/openssh' target="_blank">openssh</a></li>
                 
-                <li><a href='../../tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83'>开发环境</a></li>
+                <li><a href='../../tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83' target="_blank">开发环境</a></li>
                 
             </ul>
             
@@ -434,11 +478,14 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
       </script>
     </div>
     
+    
+    
+
 </div>
 
                     <footer id="footer">
     <div>
-        &copy; 2021 <a href="../../">一蓑烟雨任平生 By 风竹</a>
+        &copy; 2022 <a href="../../">一蓑烟雨任平生 By 风竹</a>
         
     </div>
     <br />
@@ -457,6 +504,7 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
 
 
     
+    
     <script type="text/javascript">
         window.MathJax = {
             tex2jax: {
@@ -465,11 +513,84 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
                 }
             };
     </script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 <a id="rocket" href="#top"></a>
 <script type="text/javascript" src='../../js/totop.js?v=0.0.0' async=""></script>
+<style type="text/css">
+div.highlight {
+    position: relative;
+    margin: 1em 0px;
+}
 
+.copy-code {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(78, 78, 78, 0.8);
+    border-radius: var(--radius);
+    padding: 0 5px;
+    font: inherit;
+    user-select: none;
+    cursor: pointer;
+    border: 0;
+    --radius: 8px;
+}
+
+div.highlight:hover .copy-code,pre:hover .copy-code {
+    display: block;
+}
+
+</style>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
 
 
     <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
@@ -488,49 +609,49 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
       <button type="submit" class="submit icon-search"></button>
 </form>
     </section>
-    
+
     <section class="widget">
-        <h3 class="widget-title">最近文章</h3>
+        <h3 class="widget-title"></h3>
 <ul class="widget-list">
     
     <li>
-        <a href="../../post/use-windows-as-linux/" title="Use Windows as Linux">Use Windows as Linux</a>
+        <a href="../../post/use-windows-as-linux/" title="听说你想把windows当作linux用？" target="_blank">听说你想把windows当作linux用？</a>
     </li>
     
     <li>
-        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析">Go Rate限流器代码分析</a>
+        <a href="../../post/go-time-rate/" title="Go Rate限流器代码分析" target="_blank">Go Rate限流器代码分析</a>
     </li>
     
     <li>
-        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
+        <a href="../../post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理" target="_blank">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
     </li>
     
     <li>
-        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建">VSCode Remote Development-go开发环境搭建</a>
+        <a href="../../post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建" target="_blank">VSCode Remote Development-go开发环境搭建</a>
     </li>
     
     <li>
-        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信">李开复：留学带给我的十件礼物，第一件是自信</a>
+        <a href="../../post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信" target="_blank">李开复：留学带给我的十件礼物，第一件是自信</a>
     </li>
     
     <li>
-        <a href="../../post/go-type-convert/" title="golang类型转换">golang类型转换</a>
+        <a href="../../post/go-type-convert/" title="golang类型转换" target="_blank">golang类型转换</a>
     </li>
     
     <li>
-        <a href="../../post/multiple-git-account/" title="git多账户共存">git多账户共存</a>
+        <a href="../../post/multiple-git-account/" title="git多账户共存" target="_blank">git多账户共存</a>
     </li>
     
     <li>
-        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制">goroutine并发控制</a>
+        <a href="../../post/go-goroutine-concurrent-control/" title="goroutine并发控制" target="_blank">goroutine并发控制</a>
     </li>
     
     <li>
-        <a href="../../post/go-get-progress/" title="go get添加进度">go get添加进度</a>
+        <a href="../../post/go-get-progress/" title="go get添加进度" target="_blank">go get添加进度</a>
     </li>
     
     <li>
-        <a href="../../post/markdown/" title="Markdown 基本语法">Markdown 基本语法</a>
+        <a href="../../post/markdown/" title="Markdown 基本语法" target="_blank">Markdown 基本语法</a>
     </li>
     
 </ul>
@@ -539,7 +660,7 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
     
 
     <section class="widget">
-        <h3 class="widget-title"><a href='../../categories/'>分类</a></h3>
+        <h3 class="widget-title"><a href='../../categories/'></a></h3>
 <ul class="widget-list">
     
     <li><a href="../../categories/git/">git (1)</a></li>
@@ -556,7 +677,7 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
     </section>
 
     <section class="widget">
-        <h3 class="widget-title"><a href='../../tags/'>标签</a></h3>
+        <h3 class="widget-title"><a href='../../tags/'></a></h3>
 <div class="tagcloud">
     
     <a href="../../tags/caddy/">caddy</a>
@@ -611,9 +732,9 @@ ljc43026@10.181.24.27: Permission denied <span style="color:#f92672">(</span>pub
     
 
     <section class="widget">
-        <h3 class="widget-title">其它</h3>
+        <h3 class="widget-title"></h3>
         <ul class="widget-list">
-            <li><a href="../../index.xml">文章 RSS</a></li>
+            <li><a href="../../index.xml"></a></li>
         </ul>
     </section>
 </div>
