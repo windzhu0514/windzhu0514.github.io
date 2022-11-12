@@ -17,7 +17,8 @@ categories: ["golang"]
 
 *假定安装过程在非root用户下* 
 
-# hugo
+## 安装 hugo
+
 ```shell
 # 链接修改为自己需要的版本
 wget https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz
@@ -27,8 +28,6 @@ cp hugo /usr/local/bin/
 # 解压后的hugo默认权限为755，如果不是，修改一下权限
 sudo chmod 755 /usr/local/bin/hugo
 ```
-
-# Caddy
 
 ## 安装caddy
 
@@ -297,18 +296,18 @@ Nov 11 04:10:30 localhost.localdomain systemd[1]: Unit caddy.service entered fai
 Nov 11 04:10:30 localhost.localdomain systemd[1]: caddy.service failed.
 ```
 
-# filebrowser实现文件浏览和后台管理
+## filebrowser实现文件浏览和后台管理
 
 官方文档：https://filebrowser.xyz/
 
-## 安装
+### 安装
 
 ```sh
 curl -fsSL https://filebrowser.xyz/get.sh | bash
 filebrowser -r /path/to/your/files
 ```
 
-## filebrowser配置
+### filebrowser配置
 
 参考：https://filebrowser.xyz/cli/filebrowser
 
@@ -406,7 +405,7 @@ filebrowser命令执行时的当前目录是程序启动的目录
 ```
 
 
-## 系统服务
+### 系统服务
 
 systemd 模式
 
@@ -424,9 +423,9 @@ WantedBy=multi-user.target
 
 如果不想使用默认配置文件路径，在`ExecStart=/usr/local/bin/filebrowser`后面通过命令选项指定配置
 
-# docker部署
+## docker部署
 
-## caddy+hugo
+### caddy+hugo
 
 下载caddy+hugo镜像
 ```sh
@@ -461,7 +460,7 @@ sudo docker run -d -p 9000:9000 --name alpine-website-d  windzhu0514/caddy-hugo:
 浏览器输入https://ip:9000访问网站，如果提示`404 Site [ip:port] is not served on this interface`
 容器里caddy监听外网无法访问 修改Caddyfile站点地址为`:9000`
 
-## filebrowser
+### filebrowser
 
 容器中的目录可以不必和例子相同，但是配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一（参考[.filebrowser ](https://filebrowser.xyz/cli/filebrowser)）
 
@@ -474,13 +473,13 @@ sudo docker run -d --restart=always --name filebrowser \
 -p 9001:9001  filebrowser/filebrowser
 ```
 
-# 代理网站
+## 代理网站
 
-## 为什么要代理
+### 为什么要代理
 
 域名指向中国大陆境内服务器且开通Web服务时需要备案。域名指向中国大陆境外服务器（例如中国香港等大陆境外）不需要备案。首次备案时间需要一周到一个月才能完成，如果更换了服务器，需要修改备案信息。如果手里有境外服务器，域名绑定到境外服务器服务器，如果境外服务器性能较低，可以把网站部署在境内服务器，由境外服务器跳转到境内服务器。
 
-## 代理配置
+### 代理配置
 境外服务器的代理依然使用强大的caddy，配置如下
 ```sh
 ljc.space {
@@ -506,7 +505,7 @@ www.ljc.space {
 }
 ```
 
-## 代理服务开机启动
+### 代理服务开机启动
 
 代理服务启动脚本修改自官方systemd启动脚本：https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd
 

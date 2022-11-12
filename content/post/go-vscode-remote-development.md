@@ -5,7 +5,7 @@ tags: ["go", "ssh"]
 categories: ["golang"]
 ---
 
-# 安装vscode
+## 安装vscode
 
 刚学习go的时候一直使用的vscode开发，轻巧方便。但随着工程代码量增加，本地下载的包越来越多，代码提示和自动补全功能变得越来越慢，就转向了goland神IDE，打开一个工程占用1.5G内存，吓得我赶紧又加了8G内存！！！
 
@@ -13,13 +13,13 @@ categories: ["golang"]
 
 安装完成，安装[GO](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go)扩展和[Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)扩展，Remote Development扩展包含了[Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)、[Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)和[Remote - WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)三个扩展，分别用于通过ssh远程连接、连接docker容器和连接[ Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl/about)。
 
-# 本机安装ssh客户端
+## 本机安装ssh客户端
 
 如果安装过git，就不需要再进行安装
 
 具体安装说明参照：[Installing a supported SSH client](https://code.visualstudio.com/docs/remote/troubleshooting#_installing-a-supported-ssh-client)
 
-# Remote - SSH
+## Remote - SSH
 
 Remote - SSH已支持系统版本： x86_64 Debian 8+, Ubuntu 16.04+, CentOS / RHEL 7+
 
@@ -60,11 +60,12 @@ Host example-remote-linux-machine
     User your-user-name-here
     HostName host-fqdn-or-ip-goes-here
 ```
-# 安装扩展到远程机器
+
+## 安装扩展到远程机器
 
 给远程机器安装的扩展，需要先安装到本地，然后在扩展列表里点击`Install in SSH:xxx`，安装到远程机器
 
-# 安装go tool到远程机器
+## 安装go tool到远程机器
 
 1. `ctrl+shift+p`或者`菜单-查看-命令面板`，打开命令面板，运行`Go:Install/Update Tools`命令
 2. 在弹出的下拉列表里选择要安装的go tools
@@ -73,7 +74,7 @@ Host example-remote-linux-machine
 
 如果远程服务没有go程序，安装的go tools会先下载到本地，再传送到远程机器，部分go tools需要翻墙安装，只需设置本地代理即可。
 
-# 问题及解决方法
+## 问题及解决方法
 
 - 连接远程终端时出现一下错误
 
@@ -92,6 +93,6 @@ vscode github issues：https://github.com/microsoft/vscode-remote-release/issues
 2 设置代理参照一下链接：
 https://github.com/Microsoft/vscode-remote-release/issues/78#issuecomment-491229576
 
-# 参考资料：
+## 参考资料
 
 [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview)

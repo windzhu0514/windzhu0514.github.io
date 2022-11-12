@@ -144,7 +144,7 @@ ljc43026@10.181.24.27: Permission denied (publickey,keyboard-interactive).
 
 如果用户是[管理员用户](https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_keymanagement#administrative-user)，客户端的公钥应该添加到`administrators_authorized_keys`，该文件路径为`%ProgramData%\ssh\administrators_authorized_keys`，并且此文件上的 ACL 需要配置为仅允许访问管理员和系统，设置方法参见[修复administrators_authorized_keys文件权限](https://github.com/PowerShell/Win32-OpenSSH/wiki/Security-protection-of-various-files-in-Win32-OpenSSH#administrators_authorized_keys)。
 
-## 参考资料：
+## 参考资料
 > - [适用于 Linux 的 Windows 子系统文档](https://docs.microsoft.com/zh-cn/windows/wsl/)
 > - [解决访问windows ssh服务出现Permission denied](https://github.com/PowerShell/Win32-OpenSSH/issues/1617#issuecomment-637910492)
 > - [修复 administrators_authorized_keys  文件的权限](https://github.com/PowerShell/Win32-OpenSSH/wiki/Security-protection-of-various-files-in-Win32-OpenSSH#administrators_authorized_keys)

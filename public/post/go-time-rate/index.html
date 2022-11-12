@@ -53,8 +53,6 @@
                 <nav id="nav-menu" class="clearfix">
                     <a class="current" href="../../"></a>
                     
-                    <a  href="../../about/" title="关于">关于</a>
-                    
                 </nav>
             </div>
         </div>
@@ -132,7 +130,12 @@
 <div class="post-toc" style="position: absolute; top: 188px;">
     <h2 class="post-toc-title"></h2>
     <div class="post-toc-content">
-        <nav id="TableOfContents"></nav>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#go-rate-限流器代码分析">Go Rate 限流器代码分析</a></li>
+    <li><a href="#参考资料">参考资料：</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 <script type="text/javascript">
@@ -193,7 +196,7 @@
         
         
         <div class="post-content">
-            <h1 id="go-rate-限流器代码分析">Go Rate 限流器代码分析</h1>
+            <h2 id="go-rate-限流器代码分析">Go Rate 限流器代码分析</h2>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
@@ -1168,7 +1171,7 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="参考资料">参考资料：</h1>
+</div><h2 id="参考资料">参考资料：</h2>
 <p><a href="https://zhuanlan.zhihu.com/p/90206074">Golang 限流器 time/rate 实现剖析</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/89820414">Golang 限流器 time/rate 使用介绍</a></p>
 <p><a href="https://blog.luojilab.com/2019/12/16/zeroteam/You_have_to_know_the_rate_limit_of_the_series/">不得不了解系列之限流</a></p>
@@ -1366,7 +1369,8 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
 
                 <div id="secondary">
     <section class="widget">
-        <form id="search" action='//www.google.com/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+        <form id="search" action='../../search'
+      method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
       
       <input type="text" name="q" maxlength="20" placeholder="Search">
       <input type="hidden" name="sitesearch" value="/">

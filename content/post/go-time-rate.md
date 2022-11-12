@@ -4,9 +4,10 @@ date: 2020-08-30T23:49:05+08:00
 draft: false
 tags: ["go", "golang", "rate", "限流器", "令牌桶"]
 categories: ["golang"]
+toc: false
 ---
 
-# Go Rate 限流器代码分析
+## 源码分析
 
 ```go
 // Copyright 2015 The Go Authors. All rights reserved.
@@ -496,14 +497,10 @@ func (limit Limit) tokensFromDuration(d time.Duration) float64 {
 
 ```
 
-# 参考资料：
+## 参考资料
 
 [Golang 限流器 time/rate 实现剖析](https://zhuanlan.zhihu.com/p/90206074)
-
 [Golang 限流器 time/rate 使用介绍](https://zhuanlan.zhihu.com/p/89820414)
-
 [不得不了解系列之限流](https://blog.luojilab.com/2019/12/16/zeroteam/You_have_to_know_the_rate_limit_of_the_series/)
-
 [How to handle API rate limits: Do your integrations work at scale?](https://techbeacon.com/app-dev-testing/how-handle-api-rate-limits-do-your-integrations-work-scale)
-
 [Golang rate 无法延迟重排的 BUG](http://xiaorui.cc/archives/5930)

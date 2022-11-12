@@ -53,8 +53,6 @@
                 <nav id="nav-menu" class="clearfix">
                     <a class="current" href="../../"></a>
                     
-                    <a  href="../../about/" title="关于">关于</a>
-                    
                 </nav>
             </div>
         </div>
@@ -913,7 +911,7 @@ Delete<br>
 <pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo docker run -d -p 9000:9000 --name alpine-website-d  windzhu0514/caddy-hugo:0.0.3
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>浏览器输入https://ip:9000访问网站，如果提示<code>404 Site [ip:port] is not served on this interface</code>
+</div><p>浏览器输入https://ip:9000访问网站，如果提示<code>404 Site [ip:port] is not served on this interface</code><br>
 容器里caddy监听外网无法访问 修改Caddyfile站点地址为<code>:9000</code></p>
 <h2 id="filebrowser">filebrowser</h2>
 <p>容器中的目录可以不必和例子相同，但是配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一（参考<a href="https://filebrowser.xyz/cli/filebrowser">.filebrowser </a>）</p>
@@ -1357,7 +1355,8 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
 
                 <div id="secondary">
     <section class="widget">
-        <form id="search" action='//www.google.com/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+        <form id="search" action='../../search'
+      method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
       
       <input type="text" name="q" maxlength="20" placeholder="Search">
       <input type="hidden" name="sitesearch" value="/">

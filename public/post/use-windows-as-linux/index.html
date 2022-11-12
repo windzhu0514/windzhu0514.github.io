@@ -53,8 +53,6 @@
                 <nav id="nav-menu" class="clearfix">
                     <a class="current" href="../../"></a>
                     
-                    <a  href="../../about/" title="关于">关于</a>
-                    
                 </nav>
             </div>
         </div>
@@ -247,7 +245,7 @@
 <p>打开<code>设置</code> - <code>应用</code>，最下面<code>更多windows功能</code> -  勾选<code>适用于Linux的Windows子系统</code>和<code>虚拟机平台</code>，如下图所示</p>
 <p>
         <img class="mx-auto" alt="" src="https://cdn.jsdelivr.net/gh/windzhu0514/imagehost@master/images/1635336876812%e9%80%82%e7%94%a8%e4%ba%8eLinux%e7%9a%84Windows%e5%ad%90%e7%b3%bb%e7%bb%9f.png" />   
-    
+    <br>
 
         <img class="mx-auto" alt="" src="https://cdn.jsdelivr.net/gh/windzhu0514/imagehost@master/images/1635336917450%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%B9%B3%E5%8F%B0.png" />   
     </p>
@@ -355,11 +353,11 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
-<li>添加开机启动任务
+<li>添加开机启动任务<br>
 打开<code>任务计划程序</code>，左边列表里选择<code>任务计划程序库</code>，右键<code>创建基本任务</code>，填写任务名，下一步后选择<code>计算机启动时</code>,下一步选择<code>启动程序</code>，下一步选择脚本路径，下一步完成。</li>
 </ol>
 <h2 id="防火墙开放ssh服务的对外端口">防火墙开放ssh服务的对外端口</h2>
-<p>windows防火墙默认关闭任何对外端口，局域网访问需要开放端口。
+<p>windows防火墙默认关闭任何对外端口，局域网访问需要开放端口。<br>
 防火墙开放端口：<code>设置</code>-<code>更新和安全</code>-<code>Windows安全中心</code>-<code>防火墙和网络保护</code>-<code>高级设置</code>-<code>入站规则</code>-<code>新建规则</code>-<code>端口</code>-<code>下一页</code>-选择<code>TCP</code>和<code>特定本地端口</code>，后面填写ssh服务的对外端口-<code>下一页</code>-<code>允许连接</code>-继续下一页-最后一页填写名称</p>
 <h2 id="局域网机器ssh连接wsl">局域网机器ssh连接wsl</h2>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
@@ -602,7 +600,8 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
 
                 <div id="secondary">
     <section class="widget">
-        <form id="search" action='//www.google.com/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+        <form id="search" action='../../search'
+      method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
       
       <input type="text" name="q" maxlength="20" placeholder="Search">
       <input type="hidden" name="sitesearch" value="/">

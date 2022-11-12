@@ -6,7 +6,6 @@ tags: ["markdown"]
 categories: ["markdown"]
 ---
 
-# Welcome to Leanote! 欢迎来到 Leanote!
 
 ## 1. 排版
 
@@ -91,7 +90,7 @@ class Employee:
         Employee.empCount += 1
 ```
 
-# 5. Markdown 扩展
+## 5. Markdown 扩展
 
 Markdown 扩展支持:
 

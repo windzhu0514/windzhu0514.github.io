@@ -53,8 +53,6 @@
                 <nav id="nav-menu" class="clearfix">
                     <a class="current" href="../../"></a>
                     
-                    <a  href="../../about/" title="关于">关于</a>
-                    
                 </nav>
             </div>
         </div>
@@ -314,7 +312,7 @@
 </div>
 </div><p>相对复杂的数据流动情况</p>
 <h2 id="同步和控制">同步和控制</h2>
-<p>goroutine 退出只能由本身控制，不能从外部强制结束该 goroutine
+<p>goroutine 退出只能由本身控制，不能从外部强制结束该 goroutine<br>
 两种例外情况：main 函数结束或者程序崩溃结束运行</p>
 <h4 id="共享变量控制结束">共享变量控制结束</h4>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
@@ -357,12 +355,12 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><strong>优点</strong>：
-实现简单，不抽象，方便，一个变量即可简单控制子 goroutine 的进行。
-<strong>缺点</strong>:
-结构只能是多读一写，不能适应结构复杂的设计，如果有多写，会出现数据同步问题，需要加锁或者使用 sync.atomic
-不适合用于同级的子 go 程间的通信，全局变量传递的信息太少
-因为是单向通知,主进程无法等待所有子 goroutine 退出
+</div><p><strong>优点</strong>：<br>
+实现简单，不抽象，方便，一个变量即可简单控制子 goroutine 的进行。<br>
+<strong>缺点</strong>:<br>
+结构只能是多读一写，不能适应结构复杂的设计，如果有多写，会出现数据同步问题，需要加锁或者使用 sync.atomic<br>
+不适合用于同级的子 go 程间的通信，全局变量传递的信息太少<br>
+因为是单向通知,主进程无法等待所有子 goroutine 退出<br>
 这种方法只适用于非常简单的逻辑且并发量不太大的场景</p>
 <h4 id="syncwaitgroup-等待结束">sync.Waitgroup 等待结束</h4>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
@@ -438,7 +436,7 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>注意 channel 的阻塞情况，避免出现死锁。
+</div><p>注意 channel 的阻塞情况，避免出现死锁。<br>
 通常 channel 只能由发送者关闭</p>
 <ul>
 <li>
@@ -1135,7 +1133,7 @@
 </div>
 </div><ul>
 <li>
-<p>使用规则
+<p>使用规则<br>
 使用 Context 的程序应遵循以下这些规则来保持跨包接口的一致和方便静态分析工具(go vet)来检查上下文传播是否有潜在问题。</p>
 <ul>
 <li>
@@ -1349,7 +1347,8 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
 
                 <div id="secondary">
     <section class="widget">
-        <form id="search" action='//www.google.com/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+        <form id="search" action='../../search'
+      method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
       
       <input type="text" name="q" maxlength="20" placeholder="Search">
       <input type="hidden" name="sitesearch" value="/">
