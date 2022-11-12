@@ -51,7 +51,9 @@
             </div>
             <div>
                 <nav id="nav-menu" class="clearfix">
-                    <a class="current" href="../../"></a>
+                    <a class="current" href="../../">首页</a>
+                    
+                    <a  href="../../about/" title="关于">关于</a>
                     
                 </nav>
             </div>
@@ -66,116 +68,14 @@
                 <div class="col-8" id="main">
                     
 <div class="res-cons">
-    <style type="text/css">
-    .post-toc {
-        position: fixed;
-        width: 200px;
-        margin-left: -210px;
-        padding: 5px 10px;
-        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
-        font-size: 12px;
-        border: 1px solid rgba(0, 0, 0, .07);
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.98);
-        background-clip: padding-box;
-        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
-        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
-        word-wrap: break-word;
-        white-space: nowrap;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        z-index: 999;
-        cursor: pointer;
-        max-height: 70%;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .post-toc .post-toc-title {
-        width: 100%;
-        margin: 0 auto;
-        font-size: 20px;
-        font-weight: 400;
-        text-transform: uppercase;
-        text-align: center;
-    }
-
-    .post-toc .post-toc-content {
-        font-size: 15px;
-    }
-
-    .post-toc .post-toc-content>nav>ul {
-        margin: 10px 0;
-    }
-
-    .post-toc .post-toc-content ul {
-        padding-left: 20px;
-        list-style: square;
-        margin: 0.5em;
-        line-height: 1.8em;
-    }
-
-    .post-toc .post-toc-content ul ul {
-        padding-left: 15px;
-        display: none;
-    }
-
-    @media print,
-    screen and (max-width:1057px) {
-        .post-toc {
-            display: none;
-        }
-    }
-</style>
-<div class="post-toc" style="position: absolute; top: 188px;">
-    <h2 class="post-toc-title"></h2>
-    <div class="post-toc-content">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#go-rate-限流器代码分析">Go Rate 限流器代码分析</a></li>
-    <li><a href="#参考资料">参考资料：</a></li>
-  </ul>
-</nav>
-    </div>
-</div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        var postToc = $(".post-toc");
-        if (postToc.length) {
-            var leftPos = $("#main").offset().left;
-            if (leftPos < 220) {
-                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
-            }
-
-            var t = postToc.offset().top - 20,
-                a = {
-                    start: {
-                        position: "absolute",
-                        top: t
-                    },
-                    process: {
-                        position: "fixed",
-                        top: 20
-                    },
-                };
-            $(window).scroll(function () {
-                var e = $(window).scrollTop();
-                e < t ? postToc.css(a.start) : postToc.css(a.process)
-            })
-        }
-
-        if ($("#TableOfContents").children().length < 1) {
-            $(".post-toc").remove();
-        }
-    })
-</script>
+    
     <article class="post">
         <header>
             <h1 class="post-title">Go Rate限流器代码分析</h1>
         </header>
         
   <time datetime="2020-08-30T15:49:05Z" class="post-meta meta-date dt-published">
-    
+    2020年8月30日
   </time>
 
 
@@ -190,13 +90,13 @@
         
         <div class="post-meta">
             <span id="busuanzi_container_page_pv">&nbsp;|
-                <span id="busuanzi_value_page_pv"></span> <span></span>
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
             </span>
         </div>
         
         
         <div class="post-content">
-            <h2 id="go-rate-限流器代码分析">Go Rate 限流器代码分析</h2>
+            <h2 id="源码分析">源码分析</h2>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
@@ -683,6 +583,15 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">482
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">483
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">484
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">485
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">486
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">487
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">488
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">489
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">490
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">491
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">492
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">493
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Copyright 2015 The Go Authors. All rights reserved.
@@ -810,7 +719,8 @@
 </span></span><span style="display:flex;"><span><span style="color:#6272a4">// Reservation 保存在一定时间延迟后Limiter允许执行的事件信息。
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Reservation可以被取消，取消后Limiter可以执行剩下的事件。
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Reservation holds information about events that are permitted by a Limiter to happen after a delay.
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Reservation holds information about events that are permitted by a Limiter to 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// happen after a delay.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Reservation may be canceled, which may enable the Limiter to permit additional events.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Reservation <span style="color:#8be9fd;font-style:italic">struct</span> {
 </span></span><span style="display:flex;"><span>	ok        <span style="color:#8be9fd">bool</span>      <span style="color:#6272a4">// 令牌桶是否可以提供需要的令牌数量
@@ -884,8 +794,9 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// r.lim.lastEvent的值是返回Reservation对象时的值
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// r.timeToAct是此次满足预定条件时事件发生的时间
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// lastEvent始终是大于等于（也就是等于或晚于）timeToAct
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// r.lim.lastEvent-r.timeToAct表示从前一个事件发生的时间到此次预订成功后事件发生的时间之间的差值，然后计算在这个
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 时间段产生了多少令牌，即已经消耗掉的令牌数量，这些令牌不需要恢复
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// r.lim.lastEvent-r.timeToAct表示从前一个事件发生的时间到此次预订成功后事件发生
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 的时间之间的差值，然后计算在这个时间段产生了多少令牌，即已经消耗掉的令牌数量，
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 这些令牌不需要恢复
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
 </span></span><span style="display:flex;"><span>	<span style="color:#6272a4">// calculate tokens to restore
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// The duration between lim.lastEvent and r.timeToAct tells us how many tokens were reserved
@@ -912,7 +823,8 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 相等说明预约成功后没有任何事件发生，即没到预约事件发生的时间
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 把reserveN函数里修改的lastEvent还原为reserveN调用前的上一个事件发生的时间，
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 即上次调用reserveN函数并且预订成功时lastEvent的值，此次预订成功时事件发生的
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 时间减去该值就是产生此次预订的令牌数量所消耗的时间。所以前一个事件的时间=此次预订成功事件发生的时间-产生此次预订的令牌数量的时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 时间减去该值就是产生此次预订的令牌数量所消耗的时间。
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// 所以前一个事件的时间=此次预订成功事件发生的时间-产生此次预订的令牌数量的时间
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// reserveN函数timeToAct的计算反操作
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">if</span> r.timeToAct <span style="color:#ff79c6">==</span> r.lim.lastEvent {
 </span></span><span style="display:flex;"><span>		prevEvent <span style="color:#ff79c6">:=</span> r.timeToAct.<span style="color:#50fa7b">Add</span>(r.limit.<span style="color:#50fa7b">durationFromTokens</span>(<span style="color:#8be9fd;font-style:italic">float64</span>(<span style="color:#ff79c6">-</span>r.tokens)))
@@ -929,7 +841,8 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> lim.<span style="color:#50fa7b">ReserveN</span>(time.<span style="color:#50fa7b">Now</span>(), <span style="color:#bd93f9">1</span>)
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// ReserveN returns a Reservation that indicates how long the caller must wait before n events happen.
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// ReserveN returns a Reservation that indicates how long the caller must wait before 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// n events happen.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The Limiter takes this Reservation into account when allowing future events.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The returned Reservation’s OK() method returns false if n exceeds the Limiter&#39;s burst size.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Usage example:
@@ -940,7 +853,8 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//   }
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//   time.Sleep(r.Delay())
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//   Act()
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Use this method if you wish to wait and slow down in accordance with the rate limit without dropping events.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Use this method if you wish to wait and slow down in accordance with the rate limit without
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// dropping events.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// If you need to respect a deadline or cancel the delay, use Wait instead.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// To drop or skip events exceeding rate limit, use Allow instead.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (lim <span style="color:#ff79c6">*</span>Limiter) <span style="color:#50fa7b">ReserveN</span>(now time.Time, n <span style="color:#8be9fd">int</span>) <span style="color:#ff79c6">*</span>Reservation {
@@ -1014,7 +928,8 @@
 </span></span><span style="display:flex;"><span>	lim.<span style="color:#50fa7b">SetLimitAt</span>(time.<span style="color:#50fa7b">Now</span>(), newLimit)
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// SetLimitAt 修改Limit的速率值。在SetLimitAt调用前使用Reserve或者Wait预定的并且还未发生的Reservation可能不会使用到新的速率和新的桶大小。
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// SetLimitAt 修改Limit的速率值。在SetLimitAt调用前使用Reserve或者Wait预定的并且还未发生的Reservation
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// 可能不会使用到新的速率和新的桶大小。
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
 </span></span><span style="display:flex;"><span><span style="color:#6272a4">// SetLimitAt sets a new Limit for the limiter. The new Limit, and Burst, may be violated
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// or underutilized by those which reserved (using Reserve or Wait) but did not yet act
@@ -1052,7 +967,8 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#6272a4">// reserveN是AllowN, ReserveN和WaitN方法的辅助方法
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// maxFutureReserve 指定最大的等待时间
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// reserveN返回Reservation类型的值而不是指针，这样其他函数调用时不会在堆上分配内存（一个指针变量大小的内存）
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// reserveN返回Reservation类型的值而不是指针，这样其他函数调用时不会在堆上
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// 分配内存（一个指针变量大小的内存）
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
 </span></span><span style="display:flex;"><span><span style="color:#6272a4">// reserveN is a helper method for AllowN, ReserveN, and WaitN.
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// maxFutureReserve specifies the maximum reservation wait duration allowed.
@@ -1099,8 +1015,9 @@
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> ok { <span style="color:#6272a4">// 如果可以提供需要的令牌数量
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		r.tokens = n                        <span style="color:#6272a4">// 记录预订的令牌数量
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		r.timeToAct = now.<span style="color:#50fa7b">Add</span>(waitDuration) <span style="color:#6272a4">// timetoaction 记录满足所有需要的令牌数量时的时间，也即是满足后事件发生的时间
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	}
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		<span style="color:#6272a4">// timetoaction 记录满足所有需要的令牌数量时的时间，也即是满足后事件发生的时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		r.timeToAct = now.<span style="color:#50fa7b">Add</span>(waitDuration) 
+</span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#6272a4">// Update state
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">if</span> ok {
@@ -1158,7 +1075,8 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> time.Nanosecond <span style="color:#ff79c6">*</span> time.<span style="color:#50fa7b">Duration</span>(<span style="color:#bd93f9">1e9</span><span style="color:#ff79c6">*</span>seconds)
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// tokensFromDuration 是个单位转换函数，计算在指定的时间隔间内以每秒limit个token的速率产生的token数量。
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// tokensFromDuration 是个单位转换函数，计算在指定的时间隔间内以每秒limit个token的速率
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// 产生的token数量。
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
 </span></span><span style="display:flex;"><span><span style="color:#6272a4">// tokensFromDuration is a unit conversion function from a time duration to the number of tokens
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// which could be accumulated during that duration at a rate of limit tokens per second.
@@ -1171,21 +1089,21 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="参考资料">参考资料：</h2>
-<p><a href="https://zhuanlan.zhihu.com/p/90206074">Golang 限流器 time/rate 实现剖析</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/89820414">Golang 限流器 time/rate 使用介绍</a></p>
-<p><a href="https://blog.luojilab.com/2019/12/16/zeroteam/You_have_to_know_the_rate_limit_of_the_series/">不得不了解系列之限流</a></p>
-<p><a href="https://techbeacon.com/app-dev-testing/how-handle-api-rate-limits-do-your-integrations-work-scale">How to handle API rate limits: Do your integrations work at scale?</a></p>
-<p><a href="http://xiaorui.cc/archives/5930">Golang rate 无法延迟重排的 BUG</a></p>
+</div><h2 id="参考资料">参考资料</h2>
+<p><a href="https://zhuanlan.zhihu.com/p/90206074">Golang 限流器 time/rate 实现剖析</a><br>
+<a href="https://zhuanlan.zhihu.com/p/89820414">Golang 限流器 time/rate 使用介绍</a><br>
+<a href="https://blog.luojilab.com/2019/12/16/zeroteam/You_have_to_know_the_rate_limit_of_the_series/">不得不了解系列之限流</a><br>
+<a href="https://techbeacon.com/app-dev-testing/how-handle-api-rate-limits-do-your-integrations-work-scale">How to handle API rate limits: Do your integrations work at scale?</a><br>
+<a href="http://xiaorui.cc/archives/5930">Golang rate 无法延迟重排的 BUG</a></p>
 
         </div>
 
         
 <div class="post-archive">
     <ul class="post-copyright">
-        <li><strong></strong><a rel="author" href="../../">风竹</a></li>
-        <li style="word-break:break-all"><strong></strong><a href="../../post/go-time-rate/">/post/go-time-rate/</a></li>
-        <li><strong></strong><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. </li>
+        <li><strong>原文作者：</strong><a rel="author" href="../../">风竹</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="../../post/go-time-rate/">/post/go-time-rate/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. 进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
     </ul>
 </div>
 <br/>
@@ -1195,7 +1113,7 @@
         
 
 <div class="post-archive">
-    <h2></h2>
+    <h2>相关文章</h2>
     <ul class="listing">
         
         <li><a href="../../post/go-type-convert/">golang类型转换</a></li>
@@ -1369,8 +1287,7 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
 
                 <div id="secondary">
     <section class="widget">
-        <form id="search" action='../../search'
-      method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+        <form id="search" action='../../search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
       
       <input type="text" name="q" maxlength="20" placeholder="Search">
       <input type="hidden" name="sitesearch" value="/">
@@ -1379,7 +1296,7 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
     </section>
 
     <section class="widget">
-        <h3 class="widget-title"></h3>
+        <h3 class="widget-title">最近文章</h3>
 <ul class="widget-list">
     
     <li>
@@ -1428,7 +1345,7 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
     
 
     <section class="widget">
-        <h3 class="widget-title"><a href='../../categories/'></a></h3>
+        <h3 class="widget-title"><a href='../../categories/'>分类</a></h3>
 <ul class="widget-list">
     
     <li><a href="../../categories/git/">git (1)</a></li>
@@ -1445,7 +1362,7 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
     </section>
 
     <section class="widget">
-        <h3 class="widget-title"><a href='../../tags/'></a></h3>
+        <h3 class="widget-title"><a href='../../tags/'>标签</a></h3>
 <div class="tagcloud">
     
     <a href="../../tags/caddy/">caddy</a>
@@ -1500,9 +1417,9 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
     
 
     <section class="widget">
-        <h3 class="widget-title"></h3>
+        <h3 class="widget-title">其它</h3>
         <ul class="widget-list">
-            <li><a href="../../index.xml"></a></li>
+            <li><a href="../../index.xml">文章 RSS</a></li>
         </ul>
     </section>
 </div>
