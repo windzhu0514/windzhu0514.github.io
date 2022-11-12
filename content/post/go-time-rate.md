@@ -135,7 +135,8 @@ func (lim *Limiter) AllowN(now time.Time, n int) bool {
 // Reservation 保存在一定时间延迟后Limiter允许执行的事件信息。
 // Reservation可以被取消，取消后Limiter可以执行剩下的事件。
 
-// A Reservation holds information about events that are permitted by a Limiter to happen after a delay.
+// A Reservation holds information about events that are permitted by a Limiter to 
+// happen after a delay.
 // A Reservation may be canceled, which may enable the Limiter to permit additional events.
 type Reservation struct {
 	ok        bool      // 令牌桶是否可以提供需要的令牌数量
@@ -209,8 +210,9 @@ func (r *Reservation) CancelAt(now time.Time) {
 	// r.lim.lastEvent的值是返回Reservation对象时的值
 	// r.timeToAct是此次满足预定条件时事件发生的时间
 	// lastEvent始终是大于等于（也就是等于或晚于）timeToAct
-	// r.lim.lastEvent-r.timeToAct表示从前一个事件发生的时间到此次预订成功后事件发生的时间之间的差值，然后计算在这个
-	// 时间段产生了多少令牌，即已经消耗掉的令牌数量，这些令牌不需要恢复
+	// r.lim.lastEvent-r.timeToAct表示从前一个事件发生的时间到此次预订成功后事件发生
+	// 的时间之间的差值，然后计算在这个时间段产生了多少令牌，即已经消耗掉的令牌数量，
+	// 这些令牌不需要恢复
 
 	// calculate tokens to restore
 	// The duration between lim.lastEvent and r.timeToAct tells us how many tokens were reserved
@@ -237,7 +239,8 @@ func (r *Reservation) CancelAt(now time.Time) {
 	// 相等说明预约成功后没有任何事件发生，即没到预约事件发生的时间
 	// 把reserveN函数里修改的lastEvent还原为reserveN调用前的上一个事件发生的时间，
 	// 即上次调用reserveN函数并且预订成功时lastEvent的值，此次预订成功时事件发生的
-	// 时间减去该值就是产生此次预订的令牌数量所消耗的时间。所以前一个事件的时间=此次预订成功事件发生的时间-产生此次预订的令牌数量的时间
+	// 时间减去该值就是产生此次预订的令牌数量所消耗的时间。
+	// 所以前一个事件的时间=此次预订成功事件发生的时间-产生此次预订的令牌数量的时间
 	// reserveN函数timeToAct的计算反操作
 	if r.timeToAct == r.lim.lastEvent {
 		prevEvent := r.timeToAct.Add(r.limit.durationFromTokens(float64(-r.tokens)))
@@ -254,7 +257,8 @@ func (lim *Limiter) Reserve() *Reservation {
 	return lim.ReserveN(time.Now(), 1)
 }
 
-// ReserveN returns a Reservation that indicates how long the caller must wait before n events happen.
+// ReserveN returns a Reservation that indicates how long the caller must wait before 
+// n events happen.
 // The Limiter takes this Reservation into account when allowing future events.
 // The returned Reservation’s OK() method returns false if n exceeds the Limiter's burst size.
 // Usage example:
@@ -265,7 +269,8 @@ func (lim *Limiter) Reserve() *Reservation {
 //   }
 //   time.Sleep(r.Delay())
 //   Act()
-// Use this method if you wish to wait and slow down in accordance with the rate limit without dropping events.
+// Use this method if you wish to wait and slow down in accordance with the rate limit without
+// dropping events.
 // If you need to respect a deadline or cancel the delay, use Wait instead.
 // To drop or skip events exceeding rate limit, use Allow instead.
 func (lim *Limiter) ReserveN(now time.Time, n int) *Reservation {
@@ -339,7 +344,8 @@ func (lim *Limiter) SetLimit(newLimit Limit) {
 	lim.SetLimitAt(time.Now(), newLimit)
 }
 
-// SetLimitAt 修改Limit的速率值。在SetLimitAt调用前使用Reserve或者Wait预定的并且还未发生的Reservation可能不会使用到新的速率和新的桶大小。
+// SetLimitAt 修改Limit的速率值。在SetLimitAt调用前使用Reserve或者Wait预定的并且还未发生的Reservation
+// 可能不会使用到新的速率和新的桶大小。
 
 // SetLimitAt sets a new Limit for the limiter. The new Limit, and Burst, may be violated
 // or underutilized by those which reserved (using Reserve or Wait) but did not yet act
@@ -377,7 +383,8 @@ func (lim *Limiter) SetBurstAt(now time.Time, newBurst int) {
 
 // reserveN是AllowN, ReserveN和WaitN方法的辅助方法
 // maxFutureReserve 指定最大的等待时间
-// reserveN返回Reservation类型的值而不是指针，这样其他函数调用时不会在堆上分配内存（一个指针变量大小的内存）
+// reserveN返回Reservation类型的值而不是指针，这样其他函数调用时不会在堆上
+// 分配内存（一个指针变量大小的内存）
 
 // reserveN is a helper method for AllowN, ReserveN, and WaitN.
 // maxFutureReserve specifies the maximum reservation wait duration allowed.
@@ -424,7 +431,8 @@ func (lim *Limiter) reserveN(now time.Time, n int, maxFutureReserve time.Duratio
 	}
 	if ok { // 如果可以提供需要的令牌数量
 		r.tokens = n                        // 记录预订的令牌数量
-		r.timeToAct = now.Add(waitDuration) // timetoaction 记录满足所有需要的令牌数量时的时间，也即是满足后事件发生的时间
+		// timetoaction 记录满足所有需要的令牌数量时的时间，也即是满足后事件发生的时间
+		r.timeToAct = now.Add(waitDuration) 
 	}
 
 	// Update state
@@ -483,7 +491,8 @@ func (limit Limit) durationFromTokens(tokens float64) time.Duration {
 	return time.Nanosecond * time.Duration(1e9*seconds)
 }
 
-// tokensFromDuration 是个单位转换函数，计算在指定的时间隔间内以每秒limit个token的速率产生的token数量。
+// tokensFromDuration 是个单位转换函数，计算在指定的时间隔间内以每秒limit个token的速率
+// 产生的token数量。
 
 // tokensFromDuration is a unit conversion function from a time duration to the number of tokens
 // which could be accumulated during that duration at a rate of limit tokens per second.

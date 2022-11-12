@@ -1,4 +1,4 @@
 [submodule "themes/maupassant"]
 	path = themes/maupassant
-	url = https://github.com/flysnow-org/maupassant-hugo.git
+	url = https://github.com/windzhu0514/maupassant-hugo.git
 	branch = master

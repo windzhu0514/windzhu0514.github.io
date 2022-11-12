@@ -6,7 +6,7 @@ title: "一蓑烟雨任平生"
 theme: "maupassant"
 publishDir: "./public"
 hasCJKLanguage: true
-defaultContentLanguage: "zh"
+defaultContentLanguage: "zh-hans"
 
 author:
   name: "风竹"
@@ -14,8 +14,12 @@ author:
 markup:
   highlight:
     linenos: true
+    # anchorLineNos: true
+    # lineNumbersInTable: true
+    # codeFences: true
+    # lineAnchors: ""
+    # noHl: false
     # style: "github"
-    # style: "dracula"
     style: "dracula"
   goldmark:
     renderer:
