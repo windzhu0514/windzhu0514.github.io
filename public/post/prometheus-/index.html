@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>golang源码生成文档及注释语法 | 一蓑烟雨任平生</title>
+    <meta property="og:title" content="golang源码生成文档及注释语法 - 一蓑烟雨任平生">
+    <meta property="og:type" content="article">
+    
+    <meta property="article:published_time" content='2024-08-16T11:17:50&#43;08:00'>
+    
+    
+    <meta property="article:modified_time" content='2024-08-16T11:17:50&#43;08:00'>
+    
+    <meta name="Keywords" content="go,golang,go语言,博客,C,C&#43;&#43;,mfc">
+    <meta name="description" content="golang源码生成文档及注释语法">
+    
+    <meta name="author" content="">
+    <meta property="og:url" content="//localhost:1313/post/prometheus-/">
+    <link rel="shortcut icon" href='../../favicon.ico' type="image/x-icon">
+
+    <link rel="stylesheet" href='../../css/normalize.css'>
+    <link rel="stylesheet" href='../../css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+
+    
+
+    
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="//localhost:1313/">
+                        一蓑烟雨任平生
+                    </a>
+                
+                <p class="description">Go语言(golang)、C/C&#43;&#43;、MFC开发者</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="//localhost:1313/">首页</a>
+                    
+                    <a  href="//localhost:1313/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#监控系统">监控系统</a></li>
+    <li><a href="#prometheus">Prometheus</a>
+      <ul>
+        <li><a href="#适用场景">适用场景</a></li>
+        <li><a href="#不适用的场景">不适用的场景</a></li>
+        <li><a href="#数据模型">数据模型</a></li>
+        <li><a href="#指标类型">指标类型</a></li>
+        <li><a href="#promql">PromQL</a></li>
+      </ul>
+    </li>
+    <li><a href="#alerrmanager">Alerrmanager</a>
+      <ul>
+        <li><a href="#grouping分组">Grouping（分组）</a></li>
+        <li><a href="#inhibition抑制">Inhibition（抑制）</a></li>
+        <li><a href="#silences静默">Silences（静默）</a></li>
+      </ul>
+    </li>
+    <li><a href="#可视化">可视化</a>
+      <ul>
+        <li><a href="#表达式浏览器">表达式浏览器</a></li>
+        <li><a href="#grafana">Grafana</a></li>
+      </ul>
+    </li>
+    <li><a href="#监控服务指标实战">监控服务指标实战</a>
+      <ul>
+        <li><a href="#注册指标">注册指标</a></li>
+        <li><a href="#暴露指标收集接口">暴露指标收集接口</a></li>
+        <li><a href="#注意事项">注意事项</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">golang源码生成文档及注释语法</h1>
+        </header>
+        
+  <time datetime="2024-08-16T03:17:50Z" class="post-meta meta-date dt-published">
+    2024年8月16日
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='../../categories/golang' target="_blank">golang</a>
+  
+</div>
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
+        <div class="clear" style="display: none">
+            <div class="toc-article">
+                <div class="toc-title">文章目录</div>
+            </div>
+        </div>
+        
+        <div class="post-content">
+            <h1 id="基于-prometheus-的微服务监控指南">基于 Prometheus 的微服务监控指南</h1>
+<h2 id="监控系统">监控系统</h2>
+<p>随着微服务架构的广泛应用，现代软件系统的复杂性不断增加，对于系统监控和故障排除也更加困难。</p>
+<p>在微服务架构中，每个服务都是独立运行的，需要对大量的服务进行监控。</p>
+<p>且研发几乎不可能对系统存在的风险有100%的认知，即使做到了100%的认知，也不可能对所有风险环节做了100%容错，有效预警可以帮助研发及时发现系统中潜在的bug。</p>
+<p>一个有效的监控系统成为保证微服务高可用、稳定性、可靠性的关键因素。</p>
+<p>监控系统可以提供以下几个方面的帮助：</p>
+<ul>
+<li>实时监测服务的健康状态和性能指标，以便及时检测和排除故障。</li>
+<li>收集各个服务的指标数据，用于分析和优化系统性能。</li>
+<li>对所有服务的监控数据进行统一管理和可视化展示，方便了解整个系统的情况。</li>
+</ul>
+<p>本文将介绍如何使用Prometheus对golang微服务进行监控。</p>
+<h2 id="prometheus">Prometheus</h2>
+<p>Prometheus 是云原生计算基金会项目，用于对系统或服务进行监控。它按给定的时间间隔从配置的目标服务收集指标信息，评估规则表达式、显示结果、观测指标达到指定条件时触发告警。</p>
+<p>Prometheus 的主要特性：</p>
+<ul>
+<li>多维数据模型（由指标名称和键/值集合组成的时间序列）</li>
+<li><code>PromQL</code> 一种强大而灵活的查询语言，可以充分利用这种多维度数据</li>
+<li>不依赖于分布式存储；单个服务器节点是自治的</li>
+<li>采用 <code>HTTP</code> 拉取模型进行时间序列收集</li>
+<li>支持通过中间网关推送批处理任务的时间序列</li>
+<li>可以通过服务发现或静态配置发现目标服务</li>
+<li>支持多种图形和仪表板展示模式</li>
+<li>支持分层和水平联邦集群扩展</li>
+</ul>
+<p>其他信息可查看 <a href="https://prometheus.io/docs/introduction/overview/">Prometheus 概述</a></p>
+<p>Prometheus 架构图</p>
+<p>
+        <img class="mx-auto" alt="image" src="https://prometheus.io/assets/architecture.png?ynotemdtimestamp=1723550796448" />   
+    </p>
+<p><code>Prometheus</code> 采集数据有两种方式：</p>
+<ul>
+<li>一种是直接采样仪表化任务（instrumenting job）</li>
+<li>另一种通过中介 <code>push gateway</code> 来采样短时任务。</li>
+</ul>
+<p><code>Prometheus</code> 在本地存储所有采样的样本，同时基于这些数据进行规则计算、聚合数据和记录现有数据的新时间序列或者生成告警信息。收集的数据可以使用 <code>Grafana</code> 等其他工具进行可视化呈现。</p>
+<p><code>Prometheus</code> 支持多种服务发现，主要分为三类：</p>
+<ul>
+<li>基于静态文件配置的服务发现</li>
+<li>基于 <code>HTTP</code> 的动态服务发现（consul、dns、dockers、kubernetes等多种）</li>
+<li>推送网关（Push Gateway）</li>
+</ul>
+<p>在 <code>Prometheus</code> 术语中，可以抓取的服务称为实例（<code>instance</code>），通常对应于单个进程。具有相同目的的实例的集合，例如为了可扩展性或可靠性而复制的进程，称为作业（<code>Job</code>）。</p>
+<h3 id="适用场景">适用场景</h3>
+<p>Prometheus 非常适合记录任何纯数字时间序列。它既适合以机器为中心的监控，也适合高度动态的面向服务的架构的监控。在微服务的世界中，它对多维数据收集和查询的支持是一个特殊的优势。</p>
+<p>Prometheus 的设计注重可靠性，当出现服务中断或故障时，可以依赖它来快速进行问题诊断。每个 Prometheus 服务器都是独立的，不依赖于网络存储或其他远程服务。当基础设施的其他部分损坏时，依然可以依赖它进行问题分析，并且无需设置大量基础设施即可使用它。</p>
+<h3 id="不适用的场景">不适用的场景</h3>
+<p><code>Prometheus</code> 重视可靠性。即使在出现故障的情况下，也可以随时查看有关系统的可用统计信息。但是如果需要 100% 的准确性，例如按请求计费、每一笔订单的信息时，Prometheus 不是一个好的选择，因为收集的数据可能不够详细和完整。在这种情况下，您最好使用其他系统来收集和分析计费数据，并使用 Prometheus 进行其余功能的监控。</p>
+<h3 id="数据模型">数据模型</h3>
+<p><code>Prometheus</code> 收集由指标名和标签键值对组成的数据，作为时间序列进行存储。</p>
+<h4 id="指标和标签">指标和标签</h4>
+<p><strong>指标名称：</strong> 只能包含 ASCII 字母、数字、下划线和冒号。必须符合正则表达式 <code>[a-zA-Z_:][a-zA-Z0-9_:]*</code> 。</p>
+<p><strong>标签名称：</strong> 只能包含 ASCII 字母、数字和下划线。必须符合正则表达式 <code>[a-zA-Z_][a-zA-Z0-9_]*</code> 。以 <code>__</code> （两个 <code>_</code>）开头的标签名称是保留内部使用。</p>
+<p><strong>标签值：</strong> 可以包含任何 Unicode 字符</p>
+<p>指标名和标签名命名规范：https://prometheus.io/docs/practices/naming/</p>
+<h4 id="时间序列">时间序列</h4>
+<p>每个时间序列都由指标名称和可选的标签键值对唯一标识。</p>
+<p>Prometheus 将所有指标数据存储为时间序列：即属于同一指标和同一组标签的带时间戳的数据流。</p>
+<p>时间序列格式：<code>&lt;metric name&gt;{&lt;label name&gt;=&lt;label value&gt;, ...}</code></p>
+<p>如：<code>api_http_requests_total{method=&quot;POST&quot;, handler=&quot;/messages&quot;}</code></p>
+<h3 id="指标类型">指标类型</h3>
+<h4 id="counter">Counter</h4>
+<p>计数器是一种累计指标类型，表示一个单调递增计数器。其值只能递增或在重启时重置为零。</p>
+<p>通常用于表示所服务的请求数、已完成的任务数或错误数。</p>
+<h4 id="gauge">Gauge</h4>
+<p>仪表代表一种值可以任意增加和减少的单个数值的指标类型。通常用于表示温度变化或内存使用情况等，但也用于可增加可减少的“计数”，如并发请求数。</p>
+<h4 id="histogram">Histogram</h4>
+<p>直方图对观测结果（通常是请求持续时间或响应体的大小）进行采样，并将计数记录到可自定义配置的存储桶中。同时还保存了所有观察值的总和。</p>
+<p>在抓取期间，直方图在指标名称的基础上产生三个指标（时间序列）：</p>
+<ul>
+<li>观测桶的累积计数指标，格式为：<code>&lt;basename&gt;_bucket{le=&quot;&lt;upper inclusive bound&gt;&quot;}</code>;</li>
+<li>观测值的总和，格式为：<code>&lt;basename&gt;_sum</code></li>
+<li>观测值的个数，格式为：<code>&lt;basename&gt;_count</code> （等同 <code>&lt;basename&gt;_bucket{le=&quot;+Inf&quot;}</code> 的值）</li>
+</ul>
+<p>使用 <code>histogram_quantile</code> 函数计算直方图的分位数或者仅用于聚合直方图。</p>
+<p>注：</p>
+<blockquote>
+<p>le 含义： less or equal</p>
+</blockquote>
+<h4 id="summary">Summary</h4>
+<p>与直方图类似，摘要对观察结果进行采样（通常是请求持续时间和响应大小等）。同时它还提供了观察值总数量和所有观察值的总和，还可以通过滑动时间窗口计算可配置的分位数。</p>
+<p>在抓取期间，摘要在指标名称的基础上产生三个指标（时间序列）：</p>
+<ul>
+<li>基于连续的时间序列计算φ-分位数（0 ≤ φ ≤ 1），格式为：<code>&lt;basename&gt;{quantile=&quot;&lt;φ&gt;&quot;}</code></li>
+<li>观测值的总和，格式为：<code>&lt;basename&gt;_sum</code></li>
+<li>观测值的个数，格式为：<code>&lt;basename&gt;_count</code></li>
+</ul>
+<blockquote>
+<p>使用直方图和摘要可以计算所谓的 φ 分位数，其中 0 ≤ φ ≤ 1。 φ 分位数是指在 N 个观测值中排名第 φ*N 的观测值。 φ 分位数示例： 0.5 分位数称为中位数。 0.95 分位数是第 95 个百分位数。</p>
+</blockquote>
+<p>摘要和直方图之间的本质区别在于，摘要在客户端计算时序数据的 φ 分位数并直接导出到服务端，而直方图则是导出桶里观测计数，服务端使用 <code>histogram_quantile()</code> 函数计算分位数。</p>
+<p>这两种方式有许多不同点：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">Histogram</th>
+<th style="text-align:left">Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">所需的配置</td>
+<td style="text-align:left">选择适合观测值预期范围的桶配置。</td>
+<td style="text-align:left">选择所需的 φ 分位数和滑动窗口。观测数据无法计算其他 φ 分位数和滑动窗口。</td>
+</tr>
+<tr>
+<td style="text-align:left">客户端性能</td>
+<td style="text-align:left">只需要增加计数器，性能成本低。</td>
+<td style="text-align:left">需要计算时序数据的分位数，性能成本高</td>
+</tr>
+<tr>
+<td style="text-align:left">服务端性能</td>
+<td style="text-align:left">服务器计算分位数。如果临时计算花费太长时间（例如在大型仪表板中），可以使用记录规则。</td>
+<td style="text-align:left">服务器端性能成本低。</td>
+</tr>
+<tr>
+<td style="text-align:left">时间序列数(除了_sum和_count之外)</td>
+<td style="text-align:left">每个配置的存储桶是一个时间序列。</td>
+<td style="text-align:left">每个配置的分位数是一个时间序列。</td>
+</tr>
+<tr>
+<td style="text-align:left">分位数误差</td>
+<td style="text-align:left">相关数据桶（bucket）的宽度决定误差值</td>
+<td style="text-align:left">可配置的φ值决定误差值</td>
+</tr>
+<tr>
+<td style="text-align:left">φ 分位数和滑动时间窗</td>
+<td style="text-align:left">与具体 Prometheus 表达式相关</td>
+<td style="text-align:left">由客户端预先配置</td>
+</tr>
+<tr>
+<td style="text-align:left">聚合操作</td>
+<td style="text-align:left">与具体 Prometheus 表达式相关</td>
+<td style="text-align:left">通常不能进行聚合</td>
+</tr>
+</tbody>
+</table>
+<p>直方图适合场景：</p>
+<ul>
+<li>服务端对不同服务、不同标签进行聚合计算</li>
+<li>时序数据数量级比较大，比较消耗资源时</li>
+<li>可接受数据计算时的精度损失</li>
+</ul>
+<p>摘要图适合场景：</p>
+<ul>
+<li>不需要服务端聚合操作</li>
+<li>客户端可以接受性能消耗</li>
+<li>xxxxxxxxxx [Unit]Description=Caddy HTTP/2 web serverDocumentation=https://caddyserver.com/docsAfter=network-online.targetWants=network-online.target systemd-networkd-wait-online.service​[Service]Restart=on-abnormal​; Do not allow the process to be restarted in a tight loop. If the; process fails to start, something critical needs to be fixed.StartLimitInterval=14400StartLimitBurst=10​; User and group the process will run as.User=rootGroup=root​; Letsencrypt-issued certificates will be written to this directory.Environment=CADDYPATH=/etc/ssl/caddy​; Always set &ldquo;-root&rdquo; to something safe in case it gets forgotten in the Caddyfile.ExecStart=/usr/local/bin/caddy -log stdout -log-timestamps=false -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmpExecReload=/bin/kill -USR1 $MAINPID​; Use graceful shutdown with a reasonable timeoutKillMode=mixedKillSignal=SIGQUITTimeoutStopSec=5s​; Limit the number of file descriptors; see <code>man systemd.exec</code> for more limit settings.LimitNOFILE=1048576; Unmodified caddy is not expected to use more than that.LimitNPROC=512​; Use private /tmp and /var/tmp, which are discarded after caddy stops.PrivateTmp=true; Use a minimal /dev (May bring additional security if switched to &rsquo;true&rsquo;, but it may not work on Raspberry Pi&rsquo;s or other devices, so it has been disabled in this dist.)PrivateDevices=false; Hide /home, /root, and /run/user. Nobody will steal your SSH-keys.ProtectHome=true; Make /usr, /boot, /etc and possibly some more folders read-only.ProtectSystem=full; 鈥?except /etc/ssl/caddy, because we want Letsencrypt-certificates there.;   This merely retains r/w access rights, it does not add any new. Must still be writable on the host!;ReadWritePaths=/etc/ssl/caddyReadWriteDirectories=/etc/ssl/caddy​; The following additional security directives only work with systemd v229 or later.; They further restrict privileges that can be gained by caddy. Uncomment if you like.; Note that you may have to add capabilities required by any plugins in use.;CapabilityBoundingSet=CAP_NET_BIND_SERVICE;AmbientCapabilities=CAP_NET_BIND_SERVICE;NoNewPrivileges=true​[Install]WantedBy=multi-user.targetshell</li>
+</ul>
+<h3 id="promql">PromQL</h3>
+<p>Prometheus 提供了一种名为 PromQL（Prometheus Query Language）的功能查询语言，可以让用户实时选择和聚合时间序列数据。表达式的结果可以显示为图表，在 Prometheus 表达式浏览器中以表格数据形式查看，或者由外部系统通过 HTTP API 使用（如 Grafana）。</p>
+<p>PromQL 支持子查询语句。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rate<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">[</span>5m<span style="color:#ff79c6">])[</span>30m:1m<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>max_over_time<span style="color:#ff79c6">(</span>deriv<span style="color:#ff79c6">(</span>rate<span style="color:#ff79c6">(</span>distance_covered_total<span style="color:#ff79c6">[</span>5s<span style="color:#ff79c6">])[</span>30s:5s<span style="color:#ff79c6">])[</span>10m:<span style="color:#ff79c6">])</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>PromQL 支持以 <code>#</code> 开头的行注释。</p>
+<h4 id="promql语言数据类型">PromQL语言数据类型</h4>
+<p><strong>瞬时向量（Instant vector）：</strong> 给定时间戳上的一组时间序列，每个时间序列包含一个样本值。（样本值由一个指标名、一个样本值和多个标签组成）</p>
+<p><strong>范围向量（Range vector）：</strong> 给定时间范围上的一组时间序列，每个时间序列包含该段时间内的样本值。</p>
+<p><strong>标量（Scalar）：</strong> 一个简单的浮点值</p>
+<p><strong>字符串（String）：</strong> 一个简单的字符串值；目前未启用</p>
+<h4 id="时间序列选择器">时间序列选择器</h4>
+<h5 id="瞬时向量选择">瞬时向量选择</h5>
+<ul>
+<li>
+<p>按给定时间戳（即时）选择一组时间序列和每个时间序列的单个样本值<br>
+最简单的形式： <code>http_requests_total</code></p>
+</li>
+<li>
+<p>可以通过在大括号 ( {} ) 中使用逗号分隔的标签匹配列表过滤时间序列<br>
+使用标签过滤：<code>http_requests_total{job=&quot;prometheus&quot;,group=&quot;canary&quot;}</code></p>
+</li>
+<li>
+<p>向量选择器必须指定一个名称或至少一个与空字符串不匹配的标签匹配器</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">\~</span><span style="color:#f1fa8c">&#34;.\*&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#6272a4"># Bad! 匹配了空标签字符串值</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job</span><span style="color:#ff79c6">=</span>~<span style="color:#f1fa8c">&#34;.+&#34;</span><span style="color:#ff79c6">}</span>              <span style="color:#6272a4"># Good! 未匹配空标签字符串值</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job</span><span style="color:#ff79c6">=</span>~<span style="color:#f1fa8c">&#34;.*&#34;</span>,method<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;get&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#6272a4"># Good! 未匹配空标签字符串值</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>内置标签名 <code>__name__</code> 表示指标名称<br>
+<code>{__name__=&quot;http_requests_total&quot;,job=~&quot;.+&quot;}</code></p>
+<p>查询时，标签名称不能使用关键字，但是可以使用 <code>__name__</code> 标签名来使用关键字<br>
+关键字: <code>bool, on, ignoring, group_left and group_right</code><br>
+<code>{__name__=&quot;on&quot;} # Good! 通过 __name__ 使用标签名是关键字标签</code></p>
+</li>
+<li>
+<p>标签匹配运算符</p>
+<ul>
+<li><code>=</code>： 选择与指定的字符串完全相等的标签</li>
+<li><code>!=</code>：选择与指定的字符串不相等的标签</li>
+<li><code>=~</code>：选择与指定的字符串满足正则表达式匹配的标签</li>
+<li><code>!~</code>：选择与指定的字符串不满足正则表达式匹配的标签</li>
+</ul>
+</li>
+</ul>
+<h5 id="范围向量选择">范围向量选择</h5>
+<p>在瞬时向量选择器后使用方括号<code>[]</code>来指定范围向量的时间范围，时间范围是闭区间。<br>
+指标 <code>http_requests_total</code> 且 <code>job</code> 为 <code>prometheus</code> 的指标过去5分钟内的范围向量值：<br>
+<code>http_requests_total{job=&quot;prometheus&quot;}[5m]</code></p>
+<h6 id="时间格式">时间格式</h6>
+<ul>
+<li>ms 毫秒</li>
+<li>s 秒</li>
+<li>m 分钟</li>
+<li>h 小时</li>
+<li>d 天</li>
+<li>w 周</li>
+<li>y 年</li>
+</ul>
+<p>时间可以串联组合，单位必须按照从最长到最短的顺序排列，同一个单位只能出现一次。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>5h
+</span></span><span style="display:flex;"><span>1h30m
+</span></span><span style="display:flex;"><span>5m
+</span></span><span style="display:flex;"><span>10s
+</span></span><span style="display:flex;"><span>1h2h30m <span style="color:#6272a4"># Bad</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="offset-修饰符">Offset 修饰符</h4>
+<p><code>offset</code> 修饰符允许更改查询中各个瞬时向量和范围向量的时间偏移，<code>offset</code> 修饰符始必须紧跟在选择器后面。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>http_requests_total offset 5m <span style="color:#6272a4"># 相对于现在 5 分钟前的向量值</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sum<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">method</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;GET&#34;</span><span style="color:#ff79c6">}</span> offset 5m<span style="color:#ff79c6">)</span> // GOOD.
+</span></span><span style="display:flex;"><span>sum<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">method</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;GET&#34;</span><span style="color:#ff79c6">})</span> offset 5m // INVALID. 必须紧跟向量选择器
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rate<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">[</span>5m<span style="color:#ff79c6">]</span> offset 1w<span style="color:#ff79c6">)</span> <span style="color:#6272a4"># 同样适用于范围向量，一周前</span>
+</span></span><span style="display:flex;"><span>rate<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">[</span>5m<span style="color:#ff79c6">]</span> offset -1w<span style="color:#ff79c6">)</span> <span style="color:#6272a4"># 同样适用于范围向量，一周后</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="-修饰符">@ 修饰符</h4>
+<p><code>@</code> 修饰符允许更改查询中各个瞬时向量和范围向量的时间戳，时间格式为 unix 时间戳，内部使用浮点数表示。<code>@</code> 修饰符始必须紧跟在选择器后面。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>http_requests_total @ <span style="color:#bd93f9">1609746000</span> <span style="color:#6272a4"># 2021-01-04T07:40:00+00:00 的指标值</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sum<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">method</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;GET&#34;</span><span style="color:#ff79c6">}</span> @ 1609746000<span style="color:#ff79c6">)</span> <span style="color:#6272a4"># GOOD.</span>
+</span></span><span style="display:flex;"><span>sum<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">method</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;GET&#34;</span><span style="color:#ff79c6">})</span> @ <span style="color:#bd93f9">1609746000</span> <span style="color:#6272a4"># BAD.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rate<span style="color:#ff79c6">(</span>http_requests_total<span style="color:#ff79c6">[</span>5m<span style="color:#ff79c6">]</span> @ 1609746000<span style="color:#ff79c6">)</span> <span style="color:#6272a4"># 适用于范围向量 2021-01-04T07:40:00+00:00 的指标值</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>@</code> 修饰符可以和 <code>Offset</code> 修饰符一起使用，表示在 <code>@</code> 修饰符指定的时间上进行 <code>Offset</code> 偏移，结果和这两个修饰符的顺序无关。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># 以下两种形式相同</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># offset after @</span>
+</span></span><span style="display:flex;"><span>http_requests_total @ <span style="color:#bd93f9">1609746000</span> offset 5m
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># offset before @</span>
+</span></span><span style="display:flex;"><span>http_requests_total offset 5m @ <span style="color:#bd93f9">1609746000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>start()</code> 和 <code>end()</code> 内置函数可以搭配 <code>@</code> 修饰符使用</p>
+<ul>
+<li>对于瞬时查询，<code>start()</code> 和 <code>end()</code> 都解析为表达式计算的时的时间。</li>
+<li>对于范围查询，分别解析为范围查询的开始和结束时间。</li>
+</ul>
+<h4 id="操作符和函数">操作符和函数</h4>
+<p>操作符列表和示例：https://prometheus.io/docs/prometheus/latest/querying/operators/</p>
+<p>函数列表和示例：https://prometheus.io/docs/prometheus/latest/querying/functions/</p>
+<h4 id="示例">示例</h4>
+<p>查询语句示例：https://prometheus.io/docs/prometheus/latest/querying/examples/</p>
+<h2 id="alerrmanager">Alerrmanager</h2>
+<p><code>Alertmanager</code> 处理应用程序（例如 Prometheus 服务器）发送的告警。</p>
+<p><code>Prometheus</code> 的告警功能分为两部分。<code>Prometheus</code> 按服务中的告警规则将告警发送到告警管理器；然后，<code>Alertmanager</code> 管理这些告警，包括沉默、抑制、聚合以及通过电子邮件、通知系统和聊天平台等方式发送通知。</p>
+<p><code>Alertmanager</code> 支持创建集群以实现高可用性，但是不要在 <code>Prometheus</code>集群 和 <code>Alertmanager</code> 集群做负载均衡，要在 <code>Prometheus</code> 里配置所有的 <code>Alertmanagers</code> 列表。因为同一警告可能被发送到不同的 Alertmanager，导致警告的处理不一致。</p>
+<h3 id="grouping分组">Grouping（分组）</h3>
+<p>分组将相似的告警合并为单个通知。服务大规模停机的场景会很有用，此时许多系统同时发生故障，可能触发数百到数千个告警。</p>
+<h3 id="inhibition抑制">Inhibition（抑制）</h3>
+<p>抑制是在某些特定告警已经触发的情况下抑制某些告警的通知。可以阻止大量与实际问题无关的告警通知。</p>
+<h3 id="silences静默">Silences（静默）</h3>
+<p>静默是在特定时间内不发送告警。<code>Alertmanager</code> 检查收到的告警是否与静默配置匹配，如果匹配，则不会发送该告警的任何通知。</p>
+<h2 id="可视化">可视化</h2>
+<h3 id="表达式浏览器">表达式浏览器</h3>
+<p>表达式浏览器是 <code>Prometheus</code> 服务自带的指标展示功能，通过 <code>Prometheus</code> 服务地址+ <code>/graph</code>访问，允许输入任何表达式并以表格或图表形式查看结果。</p>
+<p>如：http://127.0.0.1:9090/graph</p>
+<p>
+        <img class="mx-auto" alt="prometheus_ui-2023912105735.png" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/prometheus_ui-2023912105735.png" />   
+    </p>
+<h3 id="grafana">Grafana</h3>
+<p><code>Grafana</code> 是开源可视化和分析软件。支持查询、可视化、警报指标、日志和跟踪，无论它们存储在何处。它为您提供了将时间序列数据库 (TSDB) 数据转换为富有洞察力的图表和可视化的工具。</p>
+<ul>
+<li><strong>数据源：</strong> Grafana 支持多种不同的数据源，包括 Prometheus、InfluxDB、Elasticsearch、MySQL 等。用户可以轻松将其数据导入到 Grafana 中进行可视化。</li>
+<li><strong>仪表盘：</strong> Grafana 提供了一个灵活易用的仪表盘编辑器，可让用户创建自定义的可视化图表和面板。这些仪表盘可以根据需要自由布局，并且可以轻松地嵌入到其他应用程序或网站中。</li>
+<li><strong>查询：</strong> Grafana 具有强大的查询功能，可以帮助用户快速检索和分析数据。查询语言包括 SQL、PromQL 等。</li>
+<li><strong>可视化：</strong> Grafana 提供了多种数据可视化选项，包括图表、表格、地图、单值指标等。</li>
+<li><strong>警报：</strong> Grafana 还支持警报功能，可以通过电子邮件、Slack、PagerDuty 等渠道向用户发送警报，并在发生事件时通知用户。</li>
+</ul>
+<p>
+        <img class="mx-auto" alt="grafana" src="https://grafana.com/media/grafana/images/grafana-dashboard-english.png?ynotemdtimestamp=1723550796448" />   
+    </p>
+<h2 id="监控服务指标实战">监控服务指标实战</h2>
+<p>通常需要监控的指标类别有：</p>
+<p><strong>业务指标：</strong> 业务指标可以直观的反馈业务或者系统功能是否正常可用，常用的指标有业务请求吞吐量、业务成功率。</p>
+<p><strong>服务指标：</strong> 服务指标是指能够反馈业务依赖的服务是否可用的指标，统计的指标类型类似于业务指标，只不过是接口维度，同样可以分为吞吐量、成功率以及性能。</p>
+<p><strong>环境指标</strong>：环境指标也是资源指标，用来反馈底层基础设施或者依赖服务可用率。如使用率、可用性、性能等。</p>
+<p>环境指标通常由基础组件服务本身支持或者第三方库支持，在 <code>Prometheus</code> 概念中称作 <code>exporters</code></p>
+<p>支持的第三方服务 <code>exporters</code> 列表：https://prometheus.io/docs/instrumenting/exporters/</p>
+<p>以下介绍如何进行业务和服务的指标监控，以 <code>golang</code> 语言为例。</p>
+<h3 id="注册指标">注册指标</h3>
+<p>需要监控的指标需要先在代码中定义，然后通过不同语言的 <code>SDK</code> 进行注册</p>
+<p>以下是收集服务的每个接口的响应时间的指标定义和注册方式：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> server
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#34;github.com/prometheus/client_golang/prometheus&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 定义指标
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> (
+</span></span><span style="display:flex;"><span>    namespace = <span style="color:#f1fa8c">&#34;airline&#34;</span>
+</span></span><span style="display:flex;"><span>    subsystem = <span style="color:#f1fa8c">&#34;booking&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    _metricSeconds = prometheus.<span style="color:#50fa7b">NewHistogramVec</span>(prometheus.HistogramOpts{
+</span></span><span style="display:flex;"><span>        Namespace: namespace,
+</span></span><span style="display:flex;"><span>        Subsystem: subsystem,
+</span></span><span style="display:flex;"><span>        Name:      <span style="color:#f1fa8c">&#34;grpc_server_handling_seconds&#34;</span>,
+</span></span><span style="display:flex;"><span>        Help:      <span style="color:#f1fa8c">&#34;Histogram of response latency (seconds) of gRPC that had been application-level handled by the server.&#34;</span>,
+</span></span><span style="display:flex;"><span>        Buckets:   prometheus.DefBuckets,
+</span></span><span style="display:flex;"><span>    }, []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;kind&#34;</span>, <span style="color:#f1fa8c">&#34;operation&#34;</span>})
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 注册指标
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">init</span>() {
+</span></span><span style="display:flex;"><span> prometheus.<span style="color:#50fa7b">MustRegister</span>(_metricSeconds)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>Namespace:</strong> 指标所属的命名空间，通常为业务分类，使用单个单词表示。<br>
+<strong>Subsystem：</strong> 指标所属的子系统，通常为业务内部服务名，使用单个单词表示。<br>
+<strong>Name：</strong> 指标名称</p>
+<p>其中 <code>Namespace</code> 和 <code>Subsystem</code> 是可选项。</p>
+<p>指标名称拼接规则：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">BuildFQName</span>(namespace, subsystem, name <span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">string</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> name <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">switch</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">case</span> namespace <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> subsystem <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> strings.<span style="color:#50fa7b">Join</span>([]<span style="color:#8be9fd">string</span>{namespace, subsystem, name}, <span style="color:#f1fa8c">&#34;_&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">case</span> namespace <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> strings.<span style="color:#50fa7b">Join</span>([]<span style="color:#8be9fd">string</span>{namespace, name}, <span style="color:#f1fa8c">&#34;_&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">case</span> subsystem <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> strings.<span style="color:#50fa7b">Join</span>([]<span style="color:#8be9fd">string</span>{subsystem, name}, <span style="color:#f1fa8c">&#34;_&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> name
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>指标名和标签名命名规范参考：https://prometheus.io/docs/practices/naming/</p>
+<h3 id="暴露指标收集接口">暴露指标收集接口</h3>
+<p>为了能够让 <code>Prometheus</code> 服务采集到服务收集的指标，需要暴露出 <code>/metrics</code> HTTP 接口<br>
+，并且使用 <code>prometheus/promhttp</code> 库的 <code>HTTP Handler</code> 作为处理函数。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#34;github.com/prometheus/client_golang/prometheus/promhttp&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Register</span>(srv <span style="color:#ff79c6">*</span>http.Server){
+</span></span><span style="display:flex;"><span>    srv.<span style="color:#50fa7b">Handle</span>(<span style="color:#f1fa8c">&#34;/metrics&#34;</span>, promhttp.<span style="color:#50fa7b">Handler</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Prometheus</code> 根据配置的采集间隔，定时从服务拉取指标数据。</p>
+<p>收集到的指标数据可通过可视化工具进行图形绘制和告警配置。</p>
+<h3 id="注意事项">注意事项</h3>
+<ul>
+<li>
+<p>明确采集目标，设置正确的指标</p>
+</li>
+<li>
+<p>避免过度监控</p>
+<p>过多的指标会占用大量存储，且导致查询缓慢</p>
+</li>
+<li>
+<p>标签值必须是有限值的集合</p>
+<p>每个不同标签键值对集合都代表一个不同的时间序列，如果标签值是任意值，会明显增加存储的数据量。标签值不能是用户ID、订单号、电子邮件等有无限个不同值的数据。</p>
+</li>
+<li>
+<p>无法用于准确值统计的场景</p>
+<p><code>Prometheus</code> 采集到数据可能是不完整的</p>
+</li>
+</ul>
+<p>参考资料：</p>
+<blockquote>
+<ul>
+<li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus Docs</a></li>
+<li><a href="https://grafana.com/docs/grafana/latest/introduction/">Grafana Introduction</a></li>
+<li><a href="https://github.com/prometheus/client_golang">Prometheus instrumentation library for Go applications</a></li>
+</ul>
+</blockquote>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="//localhost:1313/">一蓑烟雨任平生</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="//localhost:1313/post/prometheus-/">//localhost:1313/post/prometheus-/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. 进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>相关文章</h2>
+    <ul class="listing">
+        
+        <li><a href="../../post/go-doc-generate-and-syntax/">golang源码生成文档及注释语法</a></li>
+        
+        <li><a href="../../post/use-windows-as-linux/">听说你想把windows当作linux用？</a></li>
+        
+        <li><a href="../../post/go-time-rate/">Go Rate限流器代码分析</a></li>
+        
+        <li><a href="../../post/website-caddy-hugo-filebrowser/">caddy-hugo-filebrowser搭建个人网站和后台管理</a></li>
+        
+        <li><a href="../../post/go-vscode-remote-development/">VSCode Remote Development-go开发环境搭建</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='../../tags/go' target="_blank">go</a></li>
+                
+                <li><a href='../../tags/doc' target="_blank">doc</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "windzhu0514/windzhu0514.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2024 <a href="//localhost:1313/">一蓑烟雨任平生 By </a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered
+                    by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span
+                    class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span
+                    class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script type="text/javascript">
+    window.MathJax = {
+        tex2jax: {
+            inlineMath: [['$', '$']],
+            processEscapes: true
+        }
+    };
+</script>
+<script
+    src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'
+    async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='../../js/totop.js?v=0.0.0' async=""></script>
+<style type="text/css">
+div.highlight {
+    position: relative;
+    margin: 1em 0px;
+}
+
+.copy-code {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(78, 78, 78, 0.8);
+    border-radius: var(--radius);
+    padding: 0 5px;
+    font: inherit;
+    user-select: none;
+    cursor: pointer;
+    border: 0;
+    --radius: 8px;
+}
+
+div.highlight:hover .copy-code,pre:hover .copy-code {
+    display: block;
+}
+
+</style>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+
+
+<script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='//localhost:1313/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="//localhost:1313/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="//localhost:1313/post/go-doc-generate-and-syntax/" title="golang源码生成文档及注释语法" target="_blank">golang源码生成文档及注释语法</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/prometheus-/" title="golang源码生成文档及注释语法" target="_blank">golang源码生成文档及注释语法</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/use-windows-as-linux/" title="听说你想把windows当作linux用？" target="_blank">听说你想把windows当作linux用？</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-time-rate/" title="Go Rate限流器代码分析" target="_blank">Go Rate限流器代码分析</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理" target="_blank">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建" target="_blank">VSCode Remote Development-go开发环境搭建</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信" target="_blank">李开复：留学带给我的十件礼物，第一件是自信</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-type-convert/" title="golang类型转换" target="_blank">golang类型转换</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/multiple-git-account/" title="git多账户共存" target="_blank">git多账户共存</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-goroutine-concurrent-control/" title="goroutine并发控制" target="_blank">goroutine并发控制</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='../../categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='../../tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="//localhost:1313/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

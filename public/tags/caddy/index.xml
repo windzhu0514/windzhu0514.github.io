@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>caddy on 一蓑烟雨任平生</title>
-    <link>/tags/caddy/</link>
-    <description>Recent content in caddy on 一蓑烟雨任平生</description>
+    <title>Caddy on 一蓑烟雨任平生</title>
+    <link>//localhost:1313/tags/caddy/</link>
+    <description>Recent content in Caddy on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 06 Sep 2019 17:40:56 +0800</lastBuildDate><atom:link href="/tags/caddy/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Sep 2019 17:40:56 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/caddy/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>caddy-hugo-filebrowser搭建个人网站和后台管理</title>
-      <link>/post/website-caddy-hugo-filebrowser/</link>
+      <link>//localhost:1313/post/website-caddy-hugo-filebrowser/</link>
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
-      
-      <guid>/post/website-caddy-hugo-filebrowser/</guid>
+      <guid>//localhost:1313/post/website-caddy-hugo-filebrowser/</guid>
       <description>使用caddy和hugo搭建个人网站 功能： 自动https 自动响应git hook，运行hugo编译markdown 开机启动服务 docker部署</description>
     </item>
-    
   </channel>
 </rss>

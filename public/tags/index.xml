@@ -2,217 +2,172 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 一蓑烟雨任平生</title>
-    <link>/tags/</link>
+    <link>//localhost:1313/tags/</link>
     <description>Recent content in Tags on 一蓑烟雨任平生</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 28 Oct 2021 13:52:45 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Oct 2021 13:52:45 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>linux</title>
-      <link>/tags/linux/</link>
+      <title>Linux</title>
+      <link>//localhost:1313/tags/linux/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
-      
-      <guid>/tags/linux/</guid>
+      <guid>//localhost:1313/tags/linux/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>openssh</title>
-      <link>/tags/openssh/</link>
+      <title>Openssh</title>
+      <link>//localhost:1313/tags/openssh/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
-      
-      <guid>/tags/openssh/</guid>
+      <guid>//localhost:1313/tags/openssh/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>ssh</title>
-      <link>/tags/ssh/</link>
+      <title>Ssh</title>
+      <link>//localhost:1313/tags/ssh/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
-      
-      <guid>/tags/ssh/</guid>
+      <guid>//localhost:1313/tags/ssh/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>windows</title>
-      <link>/tags/windows/</link>
+      <title>Windows</title>
+      <link>//localhost:1313/tags/windows/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
-      
-      <guid>/tags/windows/</guid>
+      <guid>//localhost:1313/tags/windows/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>wsl</title>
-      <link>/tags/wsl/</link>
+      <title>Wsl</title>
+      <link>//localhost:1313/tags/wsl/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
-      
-      <guid>/tags/wsl/</guid>
+      <guid>//localhost:1313/tags/wsl/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>开发环境</title>
-      <link>/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <link>//localhost:1313/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Thu, 28 Oct 2021 13:52:45 +0800</pubDate>
-      
-      <guid>/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <guid>//localhost:1313/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>go</title>
-      <link>/tags/go/</link>
+      <title>Go</title>
+      <link>//localhost:1313/tags/go/</link>
       <pubDate>Sun, 30 Aug 2020 23:49:05 +0800</pubDate>
-      
-      <guid>/tags/go/</guid>
+      <guid>//localhost:1313/tags/go/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>golang</title>
-      <link>/tags/golang/</link>
+      <title>Golang</title>
+      <link>//localhost:1313/tags/golang/</link>
       <pubDate>Sun, 30 Aug 2020 23:49:05 +0800</pubDate>
-      
-      <guid>/tags/golang/</guid>
+      <guid>//localhost:1313/tags/golang/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>rate</title>
-      <link>/tags/rate/</link>
+      <title>Rate</title>
+      <link>//localhost:1313/tags/rate/</link>
       <pubDate>Sun, 30 Aug 2020 23:49:05 +0800</pubDate>
-      
-      <guid>/tags/rate/</guid>
+      <guid>//localhost:1313/tags/rate/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>令牌桶</title>
-      <link>/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/</link>
+      <link>//localhost:1313/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/</link>
       <pubDate>Sun, 30 Aug 2020 23:49:05 +0800</pubDate>
-      
-      <guid>/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/</guid>
+      <guid>//localhost:1313/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>限流器</title>
-      <link>/tags/%E9%99%90%E6%B5%81%E5%99%A8/</link>
+      <link>//localhost:1313/tags/%E9%99%90%E6%B5%81%E5%99%A8/</link>
       <pubDate>Sun, 30 Aug 2020 23:49:05 +0800</pubDate>
-      
-      <guid>/tags/%E9%99%90%E6%B5%81%E5%99%A8/</guid>
+      <guid>//localhost:1313/tags/%E9%99%90%E6%B5%81%E5%99%A8/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>caddy</title>
-      <link>/tags/caddy/</link>
+      <title>Caddy</title>
+      <link>//localhost:1313/tags/caddy/</link>
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
-      
-      <guid>/tags/caddy/</guid>
+      <guid>//localhost:1313/tags/caddy/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>docker</title>
-      <link>/tags/docker/</link>
+      <title>Docker</title>
+      <link>//localhost:1313/tags/docker/</link>
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
-      
-      <guid>/tags/docker/</guid>
+      <guid>//localhost:1313/tags/docker/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>filebrowser</title>
-      <link>/tags/filebrowser/</link>
+      <title>Filebrowser</title>
+      <link>//localhost:1313/tags/filebrowser/</link>
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
-      
-      <guid>/tags/filebrowser/</guid>
+      <guid>//localhost:1313/tags/filebrowser/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>hugo</title>
-      <link>/tags/hugo/</link>
+      <title>Hugo</title>
+      <link>//localhost:1313/tags/hugo/</link>
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
-      
-      <guid>/tags/hugo/</guid>
+      <guid>//localhost:1313/tags/hugo/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>网站</title>
-      <link>/tags/%E7%BD%91%E7%AB%99/</link>
+      <link>//localhost:1313/tags/%E7%BD%91%E7%AB%99/</link>
       <pubDate>Fri, 06 Sep 2019 17:40:56 +0800</pubDate>
-      
-      <guid>/tags/%E7%BD%91%E7%AB%99/</guid>
+      <guid>//localhost:1313/tags/%E7%BD%91%E7%AB%99/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>励志</title>
-      <link>/tags/%E5%8A%B1%E5%BF%97/</link>
+      <link>//localhost:1313/tags/%E5%8A%B1%E5%BF%97/</link>
       <pubDate>Mon, 11 Mar 2019 23:10:32 +0800</pubDate>
-      
-      <guid>/tags/%E5%8A%B1%E5%BF%97/</guid>
+      <guid>//localhost:1313/tags/%E5%8A%B1%E5%BF%97/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>人生</title>
-      <link>/tags/%E4%BA%BA%E7%94%9F/</link>
+      <link>//localhost:1313/tags/%E4%BA%BA%E7%94%9F/</link>
       <pubDate>Mon, 11 Mar 2019 23:10:32 +0800</pubDate>
-      
-      <guid>/tags/%E4%BA%BA%E7%94%9F/</guid>
+      <guid>//localhost:1313/tags/%E4%BA%BA%E7%94%9F/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>类型转换</title>
-      <link>/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</link>
+      <link>//localhost:1313/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</link>
       <pubDate>Thu, 07 Mar 2019 17:45:27 +0800</pubDate>
-      
-      <guid>/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</guid>
+      <guid>//localhost:1313/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>git</title>
-      <link>/tags/git/</link>
+      <title>Git</title>
+      <link>//localhost:1313/tags/git/</link>
       <pubDate>Sat, 12 Jan 2019 22:48:32 +0800</pubDate>
-      
-      <guid>/tags/git/</guid>
+      <guid>//localhost:1313/tags/git/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>goroutine</title>
-      <link>/tags/goroutine/</link>
+      <title>Goroutine</title>
+      <link>//localhost:1313/tags/goroutine/</link>
       <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
-      
-      <guid>/tags/goroutine/</guid>
+      <guid>//localhost:1313/tags/goroutine/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>并发</title>
-      <link>/tags/%E5%B9%B6%E5%8F%91/</link>
+      <link>//localhost:1313/tags/%E5%B9%B6%E5%8F%91/</link>
       <pubDate>Fri, 07 Dec 2018 10:05:37 +0800</pubDate>
-      
-      <guid>/tags/%E5%B9%B6%E5%8F%91/</guid>
+      <guid>//localhost:1313/tags/%E5%B9%B6%E5%8F%91/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>markdown</title>
-      <link>/tags/markdown/</link>
+      <title>Markdown</title>
+      <link>//localhost:1313/tags/markdown/</link>
       <pubDate>Thu, 29 Nov 2018 18:15:07 +0800</pubDate>
-      
-      <guid>/tags/markdown/</guid>
+      <guid>//localhost:1313/tags/markdown/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

@@ -8,7 +8,9 @@ publishDir: "./public"
 hasCJKLanguage: true
 defaultContentLanguage: "zh-hans"
 
-author:
+# author:
+#   name: "风竹"
+taxonomies:
   name: "风竹"
 
 markup:
@@ -24,7 +26,7 @@ markup:
   goldmark:
     renderer:
       hardWraps: true
-    
+
 # 开启版权声明
 params:
   author: "风竹"
@@ -35,20 +37,20 @@ params:
   # 自定义摘要默认是70
   summaryLength: 140
   # 全局开关，你也可以在每一篇内容的 front matter 中针对单篇内容关闭或开启某些功能
-  toc: true  # 是否开启目录
+  toc: true # 是否开启目录
   localSearch: true
   cc:
     name: "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
-    link: "https://creativecommons.org/licenses/by-nc-nd/4.0/" 
+    link: "https://creativecommons.org/licenses/by-nc-nd/4.0/"
 
   utteranc:
     enable: true
-    repo: "windzhu0514/windzhu0514.github.io"    # 存储评论的Repo，格式为 owner/repo
+    repo: "windzhu0514/windzhu0514.github.io" # 存储评论的Repo，格式为 owner/repo
     #表示你选择以那种方式让github issue的评论和你的文章关联。
     #1. pathname 以路径的方式，推荐选项，这样你换域名的时候就不用担心评论找不到了
     #2. url 全链接URL路径的方式。
     #3. title 按页面title标题的方式。
-    issueTerm: "pathname"  
+    issueTerm: "pathname"
     theme: "github-light" # 样式主题，有github-light和github-dark两种
 
 menu:

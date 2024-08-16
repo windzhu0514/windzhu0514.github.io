@@ -1,0 +1,1846 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>golang源码生成文档及注释语法 | 一蓑烟雨任平生</title>
+    <meta property="og:title" content="golang源码生成文档及注释语法 - 一蓑烟雨任平生">
+    <meta property="og:type" content="article">
+    
+    <meta property="article:published_time" content='2024-08-16T11:17:50&#43;08:00'>
+    
+    
+    <meta property="article:modified_time" content='2024-08-16T11:17:50&#43;08:00'>
+    
+    <meta name="Keywords" content="go,golang,go语言,博客,C,C&#43;&#43;,mfc">
+    <meta name="description" content="golang源码生成文档及注释语法">
+    
+    <meta name="author" content="">
+    <meta property="og:url" content="//localhost:1313/post/go-doc-generate-and-syntax/">
+    <link rel="shortcut icon" href='../../favicon.ico' type="image/x-icon">
+
+    <link rel="stylesheet" href='../../css/normalize.css'>
+    <link rel="stylesheet" href='../../css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+
+    
+
+    
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="//localhost:1313/">
+                        一蓑烟雨任平生
+                    </a>
+                
+                <p class="description">Go语言(golang)、C/C&#43;&#43;、MFC开发者</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="//localhost:1313/">首页</a>
+                    
+                    <a  href="//localhost:1313/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#godoc">godoc</a>
+      <ul>
+        <li><a href="#安装命令">安装命令</a></li>
+        <li><a href="#命令参数说明">命令参数说明</a></li>
+      </ul>
+    </li>
+    <li><a href="#pkgsite">pkgsite</a>
+      <ul>
+        <li><a href="#安装命令-1">安装命令</a></li>
+        <li><a href="#命令参数说明-1">命令参数说明</a></li>
+        <li><a href="#启动命令">启动命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#注释规则">注释规则</a>
+      <ul>
+        <li><a href="#注释语法">注释语法</a></li>
+        <li><a href="#包注释"><strong>包注释</strong></a></li>
+        <li><a href="#命令包注释"><strong>命令包注释</strong></a></li>
+        <li><a href="#标识符注释"><strong>标识符注释</strong></a></li>
+        <li><a href="#注释标记">注释标记</a></li>
+        <li><a href="#bug标记">Bug标记</a></li>
+        <li><a href="#deprecated标记">Deprecated标记</a></li>
+      </ul>
+    </li>
+    <li><a href="#example函数">Example函数</a></li>
+    <li><a href="#隐藏readme文件">隐藏README文件</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">golang源码生成文档及注释语法</h1>
+        </header>
+        
+  <time datetime="2024-08-16T03:17:50Z" class="post-meta meta-date dt-published">
+    2024年8月16日
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='../../categories/golang' target="_blank">golang</a>
+  
+</div>
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
+        <div class="clear" style="display: none">
+            <div class="toc-article">
+                <div class="toc-title">文章目录</div>
+            </div>
+        </div>
+        
+        <div class="post-content">
+            <blockquote>
+<p>go version: 1.22.6</p>
+</blockquote>
+<h2 id="godoc">godoc</h2>
+<p><strong>已弃用</strong>：<code>godoc</code> 无法选择要显示的包版本，由 golang.org/x/pkgsite/cmd/pkgsite 替代。</p>
+<p><code>godoc</code> 提取 Go 代码里的注释生成网页的形式的 Go 程序文档</p>
+<p>默认情况下，<code>godoc</code> 通过 <code>$GOROOT</code> 和 <code>$GOPATH</code>（如果设置了两个环境变量）查找包。<br>
+可以通过使用 <code>-goroot</code> 标志指定查找路径。</p>
+<p><code>-index</code> 标志开启自动定时更新索引，索引会在启动时创建一次。</p>
+<p>索引信息包含标识符和全文搜索信息（可通过正则表达式搜索）。 可以使用 <code>-maxresults</code> 标志设置显示的全文搜索结果的最大数量；如果设置为 0，则不显示全文结果，并且只创建标识符索引，不创建全文搜索索引。</p>
+<p>默认情况下，godoc 使用系统的 GOOS/GOARCH。 可以通过 URL 参数 <code>GOOS</code> 和 <code>GOARCH</code> 设置目标系统网页上的输出。</p>
+<p>通过 URL 参数 <code>m</code> 可以控制网页的显示模式，参数值是逗号分割的标志名：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>all 显示所有标识符的文档，而不只是导出的标识符
+</span></span><span style="display:flex;"><span>methods 显示所有的嵌入方法，而不只是未导出的匿名字段的方法
+</span></span><span style="display:flex;"><span>src 显示原始源代码而不是生成的文档
+</span></span><span style="display:flex;"><span>flat 显示全路径的不缩进的目录列表
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>这些标记在go官方文档上不生效</p>
+</blockquote>
+<p><code>m=flat</code> 未添加和添加后的区别</p>
+<p>
+        <img class="mx-auto" alt="image-20240815172843359" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/1723713878532.jpg" />   
+    
+        <img class="mx-auto" alt="image-20240815172843359" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815172843359.png" />   
+    </p>
+<p>默认情况下，godoc 使用操作系统的文件系统提供文件服务。 另外也可以通过 <code>-zip</code> 标志提供 <code>.zip</code> 文件提供文件服务，其中包含要使用的文件系统。 <code>.zip</code> 文件中存储的文件路径必须使用正斜杠（&rsquo;<code>/</code>&rsquo;）作为路径分隔符；并且它们必须没有根路径。 <code>$GOROOT</code>（或 <code>-goroot</code>）必须设置为包含 <code>Go root</code> 目录的 .zip 文件目录路径。 例如，对于通过以下命令创建的 <code>.zip</code> 文件：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>zip -r go.zip <span style="color:#8be9fd;font-style:italic">$HOME</span>/go
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以按以下方式运行 godoc：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>godoc -http<span style="color:#ff79c6">=</span>:6060 -zip<span style="color:#ff79c6">=</span>go.zip -goroot<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$HOME</span>/go
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>godoc 使用 <code>go/doc</code> 包把注释转换为 HTML 或文本；详细规则请参阅 <a href="https://golang.org/pkg/go/doc/#ToHTML">ToHTML</a><br>
+godoc 还显示可由测试包运行的示例代码；有关约定请参阅 <a href="https://golang.org/pkg/testing/#hdr-Examples">hdr-Examples</a></p>
+<h3 id="安装命令">安装命令</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go install golang.org/x/tools/cmd/godoc@latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="命令参数说明">命令参数说明</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ godoc -h      
+</span></span><span style="display:flex;"><span>usage: godoc -http<span style="color:#ff79c6">=</span>localhost:6060 
+</span></span><span style="display:flex;"><span>  -goroot string
+</span></span><span style="display:flex;"><span>        Go root directory <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;/usr/local/go&#34;</span><span style="color:#ff79c6">)</span> 
+</span></span><span style="display:flex;"><span>		// go安装目录
+</span></span><span style="display:flex;"><span>  -http string
+</span></span><span style="display:flex;"><span>        HTTP service address <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;localhost:6060&#34;</span><span style="color:#ff79c6">)</span> 
+</span></span><span style="display:flex;"><span>		// HTTP服务地址 :6060
+</span></span><span style="display:flex;"><span>  -index
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">enable</span> search index 
+</span></span><span style="display:flex;"><span>		// 启用全文搜索索引，支持搜索
+</span></span><span style="display:flex;"><span>  -index_files string
+</span></span><span style="display:flex;"><span>        glob pattern specifying index files; <span style="color:#ff79c6">if</span> not empty, the index is <span style="color:#8be9fd;font-style:italic">read</span> from these files in sorted order
+</span></span><span style="display:flex;"><span>		// glob模式指定索引信息保存的位置，索引建立后会写入这些文件；如果不为空，启动时按文件名增序读取索引信息
+</span></span><span style="display:flex;"><span>  -index_interval duration
+</span></span><span style="display:flex;"><span>        interval of indexing; <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">for</span> default <span style="color:#ff79c6">(</span>5m<span style="color:#ff79c6">)</span>, negative to only index once at startup
+</span></span><span style="display:flex;"><span>		// 索引更新间隔。不设置默认为5分钟，负值表示只在启动时更新。
+</span></span><span style="display:flex;"><span>  -index_throttle float
+</span></span><span style="display:flex;"><span>        index throttle value; 0.0 <span style="color:#ff79c6">=</span> no <span style="color:#8be9fd;font-style:italic">time</span> allocated, 1.0 <span style="color:#ff79c6">=</span> full throttle <span style="color:#ff79c6">(</span>default 0.75<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>		// 控制索引建立的速度；范围为<span style="color:#ff79c6">[</span>0,1<span style="color:#ff79c6">]</span>，默认为0.75；避免占用过高的CPU
+</span></span><span style="display:flex;"><span>  -links
+</span></span><span style="display:flex;"><span>        link identifiers to their declarations <span style="color:#ff79c6">(</span>default <span style="color:#8be9fd;font-style:italic">true</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>		// 为标识符（变量、结构体、基础数据类型、函数接收器、函数参数和返回值）生成跳转到声明的链接
+</span></span><span style="display:flex;"><span>  -maxresults int
+</span></span><span style="display:flex;"><span>        maximum number of full text search results shown <span style="color:#ff79c6">(</span>default 10000<span style="color:#ff79c6">)</span> 
+</span></span><span style="display:flex;"><span>		// 展示的全文搜索结果最大数量
+</span></span><span style="display:flex;"><span>  -notes string
+</span></span><span style="display:flex;"><span>        regular expression matching note markers to show <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;BUG&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>		// 匹配注释标记的正则表达式，MARKER<span style="color:#ff79c6">(</span>uid<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>  -play
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">enable</span> playground 
+</span></span><span style="display:flex;"><span>		// 启用playground，向https://play.golang.org服务发送代码
+</span></span><span style="display:flex;"><span>  -templates string
+</span></span><span style="display:flex;"><span>        load templates/JS/CSS from disk in this directory
+</span></span><span style="display:flex;"><span>		// 指定templates/JS/CSS加载的目录，默认使用打包到程序里的文件
+</span></span><span style="display:flex;"><span>  -timestamps
+</span></span><span style="display:flex;"><span>        show timestamps with directory listings 
+</span></span><span style="display:flex;"><span>		// 显示目录的索引更新时间
+</span></span><span style="display:flex;"><span>		// Last update: 2024-08-06 15:57:05.065391466 +0800 CST <span style="color:#8be9fd;font-style:italic">m</span><span style="color:#ff79c6">=</span>+0.105469304
+</span></span><span style="display:flex;"><span>  -url string
+</span></span><span style="display:flex;"><span>        print HTML <span style="color:#ff79c6">for</span> named URL
+</span></span><span style="display:flex;"><span>		// 在控制台打印该地址返回的网页内容然后退出程序
+</span></span><span style="display:flex;"><span>  -v    verbose mode // 输出详细日志
+</span></span><span style="display:flex;"><span>  -write_index
+</span></span><span style="display:flex;"><span>        write index to a file; the file name must be specified with -index_files
+</span></span><span style="display:flex;"><span>		// 把索引信息写入文件；由index_files指定写入的文件名
+</span></span><span style="display:flex;"><span>  -zip string
+</span></span><span style="display:flex;"><span>        zip file providing the file system to serve; disabled <span style="color:#ff79c6">if</span> empty
+</span></span><span style="display:flex;"><span>		// 使用zip文件文件系统，为空则使用默认文件系统
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="pkgsite">pkgsite</h2>
+<p>pkgsite 提取 Go 代码里的注释生成网页的形式的 Go 程序文档</p>
+<p>不指定参数的情况，<code>pkgsite</code> 展示相对于当前目录的主模块的文档，也就是 <code>go list -m</code> 命令返回的模块。通常也是父级目录中离当前目录最近的 <code>go.mod</code> 文件中定义的模块名。</p>
+<p>使用 <code>go.work</code> 定义工作空间情况下，<code>pkgsite</code> 生成工作空间下多个模块的文档。以下两种命令形式都可以生成定义在 <code>repos/cue/go.mod</code> 文件中的模块的文档：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># 单模块形式</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd</span> repos/cue <span style="color:#ff79c6">&amp;&amp;</span> pkgsite
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 多模块形式</span>
+</span></span><span style="display:flex;"><span>go work init repos/cue repos/other <span style="color:#ff79c6">&amp;&amp;</span> pkgsite
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认情况，<code>pkgsite</code> 生成模块的所有依赖包的文档。可通过 <code>-list=false</code> 参数禁用。</p>
+<p><code>pkgsite</code> 可以直接从本地的模块缓存目录（/home/ljc/go/pkg/mod/）查找模块和生成文档，默认使用环境变量里配置的GOPROXY。等同于以下命令：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pkgsite -cache -proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>-cache</code> 或 <code>-proxy</code>，<code>kgsite </code>时不会在当前目录中查找模块。但是可以在参数里指定本地模块的路径：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pkgsite -cache -proxy ~/repos/cue some/other/module
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同时也会生成标准库的文档，<code>pkgsite</code> 从 <a href="https://go.googlesource.com/go">https://go.googlesource.com/go</a> 下载 go 最新版本的源码到临时目录，然后生成标准库的文档。这个过程会有点慢，可以通过<code>gorepo</code> 参数指定本地已安装的go标准库路径。</p>
+<h3 id="安装命令-1">安装命令</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go install golang.org/x/pkgsite/cmd/pkgsite@latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="命令参数说明-1">命令参数说明</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ pkgsite -h                
+</span></span><span style="display:flex;"><span>usage: pkgsite <span style="color:#ff79c6">[</span>flags<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>PATHS ...<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>    where each PATHS is a single path or a comma-separated list
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4"># PATHS 是单个路径或逗号分隔的路径列表。代表要生成文档的模块路径</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">(</span>default is current directory <span style="color:#ff79c6">if</span> neither -cache nor -proxy is provided<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4"># 如果-cache和-proxy都不设置，默认是当前目录</span>
+</span></span><span style="display:flex;"><span>  -cache
+</span></span><span style="display:flex;"><span>        fetch from the module cache
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># 从本地模块缓存中加载模块</span>
+</span></span><span style="display:flex;"><span>  -cachedir go env GOMODCACHE
+</span></span><span style="display:flex;"><span>        module cache directory <span style="color:#ff79c6">(</span>defaults to go env GOMODCACHE<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># 模块缓存目录</span>
+</span></span><span style="display:flex;"><span>  -dev
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">enable</span> developer mode <span style="color:#ff79c6">(</span>reload templates on each page load, serve non-minified JS/CSS, etc.<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># 开发者模式，用于网站开发调试。页面每次加载时都重新加载母版文件，返回未压缩的JS/CSS文件</span>
+</span></span><span style="display:flex;"><span>  -gopath_mode
+</span></span><span style="display:flex;"><span>        assume that <span style="color:#8be9fd;font-style:italic">local</span> modules<span style="color:#f1fa8c">&#39; Paths are relative to GOPATH/src
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"> 		# 在GOPATH/src目录下查找模块
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">  -gorepo string
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        path to Go repo on local filesystem
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		# 本地go仓库目录，通常可以用本地go安装目录，$GOROOT
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">  -http string
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        HTTP service address to listen for incoming requests on (default &#34;localhost:8080&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		# 文档服务的http服务监听地址
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">  -list
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        for each path, serve all modules in build list (default true)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		# 生成编译列表里的所有包的文档（编译列表：go build时编译的所有包及模块和模块的依赖包）
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">  -open
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        open a browser window to the server&#39;</span>s address
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># 自动在浏览器中打开文档页面</span>
+</span></span><span style="display:flex;"><span>  -proxy
+</span></span><span style="display:flex;"><span>        fetch from GOPROXY <span style="color:#ff79c6">if</span> not found locally
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># 从GOPROXY环境变量设置的go包代理（https://goproxy.cn/、https://goproxy.io/）拉取包，不再从本地查找</span>
+</span></span><span style="display:flex;"><span>  -static string
+</span></span><span style="display:flex;"><span>        path to folder containing static files served <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;static&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># 自定义静态文件路径</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="启动命令">启动命令</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd</span> ~/WorkspaceGo/GS-util/gocore
+</span></span><span style="display:flex;"><span>pkgsite -http :6060
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="注释规则">注释规则</h2>
+<h3 id="注释语法">注释语法</h3>
+<p>Go 文档注释以简单的语法编写，支持段落、标题、链接、列表和预格式化代码块。为了使源文件中的注释保持轻量级和可读性，不支持字体更改或原始 HTML 等复杂功能。 可以将语法视为 Markdown 语法的简化子集。</p>
+<p>标准格式化程序 <code>gofmt</code> 以规范的格式重新格式化文档注释。 <code>gofmt</code> 的目标是提高源代码中注释的可读性和控制注释的书写方式，会调整展示格式以使特定注释的语义更清晰，如：将1+2 * 3重新格式化为1 + 2*3 。</p>
+<p><code>gofmt</code> 删除文档注释中的前部和尾部空白行。如果文档注释中的所有行都以相同的空格和制表符开头，则 <code>gofmt</code> 会自动删除该前缀。</p>
+<p>类型、变量、常量、函数，包都可以通过在声明的前面写注释的方法生成文档（中间不要有空行）。</p>
+<h4 id="段落"><strong>段落</strong></h4>
+<p>多个相邻的注释行，生成文档时被视为一个段落（忽略行尾的换行符），Gofmt 保留段落文本中的换行符，如果想要生成多个段落，使用<strong>空注释</strong>行来分割段落。</p>
+<p>单行注释方式的空行分割</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Package io provides basic interfaces to I/O primitives.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Its primary job is to wrap existing implementations of such primitives,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// such as those in package os, into shared public interfaces that
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// abstract the functionality, plus some other related primitives.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Because these interfaces and primitives wrap lower-level operations with
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// various implementations, unless otherwise informed clients should not
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// assume they are safe for parallel execution.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">package</span> io
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>多行注释方式的空行分割</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Package fmt implements formatted I/O with functions analogous
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">to C&#39;s printf and scanf.  The format &#39;verbs&#39; are derived from C&#39;s but
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">are simpler.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"># Printing
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">The verbs:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">General:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">	%v	the value in a default format
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">		when printing structs, the plus flag (%+v) adds field names
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">	%#v	a Go-syntax representation of the value
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">	%T	a Go-syntax representation of the type of the value
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">	%%	a literal percent sign; consumes no value
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Boolean:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">	%t	the word true or false
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> fmt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="标题"><strong>标题</strong></h4>
+<p>标题是以# (U+0023)开头，然后空格加标题文本的行。该行必须不能缩进，并用空行与相邻段落文本分开。</p>
+<p>标题语法在 Go 1.19 中添加。在 Go 1.19 之前，标题是通过满足某些条件的单行段落隐式标识的，最明显的是句尾没有任何终止标点符号（逗号句号分号）。</p>
+<h4 id="链接"><strong>链接</strong></h4>
+<h5 id="网页链接"><strong>网页链接</strong></h5>
+<p>网页链接注释是一段格式为 <code>[Text]: URL</code>，没有缩进的注释行组成，多行之间没有空行。</p>
+<p>识别为 URL 的注释文本在网页中显示为链接。</p>
+<p>每个注释块内的链接定义都是独立，不会影响其他注释块。</p>
+<p>同一个注释块内其他的注释文本中可以用 <code>[Text]</code> 格式来使用定义的链接。在网页源码中表示为：<code>&lt;a href=“URL”&gt;Text&lt;/a&gt;</code>；被使用的链接注释和未被使用的链接注释会被 <code>gofmt</code> 分开，如 <code>archive/zip</code> 包的注释：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Package zip provides support for reading and writing ZIP archives.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">See the [ZIP specification] for details.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">This package does not support disk spanning.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">A note about ZIP64:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">To be backwards compatible the FileHeader has both 32 and 64 bit Size
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">fields. The 64 bit fields will always contain the correct value and
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">for normal archives both fields will be the same. For files requiring
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">the ZIP64 format the 32 bit fields will be 0xffffffff and the 64 bit
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">fields must be used instead.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">[ZIP specification]: https://www.pkware.com/appnote
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">[ZIP2 specification]: https://www.pkware.com/appnote
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">[ZIP3 specification]: https://www.pkware.com/appnote
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> zip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;io/fs&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;path&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文档展示效果</p>
+<p>
+        <img class="mx-auto" alt="image-20240815174559174" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815174559174.png" />   
+    </p>
+<h5 id="文档链接"><strong>文档链接</strong></h5>
+<p>仅包含方括号的链接用来定义文档链接。</p>
+<p><code>[Name1]</code> 或 <code>[Name1.Name2]</code> 格式用于引用当前文档里的标识符</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Package path implements utility routines for manipulating slash-separated
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// paths.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The path package should only be used for paths separated by forward
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// slashes, such as the paths in URLs. This package does not deal with
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Windows paths with drive letters or backslashes; to manipulate
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// operating system paths, use the [path/filepath] package.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">package</span> path
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文档页面显示样式</p>
+<p>
+        <img class="mx-auto" alt="image-20240815174656164" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815174656164.png" />   
+    </p>
+<p><code>[pkg]</code>、<code>[pkg.Name1]</code> 或者 <code>[pkg.Name1.Name2]</code> 格式用于引用其他包中的标识符。</p>
+<p>当引用其他包时，<code>pkg</code> 可以是完整的包导入路径，也可以是重命名后的包的别名。</p>
+<p>例如，如果当前包导入 <code>encoding/json</code>，则可以使用 <code>[json.Decoder]</code> 来代替 <code>[encoding/json.Decoder]</code> 来链接到 <code>encoding/json</code> 的文档。</p>
+<p>只有当 <code>pkg</code> 是域名或者是标准库里的包名时，才被识别为完整路径导入。例如， <code>[os.File]</code> 和 <code>[example.com/sys.File]</code> 是文档链接，但 <code>[os/sys.File]</code> 不是，因为标准库中没有 <code>os/sys</code> 包。</p>
+<p>为了和map、泛型和数组类型定义进行区分，文档链接的前后必须有标点符号、空格、制表符或行开头和结尾。例如：<code>map[ast.Expr]TypeAndValue</code> 不会被识别为文档链接。</p>
+<p>符号链接的括号内文本可以包含可选的星号（<code>*</code>）前缀，用于创建引用指针类型的符号链接，例如: <code>[*bytes.Buffer]</code>。</p>
+<h4 id="列表"><strong>列表</strong></h4>
+<p>列表是一段缩进行或空行，以第一个有无序列表标记或有序列表标记开头的缩进行为开始。</p>
+<p>无序列表标记是星号、加号、破折号或 Unicode 项目符号（<code>*、+、-、•；U+002A、U+002B、U+002D、U+2022</code>），后跟空格或制表符，然后是文本。在无序符号列表中，以无序列表标记开头的每一行都作为一个列表项。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// PublicSuffixList provides the public suffix of a domain. For example:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//   - the public suffix of &#34;example.com&#34; is &#34;com&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//   - the public suffix of &#34;foo1.foo2.foo3.co.uk&#34; is &#34;co.uk&#34;, and
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//   - the public suffix of &#34;bar.pvt.k12.ma.us&#34; is &#34;pvt.k12.ma.us&#34;.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Implementations of PublicSuffixList must be safe for concurrent use by
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// multiple goroutines.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// An implementation that always returns &#34;&#34; is valid and may be useful for
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// testing but it is not secure: it means that the HTTP server for foo.com can
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// set a cookie for bar.com.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// A public suffix list implementation is in the package
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// golang.org/x/net/publicsuffix.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> PublicSuffixList <span style="color:#8be9fd;font-style:italic">interface</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>有序列表标记是十进制数字后跟句点或右括号，然后是空格或制表符，然后是文本。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> path
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Clean returns the shortest path name equivalent to path
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// by purely lexical processing. It applies the following rules
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// iteratively until no further processing can be done:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  1. Replace multiple slashes with a single slash.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  2. Eliminate each . path name element (the current directory).
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  3. Eliminate each inner .. path name element (the parent directory)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//     along with the non-.. element that precedes it.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  4. Eliminate .. elements that begin a rooted path:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//     that is, replace &#34;/..&#34; by &#34;/&#34; at the beginning of a path.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The returned path ends in a slash only if it is the root &#34;/&#34;.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// If the result of this process is an empty string, Clean
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// returns the string &#34;.&#34;.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// See also Rob Pike, “[Lexical File Names in Plan 9].”
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// [Lexical File Names in Plan 9]: https://9p.io/sys/doc/lexnames.html
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Clean</span>(path <span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">string</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>列表项中只能包含段落，不能包含代码块或嵌套列表。</p>
+<p><code>gofmt</code> 格式化无序列表时，使用短横线（<code>-</code>）作为列表符号标记，在短横线之前使用两个空格的缩进，连续的换行使用四个空格的缩进。格式化有序列表时，在数字前加一个空格，在数字后使用句点（<code>.</code>），连续的换行使用四个空格的缩进。不强制要求列表前必须有空行，如果有空行会保留。列表后面会强制插入一个空行。</p>
+<h4 id="代码块"><strong>代码块</strong></h4>
+<p>代码块是注释中一段连续的缩进行或空行。生成文档时渲染为预格式化文本（网页中的 <code>&lt;pre&gt;</code> 块）。例如：</p>
+<pre tabindex="0"><code>package sort
+
+// Search uses binary search...
+//
+// As a more whimsical example, this program guesses your number:
+//
+//  func GuessingGame() {
+//      var s string
+//      fmt.Printf(&#34;Pick an integer from 0 to 100.\n&#34;)
+//      answer := sort.Search(100, func(i int) bool {
+//          fmt.Printf(&#34;Is your number &lt;= %d? &#34;, i)
+//          fmt.Scanf(&#34;%s&#34;, &amp;s)
+//          return s != &#34;&#34; &amp;&amp; s[0] == &#39;y&#39;
+//      })
+//      fmt.Printf(&#34;Your number is %d.\n&#34;, answer)
+//  }
+func Search(n int, f func(int) bool) int {
+    ...
+}
+</code></pre><p>除了代码之外，代码块还可以包含预先格式化的文本</p>
+<pre tabindex="0"><code>package path
+
+// Match reports whether name matches the shell pattern.
+// The pattern syntax is:
+//
+//  pattern:
+//      { term }
+//  term:
+//      &#39;*&#39;         matches any sequence of non-/ characters
+//      &#39;?&#39;         matches any single non-/ character
+//      &#39;[&#39; [ &#39;^&#39; ] { character-range } &#39;]&#39;
+//                  character class (must be non-empty)
+//      c           matches character c (c != &#39;*&#39;, &#39;?&#39;, &#39;\\&#39;, &#39;[&#39;)
+//      &#39;\\&#39; c      matches character c
+//
+//  character-range:
+//      c           matches character c (c != &#39;\\&#39;, &#39;-&#39;, &#39;]&#39;)
+//      &#39;\\&#39; c      matches character c
+//      lo &#39;-&#39; hi   matches character c for lo &lt;= c &lt;= hi
+//
+// Match requires pattern to match all of name, not just a substring.
+// The only possible returned error is [ErrBadPattern], when pattern
+// is malformed.
+func Match(pattern, name string) (matched bool, err error) {
+    ...
+}
+</code></pre><p>网页文档效果如下：</p>
+<p>
+        <img class="mx-auto" alt="image-20240815194144224" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815194144224.png" />   
+    </p>
+<p><code>gofmt</code> 使用单个制表符缩进代码块中的所有行，替换和非空行共有的任何其他缩进，并且在每个代码块前后插入一个空行，将代码块与周围的段落文本区分开。</p>
+<h3 id="包注释"><strong>包注释</strong></h3>
+<p>包注释以 <code>Package xxx</code>  格式开头，<code>xxx</code> 是要注释的包的包名。</p>
+<p>每个包都应该有一个介绍该包的包注释。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Package sort provides primitives for sorting slices and user-defined
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// collections.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">package</span> sort
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>包注释文本比较长时可以单独的放在命名未为 <code>doc.go</code> 文件中，文件中仅包含包注释和包声明语句，如：<a href="https://pkg.go.dev/sort">sort package - sort - Go Packages</a></p>
+<p>包注释通常写在包的主文件里，不用每个文件都写。如果多个文件有包注释，它们将被连接起来形成整个包的注释。</p>
+<p>包注释的第一句话会出现在文档里包列表页面，如：<a href="https://pkg.go.dev/std">Standard library - Go Packages</a></p>
+<p>生成文档时会忽略和包注释不相邻的其他顶级注释（包级别的注释），以 <code>BUG(who)</code> 开头的除外。<code>BUG(who)</code> 开头的注释可以出现在源码里的任何位置，都会显示在文档页面 <code>Bugs</code> 区域。如：<a href="https://pkg.go.dev/net@go1.22.6#pkg-note-BUG">net package - net - Go Packages</a></p>
+<h3 id="命令包注释"><strong>命令包注释</strong></h3>
+<p>命令的包的注释和普通包注释类似，但它描述的是程序的行为而不是包中的标识符的含义。第一个句注释通常以程序本身的名称开头（位于句子的开头所以首字母大写）。例如，以下是 <code>gofmt</code> 程序注释的删减版：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Gofmt formats Go programs.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">It uses tabs for indentation and blanks for alignment.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Alignment assumes that an editor is using a fixed-width font.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Without an explicit path, it processes the standard input. Given a file,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">it operates on that file; given a directory, it operates on all .go files in
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">that directory, recursively. (Files starting with a period are ignored.)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">By default, gofmt prints the reformatted sources to standard output.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">Usage:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    gofmt [flags] [path ...]
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">The flags are:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    -d
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        Do not print reformatted sources to standard output.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        If a file&#39;s formatting is different than gofmt&#39;s, print diffs
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        to standard output.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    -w
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        Do not print reformatted sources to standard output.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        If a file&#39;s formatting is different from gofmt&#39;s, overwrite it
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        with gofmt&#39;s version. If an error occurred during overwriting,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">        the original file is restored from an automatic backup.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">When gofmt reads from standard input, it accepts either a full Go program
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">or a program fragment. A program fragment must be a syntactically
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">valid declaration list, statement list, or expression. When formatting
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">such a fragment, gofmt preserves leading indentation as well as leading
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">and trailing spaces, so that individual sections of a Go program can be
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">formatted by piping them through gofmt.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注释的开头三行是使用<a href="https://rhodesmill.org/brandon/2012/one-sentence-per-line/">语义换行</a>模式编写，每个新句子或长短语单独占一行，随着后期代码的改动和新注释的添加，不同行的差异会更容易区分。后面的段落没有遵循这个约定。不论哪种方式， <code>go doc</code> 和 <code>pkgsite</code> 在生成文档时都会重新进行排版。例如：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>$ <span style="color:#ff79c6">go</span> doc gofmt
+</span></span><span style="display:flex;"><span>Gofmt formats Go programs. It uses tabs <span style="color:#ff79c6">for</span> indentation and blanks <span style="color:#ff79c6">for</span>
+</span></span><span style="display:flex;"><span>alignment. Alignment assumes that an editor is using a fixed<span style="color:#ff79c6">-</span>width font.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Without an explicit path, it processes the standard input. Given a file, it
+</span></span><span style="display:flex;"><span>operates on that file; given a directory, it operates on all .<span style="color:#ff79c6">go</span> files in that
+</span></span><span style="display:flex;"><span>directory, recursively. (Files starting with a period are ignored.) By <span style="color:#ff79c6">default</span>,
+</span></span><span style="display:flex;"><span>gofmt prints the reformatted sources to standard output.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Usage:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    gofmt [flags] [path <span style="color:#ff79c6">...</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The flags are:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">-</span>d
+</span></span><span style="display:flex;"><span>        Do not print reformatted sources to standard output.
+</span></span><span style="display:flex;"><span>        If a file&#39;s formatting is different than gofmt&#39;s, print diffs
+</span></span><span style="display:flex;"><span>        to standard output.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">...</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="标识符注释"><strong>标识符注释</strong></h3>
+<p>注释开头的单词以被注释的标识符的名称开头（包注释除外）</p>
+<h4 id="类型注释"><strong>类型注释</strong></h4>
+<p>类型的文档注释应该解释该类型的每个实例代表或提供什么功能。例如：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> regexp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Regexp is the representation of a compiled regular expression.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Regexp is safe for concurrent use by multiple goroutines,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// except for configuration methods, such as Longest.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Regexp <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认情况下假设类型都不支持并发操作，如果支持，最好在注释里说明:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> regexp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Regexp is the representation of a compiled regular expression.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Regexp is safe for concurrent use by multiple goroutines,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// except for configuration methods, such as Longest.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Regexp <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>类型还应该尽量使零值具有有用的含义。如果零值的含义不明显，最好在注释里说明：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> bytes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Buffer is a variable-sized buffer of bytes with Read and Write methods.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The zero value for Buffer is an empty buffer ready to use.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Buffer <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>具有导出字段的类型，文档注释或每个字段的注释应该解释每个导出字段的含义。例如：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// 类型的注释详细描述类型的功能
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">package</span> io
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// A LimitedReader reads from R but limits the amount of
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// data returned to just N bytes. Each call to Read
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// updates N to reflect the new amount remaining.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Read returns EOF when N &lt;= 0.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> LimitedReader <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>    R   Reader <span style="color:#6272a4">// underlying reader
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    N   <span style="color:#8be9fd">int64</span>  <span style="color:#6272a4">// max bytes remaining
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 类型的部分注释在每个字段的注释中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">package</span> comment
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// A Printer is a doc comment printer.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The fields in the struct can be filled in before calling
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// any of the printing methods
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// in order to customize the details of the printing process.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Printer <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// HeadingLevel is the nesting level used for
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// HTML and Markdown headings.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// If HeadingLevel is zero, it defaults to level 3,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// meaning to use &lt;h3&gt; and ###.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    HeadingLevel <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="函数和方法注释"><strong>函数和方法注释</strong></h4>
+<p>函数的注释应该解释该函数的作用、入参和返参的含义。命名参数可以直接在注释中引用，无需任何特殊语法（不用加上反引号）。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> strconv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Quote returns a double-quoted Go string literal representing s.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The returned string uses Go escape sequences (\t, \n, \xFF, \u0100)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// for control characters and non-printable characters as defined by IsPrint.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Quote</span>(s <span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">string</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Exit causes the current program to exit with the given status code.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Conventionally, code zero indicates success, non-zero an error.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// The program terminates immediately; deferred functions are not run.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// For portability, the status code should be in the range [0, 125].
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Exit</span>(code <span style="color:#8be9fd">int</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回布尔值的函数注释通常是 <code>reports whether</code> 格式：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> strings
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// HasPrefix reports whether the string s begins with prefix.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">HasPrefix</span>(s, prefix <span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">bool</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>给函数添加命名返回值，并在注释里进行引用，可以使注释更加清晰和容易理解，即使命名返回值在函数中未使用到。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Copy copies from src to dst until either EOF is reached
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// on src or an error occurs. It returns the total number of bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// written and the first error encountered while copying, if any.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// A successful Copy returns err == nil, not err == EOF.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Because Copy is defined to read from src until EOF, it does
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// not treat an EOF from Read as an error to be reported.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Copy</span>(dst Writer, src Reader) (n <span style="color:#8be9fd">int64</span>, err <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认情况下假设函数和方法都不支持并发操作，如果支持，最好在注释里说明:</p>
+<pre tabindex="0"><code>package sql
+
+// Close returns the connection to the connection pool.
+// All operations after a Close will return with ErrConnDone.
+// Close is safe to call concurrently with other operations and will
+// block until all other operations finish. It may be useful to first
+// cancel any used context and then call Close directly after.
+func (c *Conn) Close() error {
+    ...
+}
+</code></pre><p>给函数或方法添加 Locked 后缀表示该函数或方法是并发安全的或者调用该函数或方法时需要加锁。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// prepareOnConnLocked prepares the query in Stmt s on dc and adds it to the list of
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// open connStmt on the statement. It assumes the caller is holding the lock on dc.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (s <span style="color:#ff79c6">*</span>Stmt) <span style="color:#50fa7b">prepareOnConnLocked</span>(ctx context.Context, dc <span style="color:#ff79c6">*</span>driverConn) (<span style="color:#ff79c6">*</span>driverStmt, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>    si, err <span style="color:#ff79c6">:=</span> dc.<span style="color:#50fa7b">prepareLocked</span>(ctx, s.cg, s.query)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    cs <span style="color:#ff79c6">:=</span> connStmt{dc, si}
+</span></span><span style="display:flex;"><span>    s.mu.<span style="color:#50fa7b">Lock</span>()
+</span></span><span style="display:flex;"><span>    s.css = <span style="color:#8be9fd;font-style:italic">append</span>(s.css, cs)
+</span></span><span style="display:flex;"><span>    s.mu.<span style="color:#50fa7b">Unlock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> cs.ds, <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// lasterrOrErrLocked returns either lasterr or the provided err.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// rs.closemu must be read-locked.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (rs <span style="color:#ff79c6">*</span>Rows) <span style="color:#50fa7b">lasterrOrErrLocked</span>(err <span style="color:#8be9fd">error</span>) <span style="color:#8be9fd">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> rs.lasterr <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> <span style="color:#ff79c6">&amp;&amp;</span> rs.lasterr <span style="color:#ff79c6">!=</span> io.EOF {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> rs.lasterr
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> err
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>函数或方法的特殊情况需要在注释里说明</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> math
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Sqrt returns the square root of x.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Special cases are:
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  Sqrt(+Inf) = +Inf
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  Sqrt(±0) = ±0
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  Sqrt(x &lt; 0) = NaN
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//  Sqrt(NaN) = NaN
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Sqrt</span>(x <span style="color:#8be9fd">float64</span>) <span style="color:#8be9fd">float64</span> {
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>函数或方法的注释通常不需要解释内部的详细实现，详细实现的注释应该在函数或方法体内。而且将来改变内部实现时不用修改函数或方法的文档。</p>
+<h4 id="常量注释"><strong>常量注释</strong></h4>
+<p>Go 语法允许对声明进行分组，通过一段注释就可以描述一组相关的常量，也可以单独注释不同的常量。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> scanner <span style="color:#6272a4">// import &#34;text/scanner&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// The result of Scan is one of these tokens or a Unicode character.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">const</span> (
+</span></span><span style="display:flex;"><span>    EOF = <span style="color:#ff79c6">-</span>(<span style="color:#ff79c6">iota</span> <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    Ident
+</span></span><span style="display:flex;"><span>    Int
+</span></span><span style="display:flex;"><span>    Float
+</span></span><span style="display:flex;"><span>    Char
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> unicode <span style="color:#6272a4">// import &#34;unicode&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">const</span> (
+</span></span><span style="display:flex;"><span>    MaxRune         = <span style="color:#f1fa8c">&#39;\U0010FFFF&#39;</span> <span style="color:#6272a4">// maximum valid Unicode code point.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ReplacementChar = <span style="color:#f1fa8c">&#39;\uFFFD&#39;</span>     <span style="color:#6272a4">// represents invalid code points.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    MaxASCII        = <span style="color:#f1fa8c">&#39;\u007F&#39;</span>     <span style="color:#6272a4">// maximum ASCII value.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    MaxLatin1       = <span style="color:#f1fa8c">&#39;\u00FF&#39;</span>     <span style="color:#6272a4">// maximum Latin-1 value.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>未分组的常量需要添加以常量名开头的注释</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> unicode
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Version is the Unicode edition from which the tables are derived.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">const</span> Version = <span style="color:#f1fa8c">&#34;13.0.0&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>类型常量的声明通常放在类型常量的类型定义之后，这种情况一般省略类型常量或类型常量组的注释，直接使用常量类型的注释。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> syntax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// An Op is a single regular expression operator.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Op <span style="color:#8be9fd">uint8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">const</span> (
+</span></span><span style="display:flex;"><span>    OpNoMatch        Op = <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">iota</span> <span style="color:#6272a4">// matches no strings
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    OpEmptyMatch                   <span style="color:#6272a4">// matches empty string
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    OpLiteral                      <span style="color:#6272a4">// matches Runes sequence
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    OpCharClass                    <span style="color:#6272a4">// matches Runes interpreted as range pair list
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    OpAnyCharNotNL                 <span style="color:#6272a4">// matches any character except newline
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>变量注释</strong></p>
+<p>变量注释和常量注释格式相同，以下是组变量和单个变量的注释格式：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> fs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Generic file system errors.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// Errors returned by file systems can be tested against these errors
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// using errors.Is.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> (
+</span></span><span style="display:flex;"><span>    ErrInvalid    = <span style="color:#50fa7b">errInvalid</span>()    <span style="color:#6272a4">// &#34;invalid argument&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ErrPermission = <span style="color:#50fa7b">errPermission</span>() <span style="color:#6272a4">// &#34;permission denied&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ErrExist      = <span style="color:#50fa7b">errExist</span>()      <span style="color:#6272a4">// &#34;file already exists&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ErrNotExist   = <span style="color:#50fa7b">errNotExist</span>()   <span style="color:#6272a4">// &#34;file does not exist&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ErrClosed     = <span style="color:#50fa7b">errClosed</span>()     <span style="color:#6272a4">// &#34;file already closed&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">package</span> unicode
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Scripts is the set of Unicode script tables.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> Scripts = <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]<span style="color:#ff79c6">*</span>RangeTable{
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;Adlam&#34;</span>:                  Adlam,
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;Ahom&#34;</span>:                   Ahom,
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;Anatolian_Hieroglyphs&#34;</span>:  Anatolian_Hieroglyphs,
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;Arabic&#34;</span>:                 Arabic,
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;Armenian&#34;</span>:               Armenian,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="注释标记">注释标记</h3>
+<h3 id="bug标记">Bug标记</h3>
+<p><code>BUG(r)</code>：该标记记录一个确认的BUG信息，<code>r</code> 是可以提供更多相关信息的人的用户名</p>
+<p>通常格式为：</p>
+<pre tabindex="0"><code>// BUG(rsc): FieldByName and related functions consider struct field names to be equal
+// BUG(rsc,mikio): On DragonFly BSD and OpenBSD, listening on the
+</code></pre><p>文档生成时的匹配标记的正则表达式：</p>
+<pre tabindex="0"><code>// 匹配所有MARKER(uid)格式的注释，再过滤BUG开头的
+var (
+	noteMarker    = `([A-Z][A-Z]+)\(([^)]+)\):?`                // MARKER(uid), MARKER at least 2 chars, uid at least 1 char
+	noteMarkerRx  = lazyregexp.New(`^[ \t]*` + noteMarker)      // MARKER(uid) at text start
+	noteCommentRx = lazyregexp.New(`^/[/*][ \t]*` + noteMarker) // MARKER(uid) at comment start
+)
+</code></pre><p>必须以 <code>BUG(xxx)</code> 格式开头 ，冒号 <code>:</code> 及其之后的格式没要求</p>
+<h3 id="deprecated标记">Deprecated标记</h3>
+<p><code>Deprecated:</code> 该标记记录结构体成员字段、函数、类型或者包已被弃用，但是保留下来保持向后兼容。</p>
+<p>通常格式为：</p>
+<pre tabindex="0"><code>// Title treats s as UTF-8-encoded bytes and returns a copy with all Unicode letters that begin
+// words mapped to their title case.
+//
+// Deprecated: The rule Title uses for word boundaries does not handle Unicode
+// punctuation properly. Use golang.org/x/text/cases instead.
+func Title(s []byte) []byte {
+	// Use a closure here to remember state.
+	// Hackish but effective. Depends on Map scanning in order and calling
+	// the closure once per rune.
+	prev := &#39; &#39;
+	return Map(
+		func(r rune) rune {
+			if isSeparator(prev) {
+				prev = r
+				return unicode.ToTitle(r)
+			}
+			prev = r
+			return r
+		},
+		s)
+}
+</code></pre><p>文档生成时的匹配标记的正则表达式：</p>
+<pre tabindex="0"><code>var deprecatedRx = regexp.MustCompile(`(^|\n\s*\n)\s*Deprecated:`)
+</code></pre><h2 id="example函数">Example函数</h2>
+<p><code>Example</code> 函数的注释会和注释的标识符的文档显示在一起，包级别的 <code>Example</code> 函数会显示在包注释后面。如 <a href="https://pkg.go.dev/archive/tar@go1.22.6">tar package - archive/tar - Go Packages</a></p>
+<p><code>Example</code> 函数必须定义在后缀为 <code>_test.go</code> 文件中，函数名以 <code>Example</code> 开头，并且不需要任何参数。</p>
+<p>godoc 通过实例函数的函数名命名约定将示例函数与包级标识符相关联。</p>
+<p>类型或者方法的示例函数会和该类型或方法的文档显示在一起。</p>
+<pre tabindex="0"><code>func ExampleFoo()     // Foo函数或者Foo类型的示例
+func ExampleBar_Qux() // Bar类型的Qux方法的示例 
+func Example()        // 包级别的示例
+</code></pre><p>可以通过在函数名后面添加后缀的方式为指定的标识符提供多个示例，后缀以 <code>_</code> 开头后面跟小写字母组成的字符串。</p>
+<pre tabindex="0"><code>func ExampleString()
+func ExampleString_second()
+func ExampleString_third()
+func ExampleBar_Qux_one()
+func ExampleBar_Qux_two() 
+</code></pre><h2 id="隐藏readme文件">隐藏README文件</h2>
+<p><code>git</code> 托管网站通常会把 <code>README</code> 文件作为仓库的文档展示。<code>godoc</code> 或 <code>pkgsite</code> 生成文档时，把 <code>README</code> 文件放在包文档页面的顶部。如果不希望展示 <code>README</code> 文件，可以把 <code>README</code> 文件放在子目录下，如 <code>docs//README.md</code>。</p>
+<h1 id="go-doc">go doc</h1>
+<p>与 <code>godoc</code> 命令不同，该命令用于在命令行上查看源码的文档</p>
+<pre tabindex="0"><code>go doc 				// 输出当前目录下的包文档
+go doc fmt 			// 查看fmt包的文档
+go doc fmt Printf 	// 查看fmt包里的Printf函数的文档
+godoc os File  		// 查看os包里File结构的文档
+go doc fmt Printf Println // 查看包内多个标识符
+</code></pre><h1 id="参考资料">参考资料</h1>
+<blockquote>
+<p><a href="https://go.dev/blog/godoc">Godoc: documenting Go code - The Go Programming Language</a><br>
+<a href="https://tip.golang.org/doc/comment">Go Doc Comments - The Go Programming Language (golang.org)</a><br>
+<a href="https://pkg.go.dev/golang.org/x/tools/cmd/godoc">godoc command - golang.org/x/tools/cmd/godoc - Go Packages</a><br>
+<a href="https://go.dev/blog/examples">Testable Examples in Go - The Go Programming Language</a><br>
+<a href="https://pkg.go.dev/golang.org/x/pkgsite/cmd/pkgsite">pkgsite command - golang.org/x/pkgsite/cmd/pkgsite - Go Packages</a><br>
+<a href="https://tonybai.com/2020/12/15/how-to-see-the-manual-of-go-history-version/">如何查看历史版本的Go文档？嘘！答案我只告诉你！ | Tony Bai</a><br>
+<a href="https://tonybai.com/2023/03/20/godoc-vs-go-doc-vs-pkgsite/">聊聊godoc、go doc与pkgsite | Tony Bai</a></p>
+</blockquote>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="//localhost:1313/">一蓑烟雨任平生</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="//localhost:1313/post/go-doc-generate-and-syntax/">//localhost:1313/post/go-doc-generate-and-syntax/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. 进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>相关文章</h2>
+    <ul class="listing">
+        
+        <li><a href="../../post/use-windows-as-linux/">听说你想把windows当作linux用？</a></li>
+        
+        <li><a href="../../post/go-time-rate/">Go Rate限流器代码分析</a></li>
+        
+        <li><a href="../../post/website-caddy-hugo-filebrowser/">caddy-hugo-filebrowser搭建个人网站和后台管理</a></li>
+        
+        <li><a href="../../post/go-vscode-remote-development/">VSCode Remote Development-go开发环境搭建</a></li>
+        
+        <li><a href="../../post/likaifu-10-gifts/">李开复：留学带给我的十件礼物，第一件是自信</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='../../tags/go' target="_blank">go</a></li>
+                
+                <li><a href='../../tags/doc' target="_blank">doc</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "windzhu0514/windzhu0514.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2024 <a href="//localhost:1313/">一蓑烟雨任平生 By </a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered
+                    by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span
+                    class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span
+                    class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script type="text/javascript">
+    window.MathJax = {
+        tex2jax: {
+            inlineMath: [['$', '$']],
+            processEscapes: true
+        }
+    };
+</script>
+<script
+    src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'
+    async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='../../js/totop.js?v=0.0.0' async=""></script>
+<style type="text/css">
+div.highlight {
+    position: relative;
+    margin: 1em 0px;
+}
+
+.copy-code {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(78, 78, 78, 0.8);
+    border-radius: var(--radius);
+    padding: 0 5px;
+    font: inherit;
+    user-select: none;
+    cursor: pointer;
+    border: 0;
+    --radius: 8px;
+}
+
+div.highlight:hover .copy-code,pre:hover .copy-code {
+    display: block;
+}
+
+</style>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+
+
+<script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='//localhost:1313/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="//localhost:1313/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="//localhost:1313/post/prometheus-guide/" title="基于 Prometheus 的微服务监控指南" target="_blank">基于 Prometheus 的微服务监控指南</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-doc-generate-and-syntax/" title="golang源码生成文档及注释语法" target="_blank">golang源码生成文档及注释语法</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/use-windows-as-linux/" title="听说你想把windows当作linux用？" target="_blank">听说你想把windows当作linux用？</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-time-rate/" title="Go Rate限流器代码分析" target="_blank">Go Rate限流器代码分析</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/website-caddy-hugo-filebrowser/" title="caddy-hugo-filebrowser搭建个人网站和后台管理" target="_blank">caddy-hugo-filebrowser搭建个人网站和后台管理</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-vscode-remote-development/" title="VSCode Remote Development-go开发环境搭建" target="_blank">VSCode Remote Development-go开发环境搭建</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/likaifu-10-gifts/" title="李开复：留学带给我的十件礼物，第一件是自信" target="_blank">李开复：留学带给我的十件礼物，第一件是自信</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-type-convert/" title="golang类型转换" target="_blank">golang类型转换</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/multiple-git-account/" title="git多账户共存" target="_blank">git多账户共存</a>
+    </li>
+    
+    <li>
+        <a href="//localhost:1313/post/go-goroutine-concurrent-control/" title="goroutine并发控制" target="_blank">goroutine并发控制</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='../../categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='../../tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="//localhost:1313/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
