@@ -1,0 +1,23 @@
+---
+title: AI 工具
+hide:
+  - toc # 隐藏右侧目录
+  # - navigation # 隐藏左侧导航栏
+
+---
+<style>
+.md-content .md-typeset h1 {
+      display: none;
+  }
+</style>
+
+<div class="grid cards" markdown>
+
+-   :material-knife-military: __AiPPT__
+
+    ---
+
+    一款 AI 驱动的PPT在线生成工具。无需复杂操作，只需输入主题 AI 即可一键生成高质量 PPT
+
+    [:octicons-arrow-right-24: 去使用](https://www.aippt.cn/)
+</div>
