@@ -1,0 +1,2145 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://windzhu0514.github.io/webhub/codec/blog/go-doc-generate-and-syntax/">
+      
+      
+        <link rel="prev" href="../use-windows-as-linux/">
+      
+      
+        <link rel="next" href="../prometheus-guide/">
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
+    
+    
+      
+        <title>golang源码生成文档及注释语法 - 一蓑烟雨任平生</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#godoc" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://windzhu0514.github.io/webhub/codec/" title="一蓑烟雨任平生" class="md-header__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            一蓑烟雨任平生
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              golang源码生成文档及注释语法
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.5 2c-1.79 1.15-3 3.18-3 5.5s1.21 4.35 3.03 5.5C4.46 13 2 10.54 2 7.5A5.5 5.5 0 0 1 7.5 2m11.57 1.5 1.43 1.43L4.93 20.5 3.5 19.07zm-6.18 2.43L11.41 5 9.97 6l.42-1.7L9 3.24l1.75-.12.58-1.65L12 3.1l1.73.03-1.35 1.13zm-3.3 3.61-1.16-.73-1.12.78.34-1.32-1.09-.83 1.36-.09.45-1.29.51 1.27 1.36.03-1.05.87zM19 13.5a5.5 5.5 0 0 1-5.5 5.5c-1.22 0-2.35-.4-3.26-1.07l7.69-7.69c.67.91 1.07 2.04 1.07 3.26m-4.4 6.58 2.77-1.15-.24 3.35zm4.33-2.7 1.15-2.77 2.2 2.54zm1.15-4.96-1.14-2.78 3.34.24zM9.63 18.93l2.77 1.15-2.53 2.19z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_3" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_3">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../webhub/codec/" class="md-tabs__link">
+          
+  
+    
+  
+  主页
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+    
+  
+  关于我
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://windzhu0514.github.io/webhub/codec/" title="一蓑烟雨任平生" class="md-nav__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    一蓑烟雨任平生
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    主页
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            主页
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../webhub/codec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    加解密
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../webhub/convert/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数据转换
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../webhub/ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 工具
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    博客
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            博客
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    归档
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            归档
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2024/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2021/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2021
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2020/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2020
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2019/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2018/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2018
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    分类
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            分类
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/caddy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    caddy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/devops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    devops
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/filebrowser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    filebrowser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/git/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/golang/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    golang
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/hugo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    hugo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/markdown/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    markdown
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%A5%BD%E6%96%87/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    好文
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发环境
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于我
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#godoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      godoc
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="godoc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      命令参数说明
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pkgsite" class="md-nav__link">
+    <span class="md-ellipsis">
+      pkgsite
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="pkgsite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      命令参数说明
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      启动命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      注释规则
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="注释规则">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      注释语法
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="注释语法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      段落
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      标题
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      链接
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="链接">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      网页链接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      文档链接
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      列表
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      代码块
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      包注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      命令包注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      标识符注释
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="标识符注释">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      类型注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      函数和方法注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      常量注释
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      注释标记
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bug标记
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deprecated" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deprecated标记
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readme" class="md-nav__link">
+    <span class="md-ellipsis">
+      隐藏README文件
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#go-doc" class="md-nav__link">
+    <span class="md-ellipsis">
+      go doc
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    回到主页
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    元数据
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2024-08-16 11:17:50+08:00" class="md-ellipsis">2024年8月16日星期五</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            分类于
+                            
+                              <a href="../category/golang/">golang</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              需要 13 分钟阅读时间
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+<blockquote>
+<p>go version: 1.22.6</p>
+</blockquote>
+<h2 id="godoc">godoc</h2>
+<p><strong>已弃用</strong>：<code>godoc</code> 无法选择要显示的包版本，由 golang.org/x/pkgsite/cmd/pkgsite 替代。</p>
+<p><code>godoc</code> 提取 Go 代码里的注释生成网页的形式的 Go 程序文档</p>
+<!-- more -->
+
+<p>默认情况下，<code>godoc</code> 通过 <code>$GOROOT</code> 和 <code>$GOPATH</code>（如果设置了两个环境变量）查找包。
+可以通过使用 <code>-goroot</code> 标志指定查找路径。</p>
+<p><code>-index</code> 标志开启自动定时更新索引，索引会在启动时创建一次。</p>
+<p>索引信息包含标识符和全文搜索信息（可通过正则表达式搜索）。 可以使用 <code>-maxresults</code> 标志设置显示的全文搜索结果的最大数量；如果设置为 0，则不显示全文结果，并且只创建标识符索引，不创建全文搜索索引。</p>
+<p>默认情况下，godoc 使用系统的 GOOS/GOARCH。 可以通过 URL 参数 <code>GOOS</code> 和 <code>GOARCH</code> 设置目标系统网页上的输出。</p>
+<p>通过 URL 参数 <code>m</code> 可以控制网页的显示模式，参数值是逗号分割的标志名：</p>
+<pre><code class="language-bash">all 显示所有标识符的文档，而不只是导出的标识符
+methods 显示所有的嵌入方法，而不只是未导出的匿名字段的方法
+src 显示原始源代码而不是生成的文档
+flat 显示全路径的不缩进的目录列表
+</code></pre>
+<blockquote>
+<p>这些标记在go官方文档上不生效</p>
+</blockquote>
+<p><code>m=flat</code> 未添加和添加后的区别</p>
+<p><img alt="image-20240815172843359" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/1723713878532.jpg" /><img alt="image-20240815172843359" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815172843359.png" /></p>
+<p>默认情况下，godoc 使用操作系统的文件系统提供文件服务。 另外也可以通过 <code>-zip</code> 标志提供 <code>.zip</code> 文件提供文件服务，其中包含要使用的文件系统。 <code>.zip</code> 文件中存储的文件路径必须使用正斜杠（'<code>/</code>'）作为路径分隔符；并且它们必须没有根路径。 <code>$GOROOT</code>（或 <code>-goroot</code>）必须设置为包含 <code>Go root</code> 目录的 .zip 文件目录路径。 例如，对于通过以下命令创建的 <code>.zip</code> 文件：</p>
+<pre><code class="language-bash">zip -r go.zip $HOME/go
+</code></pre>
+<p>可以按以下方式运行 godoc：</p>
+<pre><code class="language-bash">godoc -http=:6060 -zip=go.zip -goroot=$HOME/go
+</code></pre>
+<p>godoc 使用 <code>go/doc</code> 包把注释转换为 HTML 或文本；详细规则请参阅 <a href="https://golang.org/pkg/go/doc/#ToHTML">ToHTML</a>
+godoc 还显示可由测试包运行的示例代码；有关约定请参阅 <a href="https://golang.org/pkg/testing/#hdr-Examples">hdr-Examples</a></p>
+<h3 id="_1">安装命令</h3>
+<pre><code class="language-bash">go install golang.org/x/tools/cmd/godoc@latest
+</code></pre>
+<h3 id="_2">命令参数说明</h3>
+<pre><code class="language-bash">$ godoc -h      
+usage: godoc -http=localhost:6060 
+  -goroot string
+        Go root directory (default &quot;/usr/local/go&quot;) 
+        // go安装目录
+  -http string
+        HTTP service address (default &quot;localhost:6060&quot;) 
+        // HTTP服务地址 :6060
+  -index
+        enable search index 
+        // 启用全文搜索索引，支持搜索
+  -index_files string
+        glob pattern specifying index files; if not empty, the index is read from these files in sorted order
+        // glob模式指定索引信息保存的位置，索引建立后会写入这些文件；如果不为空，启动时按文件名增序读取索引信息
+  -index_interval duration
+        interval of indexing; 0 for default (5m), negative to only index once at startup
+        // 索引更新间隔。不设置默认为5分钟，负值表示只在启动时更新。
+  -index_throttle float
+        index throttle value; 0.0 = no time allocated, 1.0 = full throttle (default 0.75)
+        // 控制索引建立的速度；范围为[0,1]，默认为0.75；避免占用过高的CPU
+  -links
+        link identifiers to their declarations (default true)
+        // 为标识符（变量、结构体、基础数据类型、函数接收器、函数参数和返回值）生成跳转到声明的链接
+  -maxresults int
+        maximum number of full text search results shown (default 10000) 
+        // 展示的全文搜索结果最大数量
+  -notes string
+        regular expression matching note markers to show (default &quot;BUG&quot;)
+        // 匹配注释标记的正则表达式，MARKER(uid)
+  -play
+        enable playground 
+        // 启用playground，向https://play.golang.org服务发送代码
+  -templates string
+        load templates/JS/CSS from disk in this directory
+        // 指定templates/JS/CSS加载的目录，默认使用打包到程序里的文件
+  -timestamps
+        show timestamps with directory listings 
+        // 显示目录的索引更新时间
+        // Last update: 2024-08-06 15:57:05.065391466 +0800 CST m=+0.105469304
+  -url string
+        print HTML for named URL
+        // 在控制台打印该地址返回的网页内容然后退出程序
+  -v    verbose mode // 输出详细日志
+  -write_index
+        write index to a file; the file name must be specified with -index_files
+        // 把索引信息写入文件；由index_files指定写入的文件名
+  -zip string
+        zip file providing the file system to serve; disabled if empty
+        // 使用zip文件文件系统，为空则使用默认文件系统
+</code></pre>
+<h2 id="pkgsite">pkgsite</h2>
+<p>pkgsite 提取 Go 代码里的注释生成网页的形式的 Go 程序文档</p>
+<p>不指定参数的情况，<code>pkgsite</code> 展示相对于当前目录的主模块的文档，也就是 <code>go list -m</code> 命令返回的模块。通常也是父级目录中离当前目录最近的 <code>go.mod</code> 文件中定义的模块名。</p>
+<p>使用 <code>go.work</code> 定义工作空间情况下，<code>pkgsite</code> 生成工作空间下多个模块的文档。以下两种命令形式都可以生成定义在 <code>repos/cue/go.mod</code> 文件中的模块的文档：</p>
+<pre><code class="language-bash"># 单模块形式
+cd repos/cue &amp;&amp; pkgsite
+# 多模块形式
+go work init repos/cue repos/other &amp;&amp; pkgsite
+</code></pre>
+<p>默认情况，<code>pkgsite</code> 生成模块的所有依赖包的文档。可通过 <code>-list=false</code> 参数禁用。</p>
+<p><code>pkgsite</code> 可以直接从本地的模块缓存目录（/home/ljc/go/pkg/mod/）查找模块和生成文档，默认使用环境变量里配置的GOPROXY。等同于以下命令：</p>
+<pre><code class="language-bash">pkgsite -cache -proxy
+</code></pre>
+<p>使用 <code>-cache</code> 或 <code>-proxy</code>，<code>kgsite</code>时不会在当前目录中查找模块。但是可以在参数里指定本地模块的路径：</p>
+<pre><code class="language-bash">pkgsite -cache -proxy ~/repos/cue some/other/module
+</code></pre>
+<p>同时也会生成标准库的文档，<code>pkgsite</code> 从 https://go.googlesource.com/go 下载 go 最新版本的源码到临时目录，然后生成标准库的文档。这个过程会有点慢，可以通过<code>gorepo</code> 参数指定本地已安装的go标准库路径。</p>
+<h3 id="_3">安装命令</h3>
+<pre><code class="language-bash">go install golang.org/x/pkgsite/cmd/pkgsite@latest
+</code></pre>
+<h3 id="_4">命令参数说明</h3>
+<pre><code class="language-bash">$ pkgsite -h                
+usage: pkgsite [flags] [PATHS ...]
+    where each PATHS is a single path or a comma-separated list
+    # PATHS 是单个路径或逗号分隔的路径列表。代表要生成文档的模块路径
+    (default is current directory if neither -cache nor -proxy is provided)
+    # 如果-cache和-proxy都不设置，默认是当前目录
+  -cache
+        fetch from the module cache
+        # 从本地模块缓存中加载模块
+  -cachedir go env GOMODCACHE
+        module cache directory (defaults to go env GOMODCACHE)
+        # 模块缓存目录
+  -dev
+        enable developer mode (reload templates on each page load, serve non-minified JS/CSS, etc.)
+        # 开发者模式，用于网站开发调试。页面每次加载时都重新加载母版文件，返回未压缩的JS/CSS文件
+  -gopath_mode
+        assume that local modules' Paths are relative to GOPATH/src
+        # 在GOPATH/src目录下查找模块
+  -gorepo string
+        path to Go repo on local filesystem
+        # 本地go仓库目录，通常可以用本地go安装目录，$GOROOT
+  -http string
+        HTTP service address to listen for incoming requests on (default &quot;localhost:8080&quot;)
+        # 文档服务的http服务监听地址
+  -list
+        for each path, serve all modules in build list (default true)
+        # 生成编译列表里的所有包的文档（编译列表：go build时编译的所有包及模块和模块的依赖包）
+  -open
+        open a browser window to the server's address
+        # 自动在浏览器中打开文档页面
+  -proxy
+        fetch from GOPROXY if not found locally
+        # 从GOPROXY环境变量设置的go包代理（https://goproxy.cn/、https://goproxy.io/）拉取包，不再从本地查找
+  -static string
+        path to folder containing static files served (default &quot;static&quot;)
+        # 自定义静态文件路径
+</code></pre>
+<h3 id="_5">启动命令</h3>
+<pre><code class="language-bash">cd ~/WorkspaceGo/GS-util/gocore
+pkgsite -http :6060
+</code></pre>
+<h2 id="_6">注释规则</h2>
+<h3 id="_7">注释语法</h3>
+<p>Go 文档注释以简单的语法编写，支持段落、标题、链接、列表和预格式化代码块。为了使源文件中的注释保持轻量级和可读性，不支持字体更改或原始 HTML 等复杂功能。 可以将语法视为 Markdown 语法的简化子集。</p>
+<p>标准格式化程序 <code>gofmt</code> 以规范的格式重新格式化文档注释。 <code>gofmt</code> 的目标是提高源代码中注释的可读性和控制注释的书写方式，会调整展示格式以使特定注释的语义更清晰，如：将1+2 * 3重新格式化为1 + 2*3 。</p>
+<p><code>gofmt</code> 删除文档注释中的前部和尾部空白行。如果文档注释中的所有行都以相同的空格和制表符开头，则 <code>gofmt</code> 会自动删除该前缀。</p>
+<p>类型、变量、常量、函数，包都可以通过在声明的前面写注释的方法生成文档（中间不要有空行）。</p>
+<h4 id="_8"><strong>段落</strong></h4>
+<p>多个相邻的注释行，生成文档时被视为一个段落（忽略行尾的换行符），Gofmt 保留段落文本中的换行符，如果想要生成多个段落，使用<strong>空注释</strong>行来分割段落。</p>
+<p>单行注释方式的空行分割</p>
+<pre><code class="language-go">// Package io provides basic interfaces to I/O primitives.
+// Its primary job is to wrap existing implementations of such primitives,
+// such as those in package os, into shared public interfaces that
+// abstract the functionality, plus some other related primitives.
+//
+// Because these interfaces and primitives wrap lower-level operations with
+// various implementations, unless otherwise informed clients should not
+// assume they are safe for parallel execution.
+package io
+</code></pre>
+<p>多行注释方式的空行分割</p>
+<pre><code class="language-go">/*
+Package fmt implements formatted I/O with functions analogous
+to C's printf and scanf.  The format 'verbs' are derived from C's but
+are simpler.
+
+# Printing
+
+The verbs:
+
+General:
+
+    %v  the value in a default format
+        when printing structs, the plus flag (%+v) adds field names
+    %#v a Go-syntax representation of the value
+    %T  a Go-syntax representation of the type of the value
+    %%  a literal percent sign; consumes no value
+
+Boolean:
+
+    %t  the word true or false
+*/
+package fmt
+</code></pre>
+<h4 id="_9"><strong>标题</strong></h4>
+<p>标题是以# (U+0023)开头，然后空格加标题文本的行。该行必须不能缩进，并用空行与相邻段落文本分开。</p>
+<p>标题语法在 Go 1.19 中添加。在 Go 1.19 之前，标题是通过满足某些条件的单行段落隐式标识的，最明显的是句尾没有任何终止标点符号（逗号句号分号）。</p>
+<h4 id="_10"><strong>链接</strong></h4>
+<h5 id="_11"><strong>网页链接</strong></h5>
+<p>网页链接注释是一段格式为 <code>[Text]: URL</code>，没有缩进的注释行组成，多行之间没有空行。</p>
+<p>识别为 URL 的注释文本在网页中显示为链接。</p>
+<p>每个注释块内的链接定义都是独立，不会影响其他注释块。</p>
+<p>同一个注释块内其他的注释文本中可以用 <code>[Text]</code> 格式来使用定义的链接。在网页源码中表示为：<code>&lt;a href=“URL”&gt;Text&lt;/a&gt;</code>；被使用的链接注释和未被使用的链接注释会被 <code>gofmt</code> 分开，如 <code>archive/zip</code> 包的注释：</p>
+<pre><code class="language-go">/*
+Package zip provides support for reading and writing ZIP archives.
+
+See the [ZIP specification] for details.
+
+This package does not support disk spanning.
+
+A note about ZIP64:
+
+To be backwards compatible the FileHeader has both 32 and 64 bit Size
+fields. The 64 bit fields will always contain the correct value and
+for normal archives both fields will be the same. For files requiring
+the ZIP64 format the 32 bit fields will be 0xffffffff and the 64 bit
+fields must be used instead.
+
+[ZIP specification]: https://www.pkware.com/appnote
+
+[ZIP2 specification]: https://www.pkware.com/appnote
+[ZIP3 specification]: https://www.pkware.com/appnote
+*/
+package zip
+
+import (
+    &quot;io/fs&quot;
+    &quot;path&quot;
+    &quot;time&quot;
+)
+</code></pre>
+<p>文档展示效果</p>
+<p><img alt="image-20240815174559174" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815174559174.png" /></p>
+<h5 id="_12"><strong>文档链接</strong></h5>
+<p>仅包含方括号的链接用来定义文档链接。</p>
+<p><code>[Name1]</code> 或 <code>[Name1.Name2]</code> 格式用于引用当前文档里的标识符</p>
+<pre><code class="language-go">// Package path implements utility routines for manipulating slash-separated
+// paths.
+//
+// The path package should only be used for paths separated by forward
+// slashes, such as the paths in URLs. This package does not deal with
+// Windows paths with drive letters or backslashes; to manipulate
+// operating system paths, use the [path/filepath] package.
+package path
+</code></pre>
+<p>文档页面显示样式</p>
+<p><img alt="image-20240815174656164" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815174656164.png" /></p>
+<p><code>[pkg]</code>、<code>[pkg.Name1]</code> 或者 <code>[pkg.Name1.Name2]</code> 格式用于引用其他包中的标识符。</p>
+<p>当引用其他包时，<code>pkg</code> 可以是完整的包导入路径，也可以是重命名后的包的别名。</p>
+<p>例如，如果当前包导入 <code>encoding/json</code>，则可以使用 <code>[json.Decoder]</code> 来代替 <code>[encoding/json.Decoder]</code> 来链接到 <code>encoding/json</code> 的文档。</p>
+<p>只有当 <code>pkg</code> 是域名或者是标准库里的包名时，才被识别为完整路径导入。例如， <code>[os.File]</code> 和 <code>[example.com/sys.File]</code> 是文档链接，但 <code>[os/sys.File]</code> 不是，因为标准库中没有 <code>os/sys</code> 包。</p>
+<p>为了和map、泛型和数组类型定义进行区分，文档链接的前后必须有标点符号、空格、制表符或行开头和结尾。例如：<code>map[ast.Expr]TypeAndValue</code> 不会被识别为文档链接。</p>
+<p>符号链接的括号内文本可以包含可选的星号（<code>*</code>）前缀，用于创建引用指针类型的符号链接，例如: <code>[*bytes.Buffer]</code>。</p>
+<h4 id="_13"><strong>列表</strong></h4>
+<p>列表是一段缩进行或空行，以第一个有无序列表标记或有序列表标记开头的缩进行为开始。</p>
+<p>无序列表标记是星号、加号、破折号或 Unicode 项目符号（<code>*、+、-、•；U+002A、U+002B、U+002D、U+2022</code>），后跟空格或制表符，然后是文本。在无序符号列表中，以无序列表标记开头的每一行都作为一个列表项。</p>
+<pre><code class="language-go">package url
+
+// PublicSuffixList provides the public suffix of a domain. For example:
+//   - the public suffix of &quot;example.com&quot; is &quot;com&quot;,
+//   - the public suffix of &quot;foo1.foo2.foo3.co.uk&quot; is &quot;co.uk&quot;, and
+//   - the public suffix of &quot;bar.pvt.k12.ma.us&quot; is &quot;pvt.k12.ma.us&quot;.
+//
+// Implementations of PublicSuffixList must be safe for concurrent use by
+// multiple goroutines.
+//
+// An implementation that always returns &quot;&quot; is valid and may be useful for
+// testing but it is not secure: it means that the HTTP server for foo.com can
+// set a cookie for bar.com.
+//
+// A public suffix list implementation is in the package
+// golang.org/x/net/publicsuffix.
+type PublicSuffixList interface {
+    ...
+}
+</code></pre>
+<p>有序列表标记是十进制数字后跟句点或右括号，然后是空格或制表符，然后是文本。</p>
+<pre><code class="language-go">package path
+
+// Clean returns the shortest path name equivalent to path
+// by purely lexical processing. It applies the following rules
+// iteratively until no further processing can be done:
+//
+//  1. Replace multiple slashes with a single slash.
+//  2. Eliminate each . path name element (the current directory).
+//  3. Eliminate each inner .. path name element (the parent directory)
+//     along with the non-.. element that precedes it.
+//  4. Eliminate .. elements that begin a rooted path:
+//     that is, replace &quot;/..&quot; by &quot;/&quot; at the beginning of a path.
+//
+// The returned path ends in a slash only if it is the root &quot;/&quot;.
+//
+// If the result of this process is an empty string, Clean
+// returns the string &quot;.&quot;.
+//
+// See also Rob Pike, “[Lexical File Names in Plan 9].”
+//
+// [Lexical File Names in Plan 9]: https://9p.io/sys/doc/lexnames.html
+func Clean(path string) string {
+    ...
+}
+</code></pre>
+<p>列表项中只能包含段落，不能包含代码块或嵌套列表。</p>
+<p><code>gofmt</code> 格式化无序列表时，使用短横线（<code>-</code>）作为列表符号标记，在短横线之前使用两个空格的缩进，连续的换行使用四个空格的缩进。格式化有序列表时，在数字前加一个空格，在数字后使用句点（<code>.</code>），连续的换行使用四个空格的缩进。不强制要求列表前必须有空行，如果有空行会保留。列表后面会强制插入一个空行。</p>
+<h4 id="_14"><strong>代码块</strong></h4>
+<p>代码块是注释中一段连续的缩进行或空行。生成文档时渲染为预格式化文本（网页中的 <code>&lt;pre&gt;</code> 块）。例如：</p>
+<pre><code>package sort
+
+// Search uses binary search...
+//
+// As a more whimsical example, this program guesses your number:
+//
+//  func GuessingGame() {
+//      var s string
+//      fmt.Printf(&quot;Pick an integer from 0 to 100.\n&quot;)
+//      answer := sort.Search(100, func(i int) bool {
+//          fmt.Printf(&quot;Is your number &lt;= %d? &quot;, i)
+//          fmt.Scanf(&quot;%s&quot;, &amp;s)
+//          return s != &quot;&quot; &amp;&amp; s[0] == 'y'
+//      })
+//      fmt.Printf(&quot;Your number is %d.\n&quot;, answer)
+//  }
+func Search(n int, f func(int) bool) int {
+    ...
+}
+</code></pre>
+<p>除了代码之外，代码块还可以包含预先格式化的文本</p>
+<pre><code>package path
+
+// Match reports whether name matches the shell pattern.
+// The pattern syntax is:
+//
+//  pattern:
+//      { term }
+//  term:
+//      '*'         matches any sequence of non-/ characters
+//      '?'         matches any single non-/ character
+//      '[' [ '^' ] { character-range } ']'
+//                  character class (must be non-empty)
+//      c           matches character c (c != '*', '?', '\\', '[')
+//      '\\' c      matches character c
+//
+//  character-range:
+//      c           matches character c (c != '\\', '-', ']')
+//      '\\' c      matches character c
+//      lo '-' hi   matches character c for lo &lt;= c &lt;= hi
+//
+// Match requires pattern to match all of name, not just a substring.
+// The only possible returned error is [ErrBadPattern], when pattern
+// is malformed.
+func Match(pattern, name string) (matched bool, err error) {
+    ...
+}
+</code></pre>
+<p>网页文档效果如下：</p>
+<p><img alt="image-20240815194144224" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815194144224.png" /></p>
+<p><code>gofmt</code> 使用单个制表符缩进代码块中的所有行，替换和非空行共有的任何其他缩进，并且在每个代码块前后插入一个空行，将代码块与周围的段落文本区分开。</p>
+<h3 id="_15"><strong>包注释</strong></h3>
+<p>包注释以 <code>Package xxx</code>  格式开头，<code>xxx</code> 是要注释的包的包名。</p>
+<p>每个包都应该有一个介绍该包的包注释。</p>
+<pre><code class="language-go">// Package sort provides primitives for sorting slices and user-defined
+// collections.
+package sort
+</code></pre>
+<p>包注释文本比较长时可以单独的放在命名未为 <code>doc.go</code> 文件中，文件中仅包含包注释和包声明语句，如：<a href="https://pkg.go.dev/sort">sort package - sort - Go Packages</a></p>
+<p>包注释通常写在包的主文件里，不用每个文件都写。如果多个文件有包注释，它们将被连接起来形成整个包的注释。</p>
+<p>包注释的第一句话会出现在文档里包列表页面，如：<a href="https://pkg.go.dev/std">Standard library - Go Packages</a></p>
+<p>生成文档时会忽略和包注释不相邻的其他顶级注释（包级别的注释），以 <code>BUG(who)</code> 开头的除外。<code>BUG(who)</code> 开头的注释可以出现在源码里的任何位置，都会显示在文档页面 <code>Bugs</code> 区域。如：<a href="https://pkg.go.dev/net@go1.22.6#pkg-note-BUG">net package - net - Go Packages</a></p>
+<h3 id="_16"><strong>命令包注释</strong></h3>
+<p>命令的包的注释和普通包注释类似，但它描述的是程序的行为而不是包中的标识符的含义。第一个句注释通常以程序本身的名称开头（位于句子的开头所以首字母大写）。例如，以下是 <code>gofmt</code> 程序注释的删减版：</p>
+<pre><code class="language-go">/*
+Gofmt formats Go programs.
+It uses tabs for indentation and blanks for alignment.
+Alignment assumes that an editor is using a fixed-width font.
+
+Without an explicit path, it processes the standard input. Given a file,
+it operates on that file; given a directory, it operates on all .go files in
+that directory, recursively. (Files starting with a period are ignored.)
+By default, gofmt prints the reformatted sources to standard output.
+
+Usage:
+
+    gofmt [flags] [path ...]
+
+The flags are:
+
+    -d
+        Do not print reformatted sources to standard output.
+        If a file's formatting is different than gofmt's, print diffs
+        to standard output.
+    -w
+        Do not print reformatted sources to standard output.
+        If a file's formatting is different from gofmt's, overwrite it
+        with gofmt's version. If an error occurred during overwriting,
+        the original file is restored from an automatic backup.
+
+When gofmt reads from standard input, it accepts either a full Go program
+or a program fragment. A program fragment must be a syntactically
+valid declaration list, statement list, or expression. When formatting
+such a fragment, gofmt preserves leading indentation as well as leading
+and trailing spaces, so that individual sections of a Go program can be
+formatted by piping them through gofmt.
+*/
+package main
+</code></pre>
+<p>注释的开头三行是使用<a href="https://rhodesmill.org/brandon/2012/one-sentence-per-line/">语义换行</a>模式编写，每个新句子或长短语单独占一行，随着后期代码的改动和新注释的添加，不同行的差异会更容易区分。后面的段落没有遵循这个约定。不论哪种方式， <code>go doc</code> 和 <code>pkgsite</code> 在生成文档时都会重新进行排版。例如：</p>
+<pre><code class="language-go">$ go doc gofmt
+Gofmt formats Go programs. It uses tabs for indentation and blanks for
+alignment. Alignment assumes that an editor is using a fixed-width font.
+
+Without an explicit path, it processes the standard input. Given a file, it
+operates on that file; given a directory, it operates on all .go files in that
+directory, recursively. (Files starting with a period are ignored.) By default,
+gofmt prints the reformatted sources to standard output.
+
+Usage:
+
+    gofmt [flags] [path ...]
+
+The flags are:
+
+    -d
+        Do not print reformatted sources to standard output.
+        If a file's formatting is different than gofmt's, print diffs
+        to standard output.
+...
+</code></pre>
+<h3 id="_17"><strong>标识符注释</strong></h3>
+<p>注释开头的单词以被注释的标识符的名称开头（包注释除外）</p>
+<h4 id="_18"><strong>类型注释</strong></h4>
+<p>类型的文档注释应该解释该类型的每个实例代表或提供什么功能。例如：</p>
+<pre><code class="language-go">package regexp
+
+// Regexp is the representation of a compiled regular expression.
+// A Regexp is safe for concurrent use by multiple goroutines,
+// except for configuration methods, such as Longest.
+type Regexp struct {
+    ...
+}
+</code></pre>
+<p>默认情况下假设类型都不支持并发操作，如果支持，最好在注释里说明:</p>
+<pre><code class="language-go">package regexp
+
+// Regexp is the representation of a compiled regular expression.
+// A Regexp is safe for concurrent use by multiple goroutines,
+// except for configuration methods, such as Longest.
+type Regexp struct {
+    ...
+}
+</code></pre>
+<p>类型还应该尽量使零值具有有用的含义。如果零值的含义不明显，最好在注释里说明：</p>
+<pre><code class="language-go">package bytes
+
+// A Buffer is a variable-sized buffer of bytes with Read and Write methods.
+// The zero value for Buffer is an empty buffer ready to use.
+type Buffer struct {
+    ...
+}
+</code></pre>
+<p>具有导出字段的类型，文档注释或每个字段的注释应该解释每个导出字段的含义。例如：</p>
+<pre><code class="language-go">// 类型的注释详细描述类型的功能
+package io
+
+// A LimitedReader reads from R but limits the amount of
+// data returned to just N bytes. Each call to Read
+// updates N to reflect the new amount remaining.
+// Read returns EOF when N &lt;= 0.
+type LimitedReader struct {
+    R   Reader // underlying reader
+    N   int64  // max bytes remaining
+}
+
+// 类型的部分注释在每个字段的注释中
+package comment
+
+// A Printer is a doc comment printer.
+// The fields in the struct can be filled in before calling
+// any of the printing methods
+// in order to customize the details of the printing process.
+type Printer struct {
+    // HeadingLevel is the nesting level used for
+    // HTML and Markdown headings.
+    // If HeadingLevel is zero, it defaults to level 3,
+    // meaning to use &lt;h3&gt; and ###.
+    HeadingLevel int
+    ...
+}
+</code></pre>
+<h4 id="_19"><strong>函数和方法注释</strong></h4>
+<p>函数的注释应该解释该函数的作用、入参和返参的含义。命名参数可以直接在注释中引用，无需任何特殊语法（不用加上反引号）。 </p>
+<pre><code class="language-go">package strconv
+
+// Quote returns a double-quoted Go string literal representing s.
+// The returned string uses Go escape sequences (\t, \n, \xFF, \u0100)
+// for control characters and non-printable characters as defined by IsPrint.
+func Quote(s string) string {
+    ...
+}
+
+package os
+
+// Exit causes the current program to exit with the given status code.
+// Conventionally, code zero indicates success, non-zero an error.
+// The program terminates immediately; deferred functions are not run.
+//
+// For portability, the status code should be in the range [0, 125].
+func Exit(code int) {
+    ...
+}
+</code></pre>
+<p>返回布尔值的函数注释通常是 <code>reports whether</code> 格式：</p>
+<pre><code class="language-go">package strings
+
+// HasPrefix reports whether the string s begins with prefix.
+func HasPrefix(s, prefix string) bool
+</code></pre>
+<p>给函数添加命名返回值，并在注释里进行引用，可以使注释更加清晰和容易理解，即使命名返回值在函数中未使用到。</p>
+<pre><code class="language-go">package io
+
+// Copy copies from src to dst until either EOF is reached
+// on src or an error occurs. It returns the total number of bytes
+// written and the first error encountered while copying, if any.
+//
+// A successful Copy returns err == nil, not err == EOF.
+// Because Copy is defined to read from src until EOF, it does
+// not treat an EOF from Read as an error to be reported.
+func Copy(dst Writer, src Reader) (n int64, err error) {
+    ...
+}
+</code></pre>
+<p>默认情况下假设函数和方法都不支持并发操作，如果支持，最好在注释里说明:</p>
+<pre><code>package sql
+
+// Close returns the connection to the connection pool.
+// All operations after a Close will return with ErrConnDone.
+// Close is safe to call concurrently with other operations and will
+// block until all other operations finish. It may be useful to first
+// cancel any used context and then call Close directly after.
+func (c *Conn) Close() error {
+    ...
+}
+</code></pre>
+<p>给函数或方法添加 Locked 后缀表示该函数或方法是并发安全的或者调用该函数或方法时需要加锁。</p>
+<pre><code class="language-go">// prepareOnConnLocked prepares the query in Stmt s on dc and adds it to the list of
+// open connStmt on the statement. It assumes the caller is holding the lock on dc.
+func (s *Stmt) prepareOnConnLocked(ctx context.Context, dc *driverConn) (*driverStmt, error) {
+    si, err := dc.prepareLocked(ctx, s.cg, s.query)
+    if err != nil {
+        return nil, err
+    }
+    cs := connStmt{dc, si}
+    s.mu.Lock()
+    s.css = append(s.css, cs)
+    s.mu.Unlock()
+    return cs.ds, nil
+}
+
+// lasterrOrErrLocked returns either lasterr or the provided err.
+// rs.closemu must be read-locked.
+func (rs *Rows) lasterrOrErrLocked(err error) error {
+    if rs.lasterr != nil &amp;&amp; rs.lasterr != io.EOF {
+        return rs.lasterr
+    }
+    return err
+}
+</code></pre>
+<p>函数或方法的特殊情况需要在注释里说明</p>
+<pre><code class="language-go">package math
+
+// Sqrt returns the square root of x.
+//
+// Special cases are:
+//
+//  Sqrt(+Inf) = +Inf
+//  Sqrt(±0) = ±0
+//  Sqrt(x &lt; 0) = NaN
+//  Sqrt(NaN) = NaN
+func Sqrt(x float64) float64 {
+</code></pre>
+<p>函数或方法的注释通常不需要解释内部的详细实现，详细实现的注释应该在函数或方法体内。而且将来改变内部实现时不用修改函数或方法的文档。</p>
+<h4 id="_20"><strong>常量注释</strong></h4>
+<p>Go 语法允许对声明进行分组，通过一段注释就可以描述一组相关的常量，也可以单独注释不同的常量。</p>
+<pre><code class="language-go">package scanner // import &quot;text/scanner&quot;
+
+// The result of Scan is one of these tokens or a Unicode character.
+const (
+    EOF = -(iota + 1)
+    Ident
+    Int
+    Float
+    Char
+    ...
+)
+
+
+package unicode // import &quot;unicode&quot;
+
+const (
+    MaxRune         = '\U0010FFFF' // maximum valid Unicode code point.
+    ReplacementChar = '\uFFFD'     // represents invalid code points.
+    MaxASCII        = '\u007F'     // maximum ASCII value.
+    MaxLatin1       = '\u00FF'     // maximum Latin-1 value.
+)
+</code></pre>
+<p>未分组的常量需要添加以常量名开头的注释</p>
+<pre><code class="language-go">package unicode
+
+// Version is the Unicode edition from which the tables are derived.
+const Version = &quot;13.0.0&quot;
+</code></pre>
+<p>类型常量的声明通常放在类型常量的类型定义之后，这种情况一般省略类型常量或类型常量组的注释，直接使用常量类型的注释。</p>
+<pre><code class="language-go">package syntax
+
+// An Op is a single regular expression operator.
+type Op uint8
+
+const (
+    OpNoMatch        Op = 1 + iota // matches no strings
+    OpEmptyMatch                   // matches empty string
+    OpLiteral                      // matches Runes sequence
+    OpCharClass                    // matches Runes interpreted as range pair list
+    OpAnyCharNotNL                 // matches any character except newline
+    ...
+)
+</code></pre>
+<p><strong>变量注释</strong></p>
+<p>变量注释和常量注释格式相同，以下是组变量和单个变量的注释格式：</p>
+<pre><code class="language-go">package fs
+
+// Generic file system errors.
+// Errors returned by file systems can be tested against these errors
+// using errors.Is.
+var (
+    ErrInvalid    = errInvalid()    // &quot;invalid argument&quot;
+    ErrPermission = errPermission() // &quot;permission denied&quot;
+    ErrExist      = errExist()      // &quot;file already exists&quot;
+    ErrNotExist   = errNotExist()   // &quot;file does not exist&quot;
+    ErrClosed     = errClosed()     // &quot;file already closed&quot;
+)
+
+package unicode
+
+// Scripts is the set of Unicode script tables.
+var Scripts = map[string]*RangeTable{
+    &quot;Adlam&quot;:                  Adlam,
+    &quot;Ahom&quot;:                   Ahom,
+    &quot;Anatolian_Hieroglyphs&quot;:  Anatolian_Hieroglyphs,
+    &quot;Arabic&quot;:                 Arabic,
+    &quot;Armenian&quot;:               Armenian,
+    ...
+}
+</code></pre>
+<h3 id="_21">注释标记</h3>
+<h3 id="bug">Bug标记</h3>
+<p><code>BUG(r)</code>：该标记记录一个确认的BUG信息，<code>r</code> 是可以提供更多相关信息的人的用户名</p>
+<p>通常格式为：</p>
+<pre><code>// BUG(rsc): FieldByName and related functions consider struct field names to be equal
+// BUG(rsc,mikio): On DragonFly BSD and OpenBSD, listening on the
+</code></pre>
+<p>文档生成时的匹配标记的正则表达式：</p>
+<pre><code>// 匹配所有MARKER(uid)格式的注释，再过滤BUG开头的
+var (
+    noteMarker    = `([A-Z][A-Z]+)\(([^)]+)\):?`                // MARKER(uid), MARKER at least 2 chars, uid at least 1 char
+    noteMarkerRx  = lazyregexp.New(`^[ \t]*` + noteMarker)      // MARKER(uid) at text start
+    noteCommentRx = lazyregexp.New(`^/[/*][ \t]*` + noteMarker) // MARKER(uid) at comment start
+)
+</code></pre>
+<p>必须以 <code>BUG(xxx)</code> 格式开头 ，冒号 <code>:</code> 及其之后的格式没要求</p>
+<h3 id="deprecated">Deprecated标记</h3>
+<p><code>Deprecated:</code> 该标记记录结构体成员字段、函数、类型或者包已被弃用，但是保留下来保持向后兼容。</p>
+<p>通常格式为：</p>
+<pre><code>// Title treats s as UTF-8-encoded bytes and returns a copy with all Unicode letters that begin
+// words mapped to their title case.
+//
+// Deprecated: The rule Title uses for word boundaries does not handle Unicode
+// punctuation properly. Use golang.org/x/text/cases instead.
+func Title(s []byte) []byte {
+    // Use a closure here to remember state.
+    // Hackish but effective. Depends on Map scanning in order and calling
+    // the closure once per rune.
+    prev := ' '
+    return Map(
+        func(r rune) rune {
+            if isSeparator(prev) {
+                prev = r
+                return unicode.ToTitle(r)
+            }
+            prev = r
+            return r
+        },
+        s)
+}
+</code></pre>
+<p>文档生成时的匹配标记的正则表达式：</p>
+<pre><code>var deprecatedRx = regexp.MustCompile(`(^|\n\s*\n)\s*Deprecated:`)
+</code></pre>
+<h2 id="example">Example函数</h2>
+<p><code>Example</code> 函数的注释会和注释的标识符的文档显示在一起，包级别的 <code>Example</code> 函数会显示在包注释后面。如 <a href="https://pkg.go.dev/archive/tar@go1.22.6">tar package - archive/tar - Go Packages</a></p>
+<p><code>Example</code> 函数必须定义在后缀为 <code>_test.go</code> 文件中，函数名以 <code>Example</code> 开头，并且不需要任何参数。</p>
+<p>godoc 通过实例函数的函数名命名约定将示例函数与包级标识符相关联。</p>
+<p>类型或者方法的示例函数会和该类型或方法的文档显示在一起。</p>
+<pre><code>func ExampleFoo()     // Foo函数或者Foo类型的示例
+func ExampleBar_Qux() // Bar类型的Qux方法的示例 
+func Example()        // 包级别的示例
+</code></pre>
+<p>可以通过在函数名后面添加后缀的方式为指定的标识符提供多个示例，后缀以 <code>_</code> 开头后面跟小写字母组成的字符串。</p>
+<pre><code>func ExampleString()
+func ExampleString_second()
+func ExampleString_third()
+func ExampleBar_Qux_one()
+func ExampleBar_Qux_two() 
+</code></pre>
+<h2 id="readme">隐藏README文件</h2>
+<p><code>git</code> 托管网站通常会把 <code>README</code> 文件作为仓库的文档展示。<code>godoc</code> 或 <code>pkgsite</code> 生成文档时，把 <code>README</code> 文件放在包文档页面的顶部。如果不希望展示 <code>README</code> 文件，可以把 <code>README</code> 文件放在子目录下，如 <code>docs//README.md</code>。</p>
+<h1 id="go-doc">go doc</h1>
+<p>与 <code>godoc</code> 命令不同，该命令用于在命令行上查看源码的文档</p>
+<pre><code>go doc              // 输出当前目录下的包文档
+go doc fmt          // 查看fmt包的文档
+go doc fmt Printf   // 查看fmt包里的Printf函数的文档
+godoc os File       // 查看os包里File结构的文档
+go doc fmt Printf Println // 查看包内多个标识符
+</code></pre>
+<h1 id="_22">参考资料</h1>
+<blockquote>
+<p><a href="https://go.dev/blog/godoc">Godoc: documenting Go code - The Go Programming Language</a>
+<a href="https://tip.golang.org/doc/comment">Go Doc Comments - The Go Programming Language (golang.org)</a>
+<a href="https://pkg.go.dev/golang.org/x/tools/cmd/godoc">godoc command - golang.org/x/tools/cmd/godoc - Go Packages</a>
+<a href="https://go.dev/blog/examples">Testable Examples in Go - The Go Programming Language</a>
+<a href="https://pkg.go.dev/golang.org/x/pkgsite/cmd/pkgsite">pkgsite command - golang.org/x/pkgsite/cmd/pkgsite - Go Packages</a>
+<a href="https://tonybai.com/2020/12/15/how-to-see-the-manual-of-go-history-version/">如何查看历史版本的Go文档？嘘！答案我只告诉你！ | Tony Bai</a>
+<a href="https://tonybai.com/2023/03/20/godoc-vs-go-doc-vs-pkgsite/">聊聊godoc、go doc与pkgsite | Tony Bai</a></p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
