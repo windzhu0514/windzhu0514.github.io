@@ -11,7 +11,7 @@ theme:
     #- navigation.tabs.sticky 粘性导航栏，开启后导航栏会一直显示在页面顶部
     - navigation.top # 显示 back to top 按钮
     - content.code.copy # 代码块增加复制按钮
-    - navigation.indexes # 文档直接附加到章节标题（可以减少一个文档的索引）
+    #- navigation.indexes # 文档直接附加到章节标题（可以减少一个文档的索引）
   palette:
     - primary: white # 主题颜色
     # Palette toggle for automatic mode
@@ -56,6 +56,7 @@ nav:
       - 加解密: webhub/codec.md
       - 数据转换: webhub/convert.md
       - AI 工具: webhub/ai.md
+      - 其他工具: webhub/other.md
   - 博客:
       - blog/index.md
   - 关于我: about.md

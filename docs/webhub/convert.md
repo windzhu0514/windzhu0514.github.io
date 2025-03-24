@@ -1,11 +1,3 @@
----
-title: 数据转换
-hide:
-  - toc # 隐藏右侧目录
-  # - navigation # 隐藏左侧导航栏
-
-
----
 <style>
 .md-content .md-typeset h1 {
       display: none;
