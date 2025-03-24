@@ -36,7 +36,7 @@ theme:
         name: Switch to system preference
 
 extra:
-  homepage: https://ljc.space/webhub/codec/ # 主页链接 点击logo跳转到主页
+  homepage: /webhub/codec/ # 主页链接 点击logo跳转到主页
 
 markdown_extensions:
   - attr_list # 支持 grid
