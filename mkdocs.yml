@@ -53,7 +53,9 @@ nav:
       - 加解密: webhub/codec.md
       - 数据转换: webhub/convert.md
       - AI 工具: webhub/ai.md
-      - 网络工具: webhub/net.md
+      - 前端: webhub/frontend.md
+      - 设计: webhub/design.md
+      - 其他: webhub/other.md
   - 博客:
       - blog/index.md
   - 关于我: about.md
