@@ -1,5 +1,5 @@
 site_name: 一蓑烟雨任平生
-site_url: https://windzhu0514.github.io/webhub/codec/
+site_url: https://ljc.space/
 theme:
   name: material
   language: zh
@@ -30,7 +30,7 @@ theme:
         name: Switch to light mode
 
 extra:
-  homepage: https://windzhu0514.github.io/webhub/codec/ # 主页链接 点击logo跳转到主页
+  homepage: https://ljc.space/webhub/codec/ # 主页链接 点击logo跳转到主页
 
 extra_css:
   - stylesheets/extra.css
@@ -50,11 +50,10 @@ plugins:
 
 nav:
   - 主页:
-      - 加解密: webhub/codec.md
-      - 数据转换: webhub/convert.md
+      - 开发工具: webhub/it.md
       - AI 工具: webhub/ai.md
-      - 前端: webhub/frontend.md
-      - 设计: webhub/design.md
+      - 素材资源: webhub/resource.md
+      - 绘图设计: webhub/design.md
       - 其他: webhub/other.md
   - 博客:
       - blog/index.md

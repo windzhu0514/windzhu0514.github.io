@@ -6,7 +6,7 @@
 
 <div class="grid cards" markdown>
 
--   :material-knife-military: __AiPPT__
+-   :octicons-ai-model-16: __AiPPT__
 
     ---
 
