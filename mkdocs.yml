@@ -12,6 +12,8 @@ theme:
     - navigation.top # 显示 back to top 按钮
     - content.code.copy # 代码块增加复制按钮
     - navigation.indexes # 文档直接附加到章节标题（可以减少一个文档的索引）
+    - navigation.instant
+    - navigation.instant.progress
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme: light)"
@@ -24,7 +26,7 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: slate # 主色调
+      primary: black # 主色调
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -32,8 +34,8 @@ theme:
 extra:
   homepage: https://ljc.space/home/ # 主页链接 点击logo跳转到主页
 
-extra_css:
-  - stylesheets/extra.css
+# extra_css:
+#   - stylesheets/extra.css
 
 markdown_extensions:
   - attr_list # 支持 grid
@@ -48,14 +50,14 @@ plugins:
       post_url_format: "{file}"
   - redirects:
       redirect_maps:
-        "home.md": "webhub/it.md"
+        "home.md": "home/it.md"
 nav:
   - 主页:
-      - 开发工具: webhub/it.md
-      - AI 工具: webhub/ai.md
-      - 素材资源: webhub/resource.md
-      - 绘图设计: webhub/design.md
-      - 其他: webhub/other.md
+      - 开发工具: home/it.md
+      - AI 工具: home/ai.md
+      - 素材资源: home/resource.md
+      - 绘图设计: home/design.md
+      - 其他: home/other.md
   - 博客:
       - blog/index.md
   - 关于我: about.md
