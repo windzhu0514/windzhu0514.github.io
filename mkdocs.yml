@@ -30,7 +30,7 @@ theme:
         name: Switch to light mode
 
 extra:
-  homepage: https://ljc.space/webhub/codec/ # 主页链接 点击logo跳转到主页
+  homepage: https://ljc.space/home/ # 主页链接 点击logo跳转到主页
 
 extra_css:
   - stylesheets/extra.css
@@ -44,10 +44,11 @@ markdown_extensions:
 
 plugins:
   - blog:
-      #blog_toc: true
       post_date_format: full
       post_url_format: "{file}"
-
+  - redirects:
+      redirect_maps:
+        "home.md": "webhub/it.md"
 nav:
   - 主页:
       - 开发工具: webhub/it.md
