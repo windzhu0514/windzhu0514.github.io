@@ -17,6 +17,7 @@ theme:
     - search.suggest # 搜索建议
     - search.highlight # 搜索结果高亮
     - content.code.select # 代码块增加行选择按钮
+    - navigation.footer # 页脚导航
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme: light)"

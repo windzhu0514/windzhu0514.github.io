@@ -3,6 +3,7 @@ title: "关于我"
 hide:
   - toc # 隐藏右侧目录
   - navigation # 隐藏左侧导航栏
+  - footer
 ---
 
 C/C++、MFC、Go 语言(golang)开发者
