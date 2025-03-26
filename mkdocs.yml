@@ -1,5 +1,5 @@
 site_name: 一蓑烟雨任平生
-site_url: https://ljc.space/
+site_url: https://ljc.space
 theme:
   name: material
   language: zh
@@ -43,23 +43,18 @@ plugins:
       redirect_maps:
         "home.md": "home/it.md"
 nav:
-  - 主页:
-      - 开发工具: home/it.md
-      - AI 工具: home/ai.md
-      - 素材资源: home/resource.md
-      - 绘图设计: home/design.md
-      - 其他: home/other.md
+  - 主页: index.md
   - 博客:
       - blog/index.md
   - 关于我: about.md
 extra:
-  homepage: https://ljc.space/home/ # 主页链接 点击logo跳转到主页
+  homepage: https://ljc.space # 主页链接 点击logo跳转到主页
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/windzhu0514
 
-# extra_css:
-#   - stylesheets/extra.css
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - attr_list # 支持 grid

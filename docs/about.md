@@ -6,9 +6,17 @@ hide:
   - footer
 ---
 
+<style>
+.md-content .md-typeset {
+      /* display: none; */
+      text-align: center;
+  }
+</style>
+
 C/C++、MFC、Go 语言(golang)开发者
 
-> 原生的才是最好的，推荐对原生库增强，而不是重新实现。
+擅长 golang 后端和爬虫开发
+
 
 邮箱：windzhu0514@163.com
 
