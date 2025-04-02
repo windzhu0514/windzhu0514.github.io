@@ -23,13 +23,21 @@ hide:
 
     [:octicons-arrow-right-24: 去使用](https://gchq.github.io/CyberChef/)
 
--   ::material-regex:: __regex101__
+-   :material-regex: __regex101__
 
     ---
 
     正则表达式创建和调试工具
 
     [:octicons-arrow-right-24: 去使用](https://regex101.com/)
+
+-   :material-timer-outline: __crontab__
+
+    ---
+
+    快速简便的 cron 表达式编辑器
+
+    [:octicons-arrow-right-24: 去使用](https://crontab.guru/)
 
 -   :simple-convertio: __JSON-to-Go__
 
@@ -69,6 +77,14 @@ hide:
     AI 驱动的PPT在线生成工具，无需复杂操作，只需输入主题 AI 即可一键生成高质量 PPT
 
     [:octicons-arrow-right-24: 去使用](https://www.aippt.cn/)
+
+-   :octicons-ai-model-16: __AI 图片无损放大__
+
+    ---
+
+    使用最新人工智能深度学习技术 — 深度卷积神经网络，它会将噪点和锯齿的部分进行补充，实现图片的无损放大
+
+    [:octicons-arrow-right-24: 去使用](https://bigjpg.com/)
 </div>
 
 # 素材资源
@@ -121,6 +137,13 @@ hide:
 
     [:octicons-arrow-right-24: 去使用](https://excalidraw.com/)
 
+-   :material-draw: __carbon__
+
+    ---
+
+    创建和分享漂亮的源代码图片
+
+    [:octicons-arrow-right-24: 去使用](https://carbon.now.sh/)
 </div>
 
 # 其他
