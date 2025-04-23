@@ -109,6 +109,7 @@ Temporal 提供了两种工具，让您能够深入了解幕后情况并与您�
 #### Temporal UI
 
 Temporal UI 是一个基于浏览器的用户界面，允许您查看应用程序的进度。它也被称为 Web UI，还可以帮助您快速隔离、调试和解决生产问题。
+
 工作流页面
 
 ![](https://docs.temporal.io/img/webui/workflow-details-page-hiw.avif)
