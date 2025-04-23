@@ -1,0 +1,1933 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ljc.space/blog/prometheus-guide/">
+      
+      
+        <link rel="prev" href="../go-doc-generate-and-syntax/">
+      
+      
+        <link rel="next" href="../introduction-to-the-temporal/">
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>基于 Prometheus 的微服务监控指南 - 一蓑烟雨任平生</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prometheus" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-header__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            一蓑烟雨任平生
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              基于 Prometheus 的微服务监控指南
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于我
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-nav__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    一蓑烟雨任平生
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    主页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    博客
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            博客
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    归档
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            归档
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2018
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    分类
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            分类
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/caddy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    caddy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    devops
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/filebrowser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    filebrowser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/golang/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    golang
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/hugo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    hugo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/markdown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    markdown
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%A5%BD%E6%96%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    好文
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    开发环境
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E6%9E%B6%E6%9E%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于我
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      监控系统
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prometheus_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prometheus
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prometheus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      适用场景
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      不适用的场景
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据模型
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="数据模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      指标和标签
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      时间序列
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      指标类型
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="指标类型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Counter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gauge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gauge
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#histogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Histogram
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#promql" class="md-nav__link">
+    <span class="md-ellipsis">
+      PromQL
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PromQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#promql_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      PromQL语言数据类型
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      时间序列选择器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="时间序列选择器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      瞬时向量选择
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      范围向量选择
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="范围向量选择">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      时间格式
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Offset 修饰符
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      @ 修饰符
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      操作符和函数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      示例
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alertmanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alertmanager
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alertmanager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grouping" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grouping（分组）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inhibition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inhibition（抑制）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#silences" class="md-nav__link">
+    <span class="md-ellipsis">
+      Silences（静默）
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      可视化
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="可视化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      表达式浏览器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grafana
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      监控服务指标实战
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="监控服务指标实战">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      注册指标
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      暴露指标收集接口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      注意事项
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    回到主页
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+              <div class="md-post__authors md-typeset">
+                
+                  <div class="md-profile md-post__profile">
+                    <span class="md-author md-author--long">
+                      <img src="https://avatars.githubusercontent.com/u/5474294" alt="James Li">
+                    </span>
+                    <span class="md-profile__description">
+                      <strong>
+                        
+                          <a href="https://github.com/windzhu0514">James Li</a>
+                        
+                      </strong>
+                      <br>
+                      创作者
+                    </span>
+                  </div>
+                
+              </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    元数据
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2024-08-16 13:17:50+08:00" class="md-ellipsis">2024年8月16日星期五</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            分类于
+                            
+                              <a href="../category/devops/">devops</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              需要 5 分钟阅读时间
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+<h1 id="prometheus">基于 Prometheus 的微服务监控指南</h1>
+<h2 id="_1">监控系统</h2>
+<p>随着微服务架构的广泛应用，现代软件系统的复杂性不断增加，对于系统监控和故障排除也更加困难。</p>
+<p>在微服务架构中，每个服务都是独立运行的，需要对大量的服务进行监控。</p>
+<p>且研发几乎不可能对系统存在的风险有100%的认知，即使做到了100%的认知，也不可能对所有风险环节做了100%容错，有效预警可以帮助研发及时发现系统中潜在的bug。</p>
+<p>一个有效的监控系统成为保证微服务高可用、稳定性、可靠性的关键因素。</p>
+<p>监控系统可以提供以下几个方面的帮助：</p>
+<ul>
+<li>实时监测服务的健康状态和性能指标，以便及时检测和排除故障。</li>
+<li>收集各个服务的指标数据，用于分析和优化系统性能。</li>
+<li>对所有服务的监控数据进行统一管理和可视化展示，方便了解整个系统的情况。</li>
+</ul>
+<p>本文将介绍如何使用Prometheus对golang微服务进行监控。</p>
+<!-- more -->
+
+<h2 id="prometheus_1">Prometheus</h2>
+<p>Prometheus 是云原生计算基金会项目，用于对系统或服务进行监控。它按给定的时间间隔从配置的目标服务收集指标信息，评估规则表达式、显示结果、观测指标达到指定条件时触发告警。</p>
+<p>Prometheus 的主要特性：</p>
+<ul>
+<li>多维数据模型（由指标名称和键/值集合组成的时间序列）</li>
+<li><code>PromQL</code> 一种强大而灵活的查询语言，可以充分利用这种多维度数据</li>
+<li>不依赖于分布式存储；单个服务器节点是自治的</li>
+<li>采用 <code>HTTP</code> 拉取模型进行时间序列收集</li>
+<li>支持通过中间网关推送批处理任务的时间序列</li>
+<li>可以通过服务发现或静态配置发现目标服务</li>
+<li>支持多种图形和仪表板展示模式</li>
+<li>支持分层和水平联邦集群扩展</li>
+</ul>
+<p>其他信息可查看 <a href="https://prometheus.io/docs/introduction/overview/">Prometheus 概述</a></p>
+<p>Prometheus 架构图</p>
+<p><img alt="image" src="https://prometheus.io/assets/architecture.png?ynotemdtimestamp=1723550796448" /></p>
+<p><code>Prometheus</code> 采集数据有两种方式：</p>
+<ul>
+<li>一种是直接采样仪表化任务（instrumenting job）</li>
+<li>另一种通过中介 <code>push gateway</code> 来采样短时任务。</li>
+</ul>
+<p><code>Prometheus</code> 在本地存储所有采样的样本，同时基于这些数据进行规则计算、聚合数据和记录现有数据的新时间序列或者生成告警信息。收集的数据可以使用 <code>Grafana</code> 等其他工具进行可视化呈现。</p>
+<p><code>Prometheus</code> 支持多种服务发现，主要分为三类：</p>
+<ul>
+<li>基于静态文件配置的服务发现</li>
+<li>基于 <code>HTTP</code> 的动态服务发现（consul、dns、dockers、kubernetes等多种）</li>
+<li>推送网关（Push Gateway）</li>
+</ul>
+<p>在 <code>Prometheus</code> 术语中，可以抓取的服务称为实例（<code>instance</code>），通常对应于单个进程。具有相同目的的实例的集合，例如为了可扩展性或可靠性而复制的进程，称为作业（<code>Job</code>）。</p>
+<h3 id="_2">适用场景</h3>
+<p>Prometheus 非常适合记录任何纯数字时间序列。它既适合以机器为中心的监控，也适合高度动态的面向服务的架构的监控。在微服务的世界中，它对多维数据收集和查询的支持是一个特殊的优势。</p>
+<p>Prometheus 的设计注重可靠性，当出现服务中断或故障时，可以依赖它来快速进行问题诊断。每个 Prometheus 服务器都是独立的，不依赖于网络存储或其他远程服务。当基础设施的其他部分损坏时，依然可以依赖它进行问题分析，并且无需设置大量基础设施即可使用它。</p>
+<h3 id="_3">不适用的场景</h3>
+<p><code>Prometheus</code> 重视可靠性。即使在出现故障的情况下，也可以随时查看有关系统的可用统计信息。但是如果需要 100% 的准确性，例如按请求计费、每一笔订单的信息时，Prometheus 不是一个好的选择，因为收集的数据可能不够详细和完整。在这种情况下，您最好使用其他系统来收集和分析计费数据，并使用 Prometheus 进行其余功能的监控。</p>
+<h3 id="_4">数据模型</h3>
+<p><code>Prometheus</code> 收集由指标名和标签键值对组成的数据，作为时间序列进行存储。</p>
+<h4 id="_5">指标和标签</h4>
+<p><strong>指标名称：</strong> 只能包含 ASCII 字母、数字、下划线和冒号。必须符合正则表达式 <code>[a-zA-Z_:][a-zA-Z0-9_:]*</code> 。</p>
+<p><strong>标签名称：</strong> 只能包含 ASCII 字母、数字和下划线。必须符合正则表达式 <code>[a-zA-Z_][a-zA-Z0-9_]*</code> 。以 <code>__</code> （两个 <code>_</code>）开头的标签名称是保留内部使用。</p>
+<p><strong>标签值：</strong> 可以包含任何 Unicode 字符</p>
+<p>指标名和标签名命名规范：https://prometheus.io/docs/practices/naming/</p>
+<h4 id="_6">时间序列</h4>
+<p>每个时间序列都由指标名称和可选的标签键值对唯一标识。</p>
+<p>Prometheus 将所有指标数据存储为时间序列：即属于同一指标和同一组标签的带时间戳的数据流。</p>
+<p>时间序列格式：<code>&lt;metric name&gt;{&lt;label name&gt;=&lt;label value&gt;, ...}</code></p>
+<p>如：<code>api_http_requests_total{method="POST", handler="/messages"}</code></p>
+<h3 id="_7">指标类型</h3>
+<h4 id="counter">Counter</h4>
+<p>计数器是一种累计指标类型，表示一个单调递增计数器。其值只能递增或在重启时重置为零。</p>
+<p>通常用于表示所服务的请求数、已完成的任务数或错误数。</p>
+<h4 id="gauge">Gauge</h4>
+<p>仪表代表一种值可以任意增加和减少的单个数值的指标类型。通常用于表示温度变化或内存使用情况等，但也用于可增加可减少的“计数”，如并发请求数。</p>
+<h4 id="histogram">Histogram</h4>
+<p>直方图对观测结果（通常是请求持续时间或响应体的大小）进行采样，并将计数记录到可自定义配置的存储桶中。同时还保存了所有观察值的总和。</p>
+<p>在抓取期间，直方图在指标名称的基础上产生三个指标（时间序列）：</p>
+<ul>
+<li>观测桶的累积计数指标，格式为：<code>&lt;basename&gt;_bucket{le="&lt;upper inclusive bound&gt;"}</code>;</li>
+<li>观测值的总和，格式为：<code>&lt;basename&gt;_sum</code></li>
+<li>观测值的个数，格式为：<code>&lt;basename&gt;_count</code> （等同 <code>&lt;basename&gt;_bucket{le="+Inf"}</code> 的值）</li>
+</ul>
+<p>使用 <code>histogram_quantile</code> 函数计算直方图的分位数或者仅用于聚合直方图。</p>
+<p>注：</p>
+<blockquote>
+<p>le 含义： less or equal</p>
+</blockquote>
+<h4 id="summary">Summary</h4>
+<p>与直方图类似，摘要对观察结果进行采样（通常是请求持续时间和响应大小等）。同时它还提供了观察值总数量和所有观察值的总和，还可以通过滑动时间窗口计算可配置的分位数。</p>
+<p>在抓取期间，摘要在指标名称的基础上产生三个指标（时间序列）：</p>
+<ul>
+<li>基于连续的时间序列计算φ-分位数（0 ≤ φ ≤ 1），格式为：<code>&lt;basename&gt;{quantile="&lt;φ&gt;"}</code></li>
+<li>观测值的总和，格式为：<code>&lt;basename&gt;_sum</code></li>
+<li>观测值的个数，格式为：<code>&lt;basename&gt;_count</code></li>
+</ul>
+<blockquote>
+<p>使用直方图和摘要可以计算所谓的 φ 分位数，其中 0 ≤ φ ≤ 1。 φ 分位数是指在 N 个观测值中排名第 φ*N 的观测值。 φ 分位数示例： 0.5 分位数称为中位数。 0.95 分位数是第 95 个百分位数。</p>
+</blockquote>
+<p>摘要和直方图之间的本质区别在于，摘要在客户端计算时序数据的 φ 分位数并直接导出到服务端，而直方图则是导出桶里观测计数，服务端使用 <code>histogram_quantile()</code> 函数计算分位数。</p>
+<p>这两种方式有许多不同点：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Histogram</th>
+<th style="text-align: left;">Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">所需的配置</td>
+<td style="text-align: left;">选择适合观测值预期范围的桶配置。</td>
+<td style="text-align: left;">选择所需的 φ 分位数和滑动窗口。观测数据无法计算其他 φ 分位数和滑动窗口。</td>
+</tr>
+<tr>
+<td style="text-align: left;">客户端性能</td>
+<td style="text-align: left;">只需要增加计数器，性能成本低。</td>
+<td style="text-align: left;">需要计算时序数据的分位数，性能成本高</td>
+</tr>
+<tr>
+<td style="text-align: left;">服务端性能</td>
+<td style="text-align: left;">服务器计算分位数。如果临时计算花费太长时间（例如在大型仪表板中），可以使用记录规则。</td>
+<td style="text-align: left;">服务器端性能成本低。</td>
+</tr>
+<tr>
+<td style="text-align: left;">时间序列数(除了_sum和_count之外)</td>
+<td style="text-align: left;">每个配置的存储桶是一个时间序列。</td>
+<td style="text-align: left;">每个配置的分位数是一个时间序列。</td>
+</tr>
+<tr>
+<td style="text-align: left;">分位数误差</td>
+<td style="text-align: left;">相关数据桶（bucket）的宽度决定误差值</td>
+<td style="text-align: left;">可配置的φ值决定误差值</td>
+</tr>
+<tr>
+<td style="text-align: left;">φ 分位数和滑动时间窗</td>
+<td style="text-align: left;">与具体 Prometheus 表达式相关</td>
+<td style="text-align: left;">由客户端预先配置</td>
+</tr>
+<tr>
+<td style="text-align: left;">聚合操作</td>
+<td style="text-align: left;">与具体 Prometheus 表达式相关</td>
+<td style="text-align: left;">通常不能进行聚合</td>
+</tr>
+</tbody>
+</table>
+<p>直方图适合场景：</p>
+<ul>
+<li>服务端对不同服务、不同标签进行聚合计算</li>
+<li>时序数据数量级比较大，比较消耗资源时</li>
+<li>可接受数据计算时的精度损失</li>
+</ul>
+<p>摘要图适合场景：</p>
+<ul>
+<li>不需要服务端聚合操作</li>
+<li>客户端可以接受性能消耗</li>
+<li>需要准确的分位数数据（直方图计算时会进行线性插值）</li>
+</ul>
+<h3 id="promql">PromQL</h3>
+<p>Prometheus 提供了一种名为 PromQL（Prometheus Query Language）的功能查询语言，可以让用户实时选择和聚合时间序列数据。表达式的结果可以显示为图表，在 Prometheus 表达式浏览器中以表格数据形式查看，或者由外部系统通过 HTTP API 使用（如 Grafana）。</p>
+<p>PromQL 支持子查询语句。</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>rate<span class="o">(</span>http_requests_total<span class="o">[</span>5m<span class="o">])[</span>30m:1m<span class="o">]</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>max_over_time<span class="o">(</span>deriv<span class="o">(</span>rate<span class="o">(</span>distance_covered_total<span class="o">[</span>5s<span class="o">])[</span>30s:5s<span class="o">])[</span>10m:<span class="o">])</span>
+</span></code></pre></div>
+<p>PromQL 支持以 <code>#</code> 开头的行注释。</p>
+<h4 id="promql_1">PromQL语言数据类型</h4>
+<p><strong>瞬时向量（Instant vector）：</strong> 给定时间戳上的一组时间序列，每个时间序列包含一个样本值。（样本值由一个指标名、一个样本值和多个标签组成）</p>
+<p><strong>范围向量（Range vector）：</strong> 给定时间范围上的一组时间序列，每个时间序列包含该段时间内的样本值。</p>
+<p><strong>标量（Scalar）：</strong> 一个简单的浮点值</p>
+<p><strong>字符串（String）：</strong> 一个简单的字符串值；目前未启用</p>
+<h4 id="_8">时间序列选择器</h4>
+<h5 id="_9">瞬时向量选择</h5>
+<ul>
+<li>
+<p>按给定时间戳（即时）选择一组时间序列和每个时间序列的单个样本值
+  最简单的形式： <code>http_requests_total</code></p>
+</li>
+<li>
+<p>可以通过在大括号 ( {} ) 中使用逗号分隔的标签匹配列表过滤时间序列
+  使用标签过滤：<code>http_requests_total{job="prometheus",group="canary"}</code></p>
+</li>
+<li>
+<p>向量选择器必须指定一个名称或至少一个与空字符串不匹配的标签匹配器</p>
+</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="o">{</span><span class="nv">job</span><span class="o">=</span><span class="se">\~</span><span class="s2">&quot;.\*&quot;</span><span class="o">}</span><span class="w"> </span><span class="c1"># Bad! 匹配了空标签字符串值</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="o">{</span><span class="nv">job</span><span class="o">=</span>~<span class="s2">&quot;.+&quot;</span><span class="o">}</span><span class="w">              </span><span class="c1"># Good! 未匹配空标签字符串值</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="o">{</span><span class="nv">job</span><span class="o">=</span>~<span class="s2">&quot;.*&quot;</span>,method<span class="o">=</span><span class="s2">&quot;get&quot;</span><span class="o">}</span><span class="w"> </span><span class="c1"># Good! 未匹配空标签字符串值</span>
+</span></code></pre></div>
+<ul>
+<li>内置标签名 <code>__name__</code> 表示指标名称
+  <code>{__name__="http_requests_total",job=~".+"}</code></li>
+</ul>
+<p>查询时，标签名称不能使用关键字，但是可以使用 <code>__name__</code> 标签名来使用关键字
+  关键字: <code>bool, on, ignoring, group_left and group_right</code>
+  <code>{__name__="on"} # Good! 通过 __name__ 使用标签名是关键字标签</code></p>
+<ul>
+<li>
+<p>标签匹配运算符</p>
+</li>
+<li>
+<p><code>=</code>： 选择与指定的字符串完全相等的标签</p>
+</li>
+<li><code>!=</code>：选择与指定的字符串不相等的标签</li>
+<li><code>=~</code>：选择与指定的字符串满足正则表达式匹配的标签</li>
+<li><code>!~</code>：选择与指定的字符串不满足正则表达式匹配的标签</li>
+</ul>
+<h5 id="_10">范围向量选择</h5>
+<p>在瞬时向量选择器后使用方括号<code>[]</code>来指定范围向量的时间范围，时间范围是闭区间。
+指标 <code>http_requests_total</code> 且 <code>job</code> 为 <code>prometheus</code> 的指标过去5分钟内的范围向量值：
+<code>http_requests_total{job="prometheus"}[5m]</code></p>
+<h6 id="_11">时间格式</h6>
+<ul>
+<li>ms 毫秒</li>
+<li>s 秒</li>
+<li>m 分钟</li>
+<li>h 小时</li>
+<li>d 天</li>
+<li>w 周</li>
+<li>y 年</li>
+</ul>
+<p>时间可以串联组合，单位必须按照从最长到最短的顺序排列，同一个单位只能出现一次。</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>5h
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>1h30m
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>5m
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>10s
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>1h2h30m<span class="w"> </span><span class="c1"># Bad</span>
+</span></code></pre></div>
+<h4 id="offset">Offset 修饰符</h4>
+<p><code>offset</code> 修饰符允许更改查询中各个瞬时向量和范围向量的时间偏移，<code>offset</code> 修饰符始必须紧跟在选择器后面。</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>http_requests_total<span class="w"> </span>offset<span class="w"> </span>5m<span class="w"> </span><span class="c1"># 相对于现在 5 分钟前的向量值</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>sum<span class="o">(</span>http_requests_total<span class="o">{</span><span class="nv">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="o">}</span><span class="w"> </span>offset<span class="w"> </span>5m<span class="o">)</span><span class="w"> </span>//<span class="w"> </span>GOOD.
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>sum<span class="o">(</span>http_requests_total<span class="o">{</span><span class="nv">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="o">})</span><span class="w"> </span>offset<span class="w"> </span>5m<span class="w"> </span>//<span class="w"> </span>INVALID.<span class="w"> </span>必须紧跟向量选择器
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>rate<span class="o">(</span>http_requests_total<span class="o">[</span>5m<span class="o">]</span><span class="w"> </span>offset<span class="w"> </span>1w<span class="o">)</span><span class="w"> </span><span class="c1"># 同样适用于范围向量，一周前</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>rate<span class="o">(</span>http_requests_total<span class="o">[</span>5m<span class="o">]</span><span class="w"> </span>offset<span class="w"> </span>-1w<span class="o">)</span><span class="w"> </span><span class="c1"># 同样适用于范围向量，一周后</span>
+</span></code></pre></div>
+<h4 id="_12">@ 修饰符</h4>
+<p><code>@</code> 修饰符允许更改查询中各个瞬时向量和范围向量的时间戳，时间格式为 unix 时间戳，内部使用浮点数表示。<code>@</code> 修饰符始必须紧跟在选择器后面。</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>http_requests_total<span class="w"> </span>@<span class="w"> </span><span class="m">1609746000</span><span class="w"> </span><span class="c1"># 2021-01-04T07:40:00+00:00 的指标值</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sum<span class="o">(</span>http_requests_total<span class="o">{</span><span class="nv">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="o">}</span><span class="w"> </span>@<span class="w"> </span><span class="m">1609746000</span><span class="o">)</span><span class="w"> </span><span class="c1"># GOOD.</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sum<span class="o">(</span>http_requests_total<span class="o">{</span><span class="nv">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="o">})</span><span class="w"> </span>@<span class="w"> </span><span class="m">1609746000</span><span class="w"> </span><span class="c1"># BAD.</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>rate<span class="o">(</span>http_requests_total<span class="o">[</span>5m<span class="o">]</span><span class="w"> </span>@<span class="w"> </span><span class="m">1609746000</span><span class="o">)</span><span class="w"> </span><span class="c1"># 适用于范围向量 2021-01-04T07:40:00+00:00 的指标值</span>
+</span></code></pre></div>
+<p><code>@</code> 修饰符可以和 <code>Offset</code> 修饰符一起使用，表示在 <code>@</code> 修饰符指定的时间上进行 <code>Offset</code> 偏移，结果和这两个修饰符的顺序无关。</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 以下两种形式相同</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># offset after @</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>http_requests_total<span class="w"> </span>@<span class="w"> </span><span class="m">1609746000</span><span class="w"> </span>offset<span class="w"> </span>5m
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># offset before @</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>http_requests_total<span class="w"> </span>offset<span class="w"> </span>5m<span class="w"> </span>@<span class="w"> </span><span class="m">1609746000</span>
+</span></code></pre></div>
+<p><code>start()</code> 和 <code>end()</code> 内置函数可以搭配 <code>@</code> 修饰符使用</p>
+<ul>
+<li>对于瞬时查询，<code>start()</code> 和 <code>end()</code> 都解析为表达式计算的时的时间。</li>
+<li>对于范围查询，分别解析为范围查询的开始和结束时间。</li>
+</ul>
+<h4 id="_13">操作符和函数</h4>
+<p>操作符列表和示例：https://prometheus.io/docs/prometheus/latest/querying/operators/</p>
+<p>函数列表和示例：https://prometheus.io/docs/prometheus/latest/querying/functions/</p>
+<h4 id="_14">示例</h4>
+<p>查询语句示例：https://prometheus.io/docs/prometheus/latest/querying/examples/</p>
+<h2 id="alertmanager">Alertmanager</h2>
+<p><code>Alertmanager</code> 处理应用程序（例如 Prometheus 服务器）发送的告警。</p>
+<p><code>Prometheus</code> 的告警功能分为两部分。<code>Prometheus</code> 按服务中的告警规则将告警发送到告警管理器；然后，<code>Alertmanager</code> 管理这些告警，包括沉默、抑制、聚合以及通过电子邮件、通知系统和聊天平台等方式发送通知。</p>
+<p><code>Alertmanager</code> 支持创建集群以实现高可用性，但是不要在 <code>Prometheus</code>集群 和 <code>Alertmanager</code> 集群做负载均衡，要在 <code>Prometheus</code> 里配置所有的 <code>Alertmanagers</code> 列表。因为同一警告可能被发送到不同的 Alertmanager，导致警告的处理不一致。</p>
+<h3 id="grouping">Grouping（分组）</h3>
+<p>分组将相似的告警合并为单个通知。服务大规模停机的场景会很有用，此时许多系统同时发生故障，可能触发数百到数千个告警。</p>
+<h3 id="inhibition">Inhibition（抑制）</h3>
+<p>抑制是在某些特定告警已经触发的情况下抑制某些告警的通知。可以阻止大量与实际问题无关的告警通知。</p>
+<h3 id="silences">Silences（静默）</h3>
+<p>静默是在特定时间内不发送告警。<code>Alertmanager</code> 检查收到的告警是否与静默配置匹配，如果匹配，则不会发送该告警的任何通知。</p>
+<h2 id="_15">可视化</h2>
+<h3 id="_16">表达式浏览器</h3>
+<p>表达式浏览器是 <code>Prometheus</code> 服务自带的指标展示功能，通过 <code>Prometheus</code> 服务地址+ <code>/graph</code>访问，允许输入任何表达式并以表格或图表形式查看结果。</p>
+<p>如：http://127.0.0.1:9090/graph</p>
+<p><img alt="prometheus_ui-2023912105735.png" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/prometheus_ui-2023912105735.png" /></p>
+<h3 id="grafana">Grafana</h3>
+<p><code>Grafana</code> 是开源可视化和分析软件。支持查询、可视化、警报指标、日志和跟踪，无论它们存储在何处。它为您提供了将时间序列数据库 (TSDB) 数据转换为富有洞察力的图表和可视化的工具。</p>
+<ul>
+<li><strong>数据源：</strong> Grafana 支持多种不同的数据源，包括 Prometheus、InfluxDB、Elasticsearch、MySQL 等。用户可以轻松将其数据导入到 Grafana 中进行可视化。</li>
+<li><strong>仪表盘：</strong> Grafana 提供了一个灵活易用的仪表盘编辑器，可让用户创建自定义的可视化图表和面板。这些仪表盘可以根据需要自由布局，并且可以轻松地嵌入到其他应用程序或网站中。</li>
+<li><strong>查询：</strong> Grafana 具有强大的查询功能，可以帮助用户快速检索和分析数据。查询语言包括 SQL、PromQL 等。</li>
+<li><strong>可视化：</strong> Grafana 提供了多种数据可视化选项，包括图表、表格、地图、单值指标等。</li>
+<li><strong>警报：</strong> Grafana 还支持警报功能，可以通过电子邮件、Slack、PagerDuty 等渠道向用户发送警报，并在发生事件时通知用户。</li>
+</ul>
+<p><img alt="grafana" src="https://grafana.com/media/grafana/images/grafana-dashboard-english.png?ynotemdtimestamp=1723550796448" /></p>
+<h2 id="_17">监控服务指标实战</h2>
+<p>通常需要监控的指标类别有：</p>
+<p><strong>业务指标：</strong> 业务指标可以直观的反馈业务或者系统功能是否正常可用，常用的指标有业务请求吞吐量、业务成功率。</p>
+<p><strong>服务指标：</strong> 服务指标是指能够反馈业务依赖的服务是否可用的指标，统计的指标类型类似于业务指标，只不过是接口维度，同样可以分为吞吐量、成功率以及性能。</p>
+<p><strong>环境指标</strong>：环境指标也是资源指标，用来反馈底层基础设施或者依赖服务可用率。如使用率、可用性、性能等。</p>
+<p>环境指标通常由基础组件服务本身支持或者第三方库支持，在 <code>Prometheus</code> 概念中称作 <code>exporters</code></p>
+<p>支持的第三方服务 <code>exporters</code> 列表：https://prometheus.io/docs/instrumenting/exporters/</p>
+<p>以下介绍如何进行业务和服务的指标监控，以 <code>golang</code> 语言为例。</p>
+<h3 id="_18">注册指标</h3>
+<p>需要监控的指标需要先在代码中定义，然后通过不同语言的 <code>SDK</code> 进行注册</p>
+<p>以下是收集服务的每个接口的响应时间的指标定义和注册方式：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">server</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/prometheus/client_golang/prometheus&quot;</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1">// 定义指标</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="kd">var</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nx">namespace</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;airline&quot;</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nx">subsystem</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;booking&quot;</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nx">_metricSeconds</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">NewHistogramVec</span><span class="p">(</span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">HistogramOpts</span><span class="p">{</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="nx">Namespace</span><span class="p">:</span><span class="w"> </span><span class="nx">namespace</span><span class="p">,</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="nx">Subsystem</span><span class="p">:</span><span class="w"> </span><span class="nx">subsystem</span><span class="p">,</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w">      </span><span class="s">&quot;grpc_server_handling_seconds&quot;</span><span class="p">,</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="nx">Help</span><span class="p">:</span><span class="w">      </span><span class="s">&quot;Histogram of response latency (seconds) of gRPC that had been application-level handled by the server.&quot;</span><span class="p">,</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="nx">Buckets</span><span class="p">:</span><span class="w">   </span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">DefBuckets</span><span class="p">,</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;kind&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;operation&quot;</span><span class="p">})</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="p">)</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="c1">// 注册指标</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="kd">func</span><span class="w"> </span><span class="nx">init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w"> </span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">MustRegister</span><span class="p">(</span><span class="nx">_metricSeconds</span><span class="p">)</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Namespace:</strong> 指标所属的命名空间，通常为业务分类，使用单个单词表示。
+<strong>Subsystem：</strong> 指标所属的子系统，通常为业务内部服务名，使用单个单词表示。
+<strong>Name：</strong> 指标名称</p>
+<p>其中 <code>Namespace</code> 和 <code>Subsystem</code> 是可选项。</p>
+<p>指标名称拼接规则：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">BuildFQName</span><span class="p">(</span><span class="nx">namespace</span><span class="p">,</span><span class="w"> </span><span class="nx">subsystem</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">namespace</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">subsystem</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">:</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Join</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="nx">namespace</span><span class="p">,</span><span class="w"> </span><span class="nx">subsystem</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">},</span><span class="w"> </span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">namespace</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">:</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Join</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="nx">namespace</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">},</span><span class="w"> </span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">subsystem</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">:</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Join</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="nx">subsystem</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">},</span><span class="w"> </span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">name</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>指标名和标签名命名规范参考：https://prometheus.io/docs/practices/naming/</p>
+<h3 id="_19">暴露指标收集接口</h3>
+<p>为了能够让 <code>Prometheus</code> 服务采集到服务收集的指标，需要暴露出 <code>/metrics</code> HTTP 接口
+，并且使用 <code>prometheus/promhttp</code> 库的 <code>HTTP Handler</code> 作为处理函数。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/prometheus/client_golang/prometheus/promhttp&quot;</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Register</span><span class="p">(</span><span class="nx">srv</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Server</span><span class="p">){</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nx">srv</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="s">&quot;/metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">promhttp</span><span class="p">.</span><span class="nx">Handler</span><span class="p">())</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>Prometheus</code> 根据配置的采集间隔，定时从服务拉取指标数据。</p>
+<p>收集到的指标数据可通过可视化工具进行图形绘制和告警配置。</p>
+<h3 id="_20">注意事项</h3>
+<ul>
+<li>
+<p>明确采集目标，设置正确的指标</p>
+</li>
+<li>
+<p>避免过度监控</p>
+</li>
+</ul>
+<p>过多的指标会占用大量存储，且导致查询缓慢</p>
+<ul>
+<li>标签值必须是有限值的集合</li>
+</ul>
+<p>每个不同标签键值对集合都代表一个不同的时间序列，如果标签值是任意值，会明显增加存储的数据量。标签值不能是用户ID、订单号、电子邮件等有无限个不同值的数据。</p>
+<ul>
+<li>无法用于准确值统计的场景</li>
+</ul>
+<p><code>Prometheus</code> 采集到数据可能是不完整的</p>
+<p>参考资料：</p>
+<blockquote>
+<ul>
+<li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus Docs</a></li>
+<li><a href="https://grafana.com/docs/grafana/latest/introduction/">Grafana Introduction</a></li>
+<li><a href="https://github.com/prometheus/client_golang">Prometheus instrumentation library for Go applications</a></li>
+</ul>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../go-doc-generate-and-syntax/" class="md-footer__link md-footer__link--prev" aria-label="上一页: golang源码生成文档及注释语法">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                golang源码生成文档及注释语法
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../introduction-to-the-temporal/" class="md-footer__link md-footer__link--next" aria-label="下一页: Temporal 分布式应用开发平台简介">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                Temporal 分布式应用开发平台简介
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/windzhu0514" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "navigation.indexes", "navigation.instant", "navigation.instant.progress", "search.suggest", "search.highlight", "content.code.select", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>

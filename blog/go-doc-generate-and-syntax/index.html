@@ -1,0 +1,2213 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ljc.space/blog/go-doc-generate-and-syntax/">
+      
+      
+        <link rel="prev" href="../use-windows-as-linux/">
+      
+      
+        <link rel="next" href="../prometheus-guide/">
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>golang源码生成文档及注释语法 - 一蓑烟雨任平生</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#godoc" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-header__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            一蓑烟雨任平生
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              golang源码生成文档及注释语法
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于我
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-nav__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    一蓑烟雨任平生
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    主页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    博客
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            博客
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    归档
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            归档
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2018
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    分类
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            分类
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/caddy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    caddy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    devops
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/filebrowser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    filebrowser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/golang/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    golang
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/hugo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    hugo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/markdown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    markdown
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%A5%BD%E6%96%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    好文
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    开发环境
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E6%9E%B6%E6%9E%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于我
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#godoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      godoc
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="godoc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      命令参数说明
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pkgsite" class="md-nav__link">
+    <span class="md-ellipsis">
+      pkgsite
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="pkgsite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      命令参数说明
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      启动命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      注释规则
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="注释规则">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      注释语法
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="注释语法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      段落
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      标题
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      链接
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="链接">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      网页链接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      文档链接
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      列表
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      代码块
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      包注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      命令包注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      标识符注释
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="标识符注释">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      类型注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      函数和方法注释
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      常量注释
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      注释标记
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bug标记
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deprecated" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deprecated标记
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readme" class="md-nav__link">
+    <span class="md-ellipsis">
+      隐藏README文件
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#go-doc" class="md-nav__link">
+    <span class="md-ellipsis">
+      go doc
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    回到主页
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    元数据
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2024-08-16 11:17:50+08:00" class="md-ellipsis">2024年8月16日星期五</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            分类于
+                            
+                              <a href="../category/golang/">golang</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              需要 13 分钟阅读时间
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+<blockquote>
+<p>go version: 1.22.6</p>
+</blockquote>
+<h2 id="godoc">godoc</h2>
+<p><strong>已弃用</strong>：<code>godoc</code> 无法选择要显示的包版本，由 golang.org/x/pkgsite/cmd/pkgsite 替代。</p>
+<p><code>godoc</code> 提取 Go 代码里的注释生成网页的形式的 Go 程序文档</p>
+<!-- more -->
+
+<p>默认情况下，<code>godoc</code> 通过 <code>$GOROOT</code> 和 <code>$GOPATH</code>（如果设置了两个环境变量）查找包。
+可以通过使用 <code>-goroot</code> 标志指定查找路径。</p>
+<p><code>-index</code> 标志开启自动定时更新索引，索引会在启动时创建一次。</p>
+<p>索引信息包含标识符和全文搜索信息（可通过正则表达式搜索）。 可以使用 <code>-maxresults</code> 标志设置显示的全文搜索结果的最大数量；如果设置为 0，则不显示全文结果，并且只创建标识符索引，不创建全文搜索索引。</p>
+<p>默认情况下，godoc 使用系统的 GOOS/GOARCH。 可以通过 URL 参数 <code>GOOS</code> 和 <code>GOARCH</code> 设置目标系统网页上的输出。</p>
+<p>通过 URL 参数 <code>m</code> 可以控制网页的显示模式，参数值是逗号分割的标志名：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>all<span class="w"> </span>显示所有标识符的文档，而不只是导出的标识符
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>methods<span class="w"> </span>显示所有的嵌入方法，而不只是未导出的匿名字段的方法
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>src<span class="w"> </span>显示原始源代码而不是生成的文档
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>flat<span class="w"> </span>显示全路径的不缩进的目录列表
+</span></code></pre></div>
+<blockquote>
+<p>这些标记在go官方文档上不生效</p>
+</blockquote>
+<p><code>m=flat</code> 未添加和添加后的区别</p>
+<p><img alt="image-20240815172843359" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/1723713878532.jpg" /><img alt="image-20240815172843359" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815172843359.png" /></p>
+<p>默认情况下，godoc 使用操作系统的文件系统提供文件服务。 另外也可以通过 <code>-zip</code> 标志提供 <code>.zip</code> 文件提供文件服务，其中包含要使用的文件系统。 <code>.zip</code> 文件中存储的文件路径必须使用正斜杠（'<code>/</code>'）作为路径分隔符；并且它们必须没有根路径。 <code>$GOROOT</code>（或 <code>-goroot</code>）必须设置为包含 <code>Go root</code> 目录的 .zip 文件目录路径。 例如，对于通过以下命令创建的 <code>.zip</code> 文件：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>zip<span class="w"> </span>-r<span class="w"> </span>go.zip<span class="w"> </span><span class="nv">$HOME</span>/go
+</span></code></pre></div>
+<p>可以按以下方式运行 godoc：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>godoc<span class="w"> </span>-http<span class="o">=</span>:6060<span class="w"> </span>-zip<span class="o">=</span>go.zip<span class="w"> </span>-goroot<span class="o">=</span><span class="nv">$HOME</span>/go
+</span></code></pre></div>
+<p>godoc 使用 <code>go/doc</code> 包把注释转换为 HTML 或文本；详细规则请参阅 <a href="https://golang.org/pkg/go/doc/#ToHTML">ToHTML</a>
+godoc 还显示可由测试包运行的示例代码；有关约定请参阅 <a href="https://golang.org/pkg/testing/#hdr-Examples">hdr-Examples</a></p>
+<h3 id="_1">安装命令</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>go<span class="w"> </span>install<span class="w"> </span>golang.org/x/tools/cmd/godoc@latest
+</span></code></pre></div>
+<h3 id="_2">命令参数说明</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>godoc<span class="w"> </span>-h<span class="w">      </span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>usage:<span class="w"> </span>godoc<span class="w"> </span>-http<span class="o">=</span>localhost:6060<span class="w"> </span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-goroot<span class="w"> </span>string
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">        </span>Go<span class="w"> </span>root<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="s2">&quot;/usr/local/go&quot;</span><span class="o">)</span><span class="w"> </span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span>//<span class="w"> </span>go安装目录
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>-http<span class="w"> </span>string
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span>HTTP<span class="w"> </span>service<span class="w"> </span>address<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="s2">&quot;localhost:6060&quot;</span><span class="o">)</span><span class="w"> </span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span>//<span class="w"> </span>HTTP服务地址<span class="w"> </span>:6060
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>-index
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="nb">enable</span><span class="w"> </span>search<span class="w"> </span>index<span class="w"> </span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span>//<span class="w"> </span>启用全文搜索索引，支持搜索
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span>-index_files<span class="w"> </span>string
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span>glob<span class="w"> </span>pattern<span class="w"> </span>specifying<span class="w"> </span>index<span class="w"> </span>files<span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span>not<span class="w"> </span>empty,<span class="w"> </span>the<span class="w"> </span>index<span class="w"> </span>is<span class="w"> </span><span class="nb">read</span><span class="w"> </span>from<span class="w"> </span>these<span class="w"> </span>files<span class="w"> </span><span class="k">in</span><span class="w"> </span>sorted<span class="w"> </span>order
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span>//<span class="w"> </span>glob模式指定索引信息保存的位置，索引建立后会写入这些文件；如果不为空，启动时按文件名增序读取索引信息
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span>-index_interval<span class="w"> </span>duration
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">        </span>interval<span class="w"> </span>of<span class="w"> </span>indexing<span class="p">;</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>default<span class="w"> </span><span class="o">(</span>5m<span class="o">)</span>,<span class="w"> </span>negative<span class="w"> </span>to<span class="w"> </span>only<span class="w"> </span>index<span class="w"> </span>once<span class="w"> </span>at<span class="w"> </span>startup
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">        </span>//<span class="w"> </span>索引更新间隔。不设置默认为5分钟，负值表示只在启动时更新。
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span>-index_throttle<span class="w"> </span>float
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">        </span>index<span class="w"> </span>throttle<span class="w"> </span>value<span class="p">;</span><span class="w"> </span><span class="m">0</span>.0<span class="w"> </span><span class="o">=</span><span class="w"> </span>no<span class="w"> </span><span class="nb">time</span><span class="w"> </span>allocated,<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span><span class="o">=</span><span class="w"> </span>full<span class="w"> </span>throttle<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="m">0</span>.75<span class="o">)</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">        </span>//<span class="w"> </span>控制索引建立的速度；范围为<span class="o">[</span><span class="m">0</span>,1<span class="o">]</span>，默认为0.75；避免占用过高的CPU
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">  </span>-links
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">        </span>link<span class="w"> </span>identifiers<span class="w"> </span>to<span class="w"> </span>their<span class="w"> </span>declarations<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="nb">true</span><span class="o">)</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">        </span>//<span class="w"> </span>为标识符（变量、结构体、基础数据类型、函数接收器、函数参数和返回值）生成跳转到声明的链接
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">  </span>-maxresults<span class="w"> </span>int
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">        </span>maximum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>full<span class="w"> </span>text<span class="w"> </span>search<span class="w"> </span>results<span class="w"> </span>shown<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="m">10000</span><span class="o">)</span><span class="w"> </span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">        </span>//<span class="w"> </span>展示的全文搜索结果最大数量
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">  </span>-notes<span class="w"> </span>string
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">        </span>regular<span class="w"> </span>expression<span class="w"> </span>matching<span class="w"> </span>note<span class="w"> </span>markers<span class="w"> </span>to<span class="w"> </span>show<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="s2">&quot;BUG&quot;</span><span class="o">)</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">        </span>//<span class="w"> </span>匹配注释标记的正则表达式，MARKER<span class="o">(</span>uid<span class="o">)</span>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">  </span>-play
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">        </span><span class="nb">enable</span><span class="w"> </span>playground<span class="w"> </span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="w">        </span>//<span class="w"> </span>启用playground，向https://play.golang.org服务发送代码
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="w">  </span>-templates<span class="w"> </span>string
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">        </span>load<span class="w"> </span>templates/JS/CSS<span class="w"> </span>from<span class="w"> </span>disk<span class="w"> </span><span class="k">in</span><span class="w"> </span>this<span class="w"> </span>directory
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">        </span>//<span class="w"> </span>指定templates/JS/CSS加载的目录，默认使用打包到程序里的文件
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">  </span>-timestamps
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">        </span>show<span class="w"> </span>timestamps<span class="w"> </span>with<span class="w"> </span>directory<span class="w"> </span>listings<span class="w"> </span>
+</span><span id="__span-4-38"><a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="w">        </span>//<span class="w"> </span>显示目录的索引更新时间
+</span><span id="__span-4-39"><a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="w">        </span>//<span class="w"> </span>Last<span class="w"> </span>update:<span class="w"> </span><span class="m">2024</span>-08-06<span class="w"> </span><span class="m">15</span>:57:05.065391466<span class="w"> </span>+0800<span class="w"> </span>CST<span class="w"> </span><span class="nv">m</span><span class="o">=</span>+0.105469304
+</span><span id="__span-4-40"><a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a><span class="w">  </span>-url<span class="w"> </span>string
+</span><span id="__span-4-41"><a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a><span class="w">        </span>print<span class="w"> </span>HTML<span class="w"> </span><span class="k">for</span><span class="w"> </span>named<span class="w"> </span>URL
+</span><span id="__span-4-42"><a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a><span class="w">        </span>//<span class="w"> </span>在控制台打印该地址返回的网页内容然后退出程序
+</span><span id="__span-4-43"><a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a><span class="w">  </span>-v<span class="w">    </span>verbose<span class="w"> </span>mode<span class="w"> </span>//<span class="w"> </span>输出详细日志
+</span><span id="__span-4-44"><a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a><span class="w">  </span>-write_index
+</span><span id="__span-4-45"><a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a><span class="w">        </span>write<span class="w"> </span>index<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>file<span class="p">;</span><span class="w"> </span>the<span class="w"> </span>file<span class="w"> </span>name<span class="w"> </span>must<span class="w"> </span>be<span class="w"> </span>specified<span class="w"> </span>with<span class="w"> </span>-index_files
+</span><span id="__span-4-46"><a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a><span class="w">        </span>//<span class="w"> </span>把索引信息写入文件；由index_files指定写入的文件名
+</span><span id="__span-4-47"><a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a><span class="w">  </span>-zip<span class="w"> </span>string
+</span><span id="__span-4-48"><a id="__codelineno-4-48" name="__codelineno-4-48" href="#__codelineno-4-48"></a><span class="w">        </span>zip<span class="w"> </span>file<span class="w"> </span>providing<span class="w"> </span>the<span class="w"> </span>file<span class="w"> </span>system<span class="w"> </span>to<span class="w"> </span>serve<span class="p">;</span><span class="w"> </span>disabled<span class="w"> </span><span class="k">if</span><span class="w"> </span>empty
+</span><span id="__span-4-49"><a id="__codelineno-4-49" name="__codelineno-4-49" href="#__codelineno-4-49"></a><span class="w">        </span>//<span class="w"> </span>使用zip文件文件系统，为空则使用默认文件系统
+</span></code></pre></div>
+<h2 id="pkgsite">pkgsite</h2>
+<p>pkgsite 提取 Go 代码里的注释生成网页的形式的 Go 程序文档</p>
+<p>不指定参数的情况，<code>pkgsite</code> 展示相对于当前目录的主模块的文档，也就是 <code>go list -m</code> 命令返回的模块。通常也是父级目录中离当前目录最近的 <code>go.mod</code> 文件中定义的模块名。</p>
+<p>使用 <code>go.work</code> 定义工作空间情况下，<code>pkgsite</code> 生成工作空间下多个模块的文档。以下两种命令形式都可以生成定义在 <code>repos/cue/go.mod</code> 文件中的模块的文档：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 单模块形式</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">cd</span><span class="w"> </span>repos/cue<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pkgsite
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># 多模块形式</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>go<span class="w"> </span>work<span class="w"> </span>init<span class="w"> </span>repos/cue<span class="w"> </span>repos/other<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pkgsite
+</span></code></pre></div>
+<p>默认情况，<code>pkgsite</code> 生成模块的所有依赖包的文档。可通过 <code>-list=false</code> 参数禁用。</p>
+<p><code>pkgsite</code> 可以直接从本地的模块缓存目录（/home/ljc/go/pkg/mod/）查找模块和生成文档，默认使用环境变量里配置的GOPROXY。等同于以下命令：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pkgsite<span class="w"> </span>-cache<span class="w"> </span>-proxy
+</span></code></pre></div>
+<p>使用 <code>-cache</code> 或 <code>-proxy</code>，<code>kgsite</code>时不会在当前目录中查找模块。但是可以在参数里指定本地模块的路径：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pkgsite<span class="w"> </span>-cache<span class="w"> </span>-proxy<span class="w"> </span>~/repos/cue<span class="w"> </span>some/other/module
+</span></code></pre></div>
+<p>同时也会生成标准库的文档，<code>pkgsite</code> 从 https://go.googlesource.com/go 下载 go 最新版本的源码到临时目录，然后生成标准库的文档。这个过程会有点慢，可以通过<code>gorepo</code> 参数指定本地已安装的go标准库路径。</p>
+<h3 id="_3">安装命令</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>go<span class="w"> </span>install<span class="w"> </span>golang.org/x/pkgsite/cmd/pkgsite@latest
+</span></code></pre></div>
+<h3 id="_4">命令参数说明</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>pkgsite<span class="w"> </span>-h<span class="w">                </span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>usage:<span class="w"> </span>pkgsite<span class="w"> </span><span class="o">[</span>flags<span class="o">]</span><span class="w"> </span><span class="o">[</span>PATHS<span class="w"> </span>...<span class="o">]</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span>where<span class="w"> </span>each<span class="w"> </span>PATHS<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>single<span class="w"> </span>path<span class="w"> </span>or<span class="w"> </span>a<span class="w"> </span>comma-separated<span class="w"> </span>list
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="c1"># PATHS 是单个路径或逗号分隔的路径列表。代表要生成文档的模块路径</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="o">(</span>default<span class="w"> </span>is<span class="w"> </span>current<span class="w"> </span>directory<span class="w"> </span><span class="k">if</span><span class="w"> </span>neither<span class="w"> </span>-cache<span class="w"> </span>nor<span class="w"> </span>-proxy<span class="w"> </span>is<span class="w"> </span>provided<span class="o">)</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="c1"># 如果-cache和-proxy都不设置，默认是当前目录</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span>-cache
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">        </span>fetch<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>module<span class="w"> </span>cache
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="c1"># 从本地模块缓存中加载模块</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">  </span>-cachedir<span class="w"> </span>go<span class="w"> </span>env<span class="w"> </span>GOMODCACHE
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span>module<span class="w"> </span>cache<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>defaults<span class="w"> </span>to<span class="w"> </span>go<span class="w"> </span>env<span class="w"> </span>GOMODCACHE<span class="o">)</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">        </span><span class="c1"># 模块缓存目录</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">  </span>-dev
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">        </span><span class="nb">enable</span><span class="w"> </span>developer<span class="w"> </span>mode<span class="w"> </span><span class="o">(</span>reload<span class="w"> </span>templates<span class="w"> </span>on<span class="w"> </span>each<span class="w"> </span>page<span class="w"> </span>load,<span class="w"> </span>serve<span class="w"> </span>non-minified<span class="w"> </span>JS/CSS,<span class="w"> </span>etc.<span class="o">)</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">        </span><span class="c1"># 开发者模式，用于网站开发调试。页面每次加载时都重新加载母版文件，返回未压缩的JS/CSS文件</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">  </span>-gopath_mode
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">        </span>assume<span class="w"> </span>that<span class="w"> </span><span class="nb">local</span><span class="w"> </span>modules<span class="s1">&#39; Paths are relative to GOPATH/src</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="s1">        # 在GOPATH/src目录下查找模块</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="s1">  -gorepo string</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="s1">        path to Go repo on local filesystem</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="s1">        # 本地go仓库目录，通常可以用本地go安装目录，$GOROOT</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="s1">  -http string</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="s1">        HTTP service address to listen for incoming requests on (default &quot;localhost:8080&quot;)</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="s1">        # 文档服务的http服务监听地址</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="s1">  -list</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="s1">        for each path, serve all modules in build list (default true)</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="s1">        # 生成编译列表里的所有包的文档（编译列表：go build时编译的所有包及模块和模块的依赖包）</span>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="s1">  -open</span>
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a><span class="s1">        open a browser window to the server&#39;</span>s<span class="w"> </span>address
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">        </span><span class="c1"># 自动在浏览器中打开文档页面</span>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="w">  </span>-proxy
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">        </span>fetch<span class="w"> </span>from<span class="w"> </span>GOPROXY<span class="w"> </span><span class="k">if</span><span class="w"> </span>not<span class="w"> </span>found<span class="w"> </span>locally
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="w">        </span><span class="c1"># 从GOPROXY环境变量设置的go包代理（https://goproxy.cn/、https://goproxy.io/）拉取包，不再从本地查找</span>
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="w">  </span>-static<span class="w"> </span>string
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="w">        </span>path<span class="w"> </span>to<span class="w"> </span>folder<span class="w"> </span>containing<span class="w"> </span>static<span class="w"> </span>files<span class="w"> </span>served<span class="w"> </span><span class="o">(</span>default<span class="w"> </span><span class="s2">&quot;static&quot;</span><span class="o">)</span>
+</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="w">        </span><span class="c1"># 自定义静态文件路径</span>
+</span></code></pre></div>
+<h3 id="_5">启动命令</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">cd</span><span class="w"> </span>~/WorkspaceGo/GS-util/gocore
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>pkgsite<span class="w"> </span>-http<span class="w"> </span>:6060
+</span></code></pre></div>
+<h2 id="_6">注释规则</h2>
+<h3 id="_7">注释语法</h3>
+<p>Go 文档注释以简单的语法编写，支持段落、标题、链接、列表和预格式化代码块。为了使源文件中的注释保持轻量级和可读性，不支持字体更改或原始 HTML 等复杂功能。 可以将语法视为 Markdown 语法的简化子集。</p>
+<p>标准格式化程序 <code>gofmt</code> 以规范的格式重新格式化文档注释。 <code>gofmt</code> 的目标是提高源代码中注释的可读性和控制注释的书写方式，会调整展示格式以使特定注释的语义更清晰，如：将1+2 * 3重新格式化为1 + 2*3 。</p>
+<p><code>gofmt</code> 删除文档注释中的前部和尾部空白行。如果文档注释中的所有行都以相同的空格和制表符开头，则 <code>gofmt</code> 会自动删除该前缀。</p>
+<p>类型、变量、常量、函数，包都可以通过在声明的前面写注释的方法生成文档（中间不要有空行）。</p>
+<h4 id="_8"><strong>段落</strong></h4>
+<p>多个相邻的注释行，生成文档时被视为一个段落（忽略行尾的换行符），Gofmt 保留段落文本中的换行符，如果想要生成多个段落，使用<strong>空注释</strong>行来分割段落。</p>
+<p>单行注释方式的空行分割</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Package io provides basic interfaces to I/O primitives.</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">// Its primary job is to wrap existing implementations of such primitives,</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1">// such as those in package os, into shared public interfaces that</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1">// abstract the functionality, plus some other related primitives.</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1">//</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1">// Because these interfaces and primitives wrap lower-level operations with</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1">// various implementations, unless otherwise informed clients should not</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1">// assume they are safe for parallel execution.</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="kn">package</span><span class="w"> </span><span class="nx">io</span>
+</span></code></pre></div>
+<p>多行注释方式的空行分割</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="cm">/*</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="cm">Package fmt implements formatted I/O with functions analogous</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="cm">to C&#39;s printf and scanf.  The format &#39;verbs&#39; are derived from C&#39;s but</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="cm">are simpler.</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="cm"># Printing</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="cm">The verbs:</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="cm">General:</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="cm">    %v  the value in a default format</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="cm">        when printing structs, the plus flag (%+v) adds field names</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="cm">    %#v a Go-syntax representation of the value</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="cm">    %T  a Go-syntax representation of the type of the value</span>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="cm">    %%  a literal percent sign; consumes no value</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="cm">Boolean:</span>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="cm">    %t  the word true or false</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="cm">*/</span>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a><span class="kn">package</span><span class="w"> </span><span class="nx">fmt</span>
+</span></code></pre></div>
+<h4 id="_9"><strong>标题</strong></h4>
+<p>标题是以# (U+0023)开头，然后空格加标题文本的行。该行必须不能缩进，并用空行与相邻段落文本分开。</p>
+<p>标题语法在 Go 1.19 中添加。在 Go 1.19 之前，标题是通过满足某些条件的单行段落隐式标识的，最明显的是句尾没有任何终止标点符号（逗号句号分号）。</p>
+<h4 id="_10"><strong>链接</strong></h4>
+<h5 id="_11"><strong>网页链接</strong></h5>
+<p>网页链接注释是一段格式为 <code>[Text]: URL</code>，没有缩进的注释行组成，多行之间没有空行。</p>
+<p>识别为 URL 的注释文本在网页中显示为链接。</p>
+<p>每个注释块内的链接定义都是独立，不会影响其他注释块。</p>
+<p>同一个注释块内其他的注释文本中可以用 <code>[Text]</code> 格式来使用定义的链接。在网页源码中表示为：<code>&lt;a href=“URL”&gt;Text&lt;/a&gt;</code>；被使用的链接注释和未被使用的链接注释会被 <code>gofmt</code> 分开，如 <code>archive/zip</code> 包的注释：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cm">/*</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="cm">Package zip provides support for reading and writing ZIP archives.</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="cm">See the [ZIP specification] for details.</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="cm">This package does not support disk spanning.</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="cm">A note about ZIP64:</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="cm">To be backwards compatible the FileHeader has both 32 and 64 bit Size</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="cm">fields. The 64 bit fields will always contain the correct value and</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="cm">for normal archives both fields will be the same. For files requiring</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="cm">the ZIP64 format the 32 bit fields will be 0xffffffff and the 64 bit</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="cm">fields must be used instead.</span>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="cm">[ZIP specification]: https://www.pkware.com/appnote</span>
+</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
+</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="cm">[ZIP2 specification]: https://www.pkware.com/appnote</span>
+</span><span id="__span-13-19"><a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="cm">[ZIP3 specification]: https://www.pkware.com/appnote</span>
+</span><span id="__span-13-20"><a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="cm">*/</span>
+</span><span id="__span-13-21"><a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="kn">package</span><span class="w"> </span><span class="nx">zip</span>
+</span><span id="__span-13-22"><a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>
+</span><span id="__span-13-23"><a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-13-24"><a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="w">    </span><span class="s">&quot;io/fs&quot;</span>
+</span><span id="__span-13-25"><a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="w">    </span><span class="s">&quot;path&quot;</span>
+</span><span id="__span-13-26"><a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a><span class="w">    </span><span class="s">&quot;time&quot;</span>
+</span><span id="__span-13-27"><a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>文档展示效果</p>
+<p><img alt="image-20240815174559174" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815174559174.png" /></p>
+<h5 id="_12"><strong>文档链接</strong></h5>
+<p>仅包含方括号的链接用来定义文档链接。</p>
+<p><code>[Name1]</code> 或 <code>[Name1.Name2]</code> 格式用于引用当前文档里的标识符</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">// Package path implements utility routines for manipulating slash-separated</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1">// paths.</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1">//</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1">// The path package should only be used for paths separated by forward</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">// slashes, such as the paths in URLs. This package does not deal with</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1">// Windows paths with drive letters or backslashes; to manipulate</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1">// operating system paths, use the [path/filepath] package.</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="kn">package</span><span class="w"> </span><span class="nx">path</span>
+</span></code></pre></div>
+<p>文档页面显示样式</p>
+<p><img alt="image-20240815174656164" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815174656164.png" /></p>
+<p><code>[pkg]</code>、<code>[pkg.Name1]</code> 或者 <code>[pkg.Name1.Name2]</code> 格式用于引用其他包中的标识符。</p>
+<p>当引用其他包时，<code>pkg</code> 可以是完整的包导入路径，也可以是重命名后的包的别名。</p>
+<p>例如，如果当前包导入 <code>encoding/json</code>，则可以使用 <code>[json.Decoder]</code> 来代替 <code>[encoding/json.Decoder]</code> 来链接到 <code>encoding/json</code> 的文档。</p>
+<p>只有当 <code>pkg</code> 是域名或者是标准库里的包名时，才被识别为完整路径导入。例如， <code>[os.File]</code> 和 <code>[example.com/sys.File]</code> 是文档链接，但 <code>[os/sys.File]</code> 不是，因为标准库中没有 <code>os/sys</code> 包。</p>
+<p>为了和map、泛型和数组类型定义进行区分，文档链接的前后必须有标点符号、空格、制表符或行开头和结尾。例如：<code>map[ast.Expr]TypeAndValue</code> 不会被识别为文档链接。</p>
+<p>符号链接的括号内文本可以包含可选的星号（<code>*</code>）前缀，用于创建引用指针类型的符号链接，例如: <code>[*bytes.Buffer]</code>。</p>
+<h4 id="_13"><strong>列表</strong></h4>
+<p>列表是一段缩进行或空行，以第一个有无序列表标记或有序列表标记开头的缩进行为开始。</p>
+<p>无序列表标记是星号、加号、破折号或 Unicode 项目符号（<code>*、+、-、•；U+002A、U+002B、U+002D、U+2022</code>），后跟空格或制表符，然后是文本。在无序符号列表中，以无序列表标记开头的每一行都作为一个列表项。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">url</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1">// PublicSuffixList provides the public suffix of a domain. For example:</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1">//   - the public suffix of &quot;example.com&quot; is &quot;com&quot;,</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1">//   - the public suffix of &quot;foo1.foo2.foo3.co.uk&quot; is &quot;co.uk&quot;, and</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1">//   - the public suffix of &quot;bar.pvt.k12.ma.us&quot; is &quot;pvt.k12.ma.us&quot;.</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1">//</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="c1">// Implementations of PublicSuffixList must be safe for concurrent use by</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="c1">// multiple goroutines.</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1">//</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="c1">// An implementation that always returns &quot;&quot; is valid and may be useful for</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="c1">// testing but it is not secure: it means that the HTTP server for foo.com can</span>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="c1">// set a cookie for bar.com.</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="c1">//</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="c1">// A public suffix list implementation is in the package</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="c1">// golang.org/x/net/publicsuffix.</span>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="kd">type</span><span class="w"> </span><span class="nx">PublicSuffixList</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>有序列表标记是十进制数字后跟句点或右括号，然后是空格或制表符，然后是文本。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">path</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1">// Clean returns the shortest path name equivalent to path</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">// by purely lexical processing. It applies the following rules</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1">// iteratively until no further processing can be done:</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1">//</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1">//  1. Replace multiple slashes with a single slash.</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1">//  2. Eliminate each . path name element (the current directory).</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1">//  3. Eliminate each inner .. path name element (the parent directory)</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1">//     along with the non-.. element that precedes it.</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="c1">//  4. Eliminate .. elements that begin a rooted path:</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="c1">//     that is, replace &quot;/..&quot; by &quot;/&quot; at the beginning of a path.</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="c1">//</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="c1">// The returned path ends in a slash only if it is the root &quot;/&quot;.</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="c1">//</span>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="c1">// If the result of this process is an empty string, Clean</span>
+</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="c1">// returns the string &quot;.&quot;.</span>
+</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="c1">//</span>
+</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="c1">// See also Rob Pike, “[Lexical File Names in Plan 9].”</span>
+</span><span id="__span-16-20"><a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="c1">//</span>
+</span><span id="__span-16-21"><a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="c1">// [Lexical File Names in Plan 9]: https://9p.io/sys/doc/lexnames.html</span>
+</span><span id="__span-16-22"><a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Clean</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-23"><a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-16-24"><a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>列表项中只能包含段落，不能包含代码块或嵌套列表。</p>
+<p><code>gofmt</code> 格式化无序列表时，使用短横线（<code>-</code>）作为列表符号标记，在短横线之前使用两个空格的缩进，连续的换行使用四个空格的缩进。格式化有序列表时，在数字前加一个空格，在数字后使用句点（<code>.</code>），连续的换行使用四个空格的缩进。不强制要求列表前必须有空行，如果有空行会保留。列表后面会强制插入一个空行。</p>
+<h4 id="_14"><strong>代码块</strong></h4>
+<p>代码块是注释中一段连续的缩进行或空行。生成文档时渲染为预格式化文本（网页中的 <code>&lt;pre&gt;</code> 块）。例如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>package sort
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>// Search uses binary search...
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>//
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>// As a more whimsical example, this program guesses your number:
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>//
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>//  func GuessingGame() {
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>//      var s string
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>//      fmt.Printf(&quot;Pick an integer from 0 to 100.\n&quot;)
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>//      answer := sort.Search(100, func(i int) bool {
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>//          fmt.Printf(&quot;Is your number &lt;= %d? &quot;, i)
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>//          fmt.Scanf(&quot;%s&quot;, &amp;s)
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>//          return s != &quot;&quot; &amp;&amp; s[0] == &#39;y&#39;
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>//      })
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>//      fmt.Printf(&quot;Your number is %d.\n&quot;, answer)
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>//  }
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>func Search(n int, f func(int) bool) int {
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a>    ...
+</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>}
+</span></code></pre></div>
+<p>除了代码之外，代码块还可以包含预先格式化的文本</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>package path
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>// Match reports whether name matches the shell pattern.
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>// The pattern syntax is:
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>//
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>//  pattern:
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>//      { term }
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>//  term:
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>//      &#39;*&#39;         matches any sequence of non-/ characters
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>//      &#39;?&#39;         matches any single non-/ character
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>//      &#39;[&#39; [ &#39;^&#39; ] { character-range } &#39;]&#39;
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>//                  character class (must be non-empty)
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>//      c           matches character c (c != &#39;*&#39;, &#39;?&#39;, &#39;\\&#39;, &#39;[&#39;)
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>//      &#39;\\&#39; c      matches character c
+</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>//
+</span><span id="__span-18-16"><a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>//  character-range:
+</span><span id="__span-18-17"><a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>//      c           matches character c (c != &#39;\\&#39;, &#39;-&#39;, &#39;]&#39;)
+</span><span id="__span-18-18"><a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>//      &#39;\\&#39; c      matches character c
+</span><span id="__span-18-19"><a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>//      lo &#39;-&#39; hi   matches character c for lo &lt;= c &lt;= hi
+</span><span id="__span-18-20"><a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>//
+</span><span id="__span-18-21"><a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>// Match requires pattern to match all of name, not just a substring.
+</span><span id="__span-18-22"><a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>// The only possible returned error is [ErrBadPattern], when pattern
+</span><span id="__span-18-23"><a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>// is malformed.
+</span><span id="__span-18-24"><a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>func Match(pattern, name string) (matched bool, err error) {
+</span><span id="__span-18-25"><a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>    ...
+</span><span id="__span-18-26"><a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>}
+</span></code></pre></div>
+<p>网页文档效果如下：</p>
+<p><img alt="image-20240815194144224" src="https://raw.githubusercontent.com/windzhu0514/imagehost/master/images/image-20240815194144224.png" /></p>
+<p><code>gofmt</code> 使用单个制表符缩进代码块中的所有行，替换和非空行共有的任何其他缩进，并且在每个代码块前后插入一个空行，将代码块与周围的段落文本区分开。</p>
+<h3 id="_15"><strong>包注释</strong></h3>
+<p>包注释以 <code>Package xxx</code>  格式开头，<code>xxx</code> 是要注释的包的包名。</p>
+<p>每个包都应该有一个介绍该包的包注释。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1">// Package sort provides primitives for sorting slices and user-defined</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="c1">// collections.</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="kn">package</span><span class="w"> </span><span class="nx">sort</span>
+</span></code></pre></div>
+<p>包注释文本比较长时可以单独的放在命名未为 <code>doc.go</code> 文件中，文件中仅包含包注释和包声明语句，如：<a href="https://pkg.go.dev/sort">sort package - sort - Go Packages</a></p>
+<p>包注释通常写在包的主文件里，不用每个文件都写。如果多个文件有包注释，它们将被连接起来形成整个包的注释。</p>
+<p>包注释的第一句话会出现在文档里包列表页面，如：<a href="https://pkg.go.dev/std">Standard library - Go Packages</a></p>
+<p>生成文档时会忽略和包注释不相邻的其他顶级注释（包级别的注释），以 <code>BUG(who)</code> 开头的除外。<code>BUG(who)</code> 开头的注释可以出现在源码里的任何位置，都会显示在文档页面 <code>Bugs</code> 区域。如：<a href="https://pkg.go.dev/net@go1.22.6#pkg-note-BUG">net package - net - Go Packages</a></p>
+<h3 id="_16"><strong>命令包注释</strong></h3>
+<p>命令的包的注释和普通包注释类似，但它描述的是程序的行为而不是包中的标识符的含义。第一个句注释通常以程序本身的名称开头（位于句子的开头所以首字母大写）。例如，以下是 <code>gofmt</code> 程序注释的删减版：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="cm">/*</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="cm">Gofmt formats Go programs.</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="cm">It uses tabs for indentation and blanks for alignment.</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="cm">Alignment assumes that an editor is using a fixed-width font.</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="cm">Without an explicit path, it processes the standard input. Given a file,</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="cm">it operates on that file; given a directory, it operates on all .go files in</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="cm">that directory, recursively. (Files starting with a period are ignored.)</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="cm">By default, gofmt prints the reformatted sources to standard output.</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="cm">Usage:</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="cm">    gofmt [flags] [path ...]</span>
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>
+</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="cm">The flags are:</span>
+</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>
+</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="cm">    -d</span>
+</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="cm">        Do not print reformatted sources to standard output.</span>
+</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a><span class="cm">        If a file&#39;s formatting is different than gofmt&#39;s, print diffs</span>
+</span><span id="__span-20-20"><a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a><span class="cm">        to standard output.</span>
+</span><span id="__span-20-21"><a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a><span class="cm">    -w</span>
+</span><span id="__span-20-22"><a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a><span class="cm">        Do not print reformatted sources to standard output.</span>
+</span><span id="__span-20-23"><a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a><span class="cm">        If a file&#39;s formatting is different from gofmt&#39;s, overwrite it</span>
+</span><span id="__span-20-24"><a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a><span class="cm">        with gofmt&#39;s version. If an error occurred during overwriting,</span>
+</span><span id="__span-20-25"><a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a><span class="cm">        the original file is restored from an automatic backup.</span>
+</span><span id="__span-20-26"><a id="__codelineno-20-26" name="__codelineno-20-26" href="#__codelineno-20-26"></a>
+</span><span id="__span-20-27"><a id="__codelineno-20-27" name="__codelineno-20-27" href="#__codelineno-20-27"></a><span class="cm">When gofmt reads from standard input, it accepts either a full Go program</span>
+</span><span id="__span-20-28"><a id="__codelineno-20-28" name="__codelineno-20-28" href="#__codelineno-20-28"></a><span class="cm">or a program fragment. A program fragment must be a syntactically</span>
+</span><span id="__span-20-29"><a id="__codelineno-20-29" name="__codelineno-20-29" href="#__codelineno-20-29"></a><span class="cm">valid declaration list, statement list, or expression. When formatting</span>
+</span><span id="__span-20-30"><a id="__codelineno-20-30" name="__codelineno-20-30" href="#__codelineno-20-30"></a><span class="cm">such a fragment, gofmt preserves leading indentation as well as leading</span>
+</span><span id="__span-20-31"><a id="__codelineno-20-31" name="__codelineno-20-31" href="#__codelineno-20-31"></a><span class="cm">and trailing spaces, so that individual sections of a Go program can be</span>
+</span><span id="__span-20-32"><a id="__codelineno-20-32" name="__codelineno-20-32" href="#__codelineno-20-32"></a><span class="cm">formatted by piping them through gofmt.</span>
+</span><span id="__span-20-33"><a id="__codelineno-20-33" name="__codelineno-20-33" href="#__codelineno-20-33"></a><span class="cm">*/</span>
+</span><span id="__span-20-34"><a id="__codelineno-20-34" name="__codelineno-20-34" href="#__codelineno-20-34"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+</span></code></pre></div>
+<p>注释的开头三行是使用<a href="https://rhodesmill.org/brandon/2012/one-sentence-per-line/">语义换行</a>模式编写，每个新句子或长短语单独占一行，随着后期代码的改动和新注释的添加，不同行的差异会更容易区分。后面的段落没有遵循这个约定。不论哪种方式， <code>go doc</code> 和 <code>pkgsite</code> 在生成文档时都会重新进行排版。例如：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="err">$</span><span class="w"> </span><span class="k">go</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="nx">gofmt</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nx">Gofmt</span><span class="w"> </span><span class="nx">formats</span><span class="w"> </span><span class="nx">Go</span><span class="w"> </span><span class="nx">programs</span><span class="p">.</span><span class="w"> </span><span class="nx">It</span><span class="w"> </span><span class="nx">uses</span><span class="w"> </span><span class="nx">tabs</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">indentation</span><span class="w"> </span><span class="nx">and</span><span class="w"> </span><span class="nx">blanks</span><span class="w"> </span><span class="k">for</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="nx">alignment</span><span class="p">.</span><span class="w"> </span><span class="nx">Alignment</span><span class="w"> </span><span class="nx">assumes</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">an</span><span class="w"> </span><span class="nx">editor</span><span class="w"> </span><span class="nx">is</span><span class="w"> </span><span class="nx">using</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">fixed</span><span class="o">-</span><span class="nx">width</span><span class="w"> </span><span class="nx">font</span><span class="p">.</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="nx">Without</span><span class="w"> </span><span class="nx">an</span><span class="w"> </span><span class="nx">explicit</span><span class="w"> </span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">it</span><span class="w"> </span><span class="nx">processes</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">standard</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="w"> </span><span class="nx">Given</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="nx">it</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="nx">operates</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">file</span><span class="p">;</span><span class="w"> </span><span class="nx">given</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">directory</span><span class="p">,</span><span class="w"> </span><span class="nx">it</span><span class="w"> </span><span class="nx">operates</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="p">.</span><span class="k">go</span><span class="w"> </span><span class="nx">files</span><span class="w"> </span><span class="nx">in</span><span class="w"> </span><span class="nx">that</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="nx">directory</span><span class="p">,</span><span class="w"> </span><span class="nx">recursively</span><span class="p">.</span><span class="w"> </span><span class="p">(</span><span class="nx">Files</span><span class="w"> </span><span class="nx">starting</span><span class="w"> </span><span class="nx">with</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">period</span><span class="w"> </span><span class="nx">are</span><span class="w"> </span><span class="nx">ignored</span><span class="p">.)</span><span class="w"> </span><span class="nx">By</span><span class="w"> </span><span class="k">default</span><span class="p">,</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="nx">gofmt</span><span class="w"> </span><span class="nx">prints</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">reformatted</span><span class="w"> </span><span class="nx">sources</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">standard</span><span class="w"> </span><span class="nx">output</span><span class="p">.</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="nx">Usage</span><span class="p">:</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="nx">gofmt</span><span class="w"> </span><span class="p">[</span><span class="nx">flags</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="nx">path</span><span class="w"> </span><span class="o">...</span><span class="p">]</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="nx">The</span><span class="w"> </span><span class="nx">flags</span><span class="w"> </span><span class="nx">are</span><span class="p">:</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="w">    </span><span class="o">-</span><span class="nx">d</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a><span class="w">        </span><span class="nx">Do</span><span class="w"> </span><span class="nx">not</span><span class="w"> </span><span class="nx">print</span><span class="w"> </span><span class="nx">reformatted</span><span class="w"> </span><span class="nx">sources</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">standard</span><span class="w"> </span><span class="nx">output</span><span class="p">.</span>
+</span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a><span class="w">        </span><span class="nx">If</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">file</span><span class="err">&#39;</span><span class="nx">s</span><span class="w"> </span><span class="nx">formatting</span><span class="w"> </span><span class="nx">is</span><span class="w"> </span><span class="nx">different</span><span class="w"> </span><span class="nx">than</span><span class="w"> </span><span class="nx">gofmt</span><span class="err">&#39;</span><span class="nx">s</span><span class="p">,</span><span class="w"> </span><span class="nx">print</span><span class="w"> </span><span class="nx">diffs</span>
+</span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a><span class="w">        </span><span class="nx">to</span><span class="w"> </span><span class="nx">standard</span><span class="w"> </span><span class="nx">output</span><span class="p">.</span>
+</span><span id="__span-21-20"><a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a><span class="o">...</span>
+</span></code></pre></div>
+<h3 id="_17"><strong>标识符注释</strong></h3>
+<p>注释开头的单词以被注释的标识符的名称开头（包注释除外）</p>
+<h4 id="_18"><strong>类型注释</strong></h4>
+<p>类型的文档注释应该解释该类型的每个实例代表或提供什么功能。例如：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">regexp</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1">// Regexp is the representation of a compiled regular expression.</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1">// A Regexp is safe for concurrent use by multiple goroutines,</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="c1">// except for configuration methods, such as Longest.</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Regexp</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>默认情况下假设类型都不支持并发操作，如果支持，最好在注释里说明:</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">regexp</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="c1">// Regexp is the representation of a compiled regular expression.</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1">// A Regexp is safe for concurrent use by multiple goroutines,</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="c1">// except for configuration methods, such as Longest.</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Regexp</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>类型还应该尽量使零值具有有用的含义。如果零值的含义不明显，最好在注释里说明：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">bytes</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="c1">// A Buffer is a variable-sized buffer of bytes with Read and Write methods.</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="c1">// The zero value for Buffer is an empty buffer ready to use.</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Buffer</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>具有导出字段的类型，文档注释或每个字段的注释应该解释每个导出字段的含义。例如：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1">// 类型的注释详细描述类型的功能</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="kn">package</span><span class="w"> </span><span class="nx">io</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1">// A LimitedReader reads from R but limits the amount of</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="c1">// data returned to just N bytes. Each call to Read</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1">// updates N to reflect the new amount remaining.</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="c1">// Read returns EOF when N &lt;= 0.</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="kd">type</span><span class="w"> </span><span class="nx">LimitedReader</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">    </span><span class="nx">R</span><span class="w">   </span><span class="nx">Reader</span><span class="w"> </span><span class="c1">// underlying reader</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="w">    </span><span class="nx">N</span><span class="w">   </span><span class="kt">int64</span><span class="w">  </span><span class="c1">// max bytes remaining</span>
+</span><span id="__span-25-11"><a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="p">}</span>
+</span><span id="__span-25-12"><a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a>
+</span><span id="__span-25-13"><a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="c1">// 类型的部分注释在每个字段的注释中</span>
+</span><span id="__span-25-14"><a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="kn">package</span><span class="w"> </span><span class="nx">comment</span>
+</span><span id="__span-25-15"><a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a>
+</span><span id="__span-25-16"><a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="c1">// A Printer is a doc comment printer.</span>
+</span><span id="__span-25-17"><a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a><span class="c1">// The fields in the struct can be filled in before calling</span>
+</span><span id="__span-25-18"><a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="c1">// any of the printing methods</span>
+</span><span id="__span-25-19"><a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a><span class="c1">// in order to customize the details of the printing process.</span>
+</span><span id="__span-25-20"><a id="__codelineno-25-20" name="__codelineno-25-20" href="#__codelineno-25-20"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Printer</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-21"><a id="__codelineno-25-21" name="__codelineno-25-21" href="#__codelineno-25-21"></a><span class="w">    </span><span class="c1">// HeadingLevel is the nesting level used for</span>
+</span><span id="__span-25-22"><a id="__codelineno-25-22" name="__codelineno-25-22" href="#__codelineno-25-22"></a><span class="w">    </span><span class="c1">// HTML and Markdown headings.</span>
+</span><span id="__span-25-23"><a id="__codelineno-25-23" name="__codelineno-25-23" href="#__codelineno-25-23"></a><span class="w">    </span><span class="c1">// If HeadingLevel is zero, it defaults to level 3,</span>
+</span><span id="__span-25-24"><a id="__codelineno-25-24" name="__codelineno-25-24" href="#__codelineno-25-24"></a><span class="w">    </span><span class="c1">// meaning to use &lt;h3&gt; and ###.</span>
+</span><span id="__span-25-25"><a id="__codelineno-25-25" name="__codelineno-25-25" href="#__codelineno-25-25"></a><span class="w">    </span><span class="nx">HeadingLevel</span><span class="w"> </span><span class="kt">int</span>
+</span><span id="__span-25-26"><a id="__codelineno-25-26" name="__codelineno-25-26" href="#__codelineno-25-26"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-25-27"><a id="__codelineno-25-27" name="__codelineno-25-27" href="#__codelineno-25-27"></a><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="_19"><strong>函数和方法注释</strong></h4>
+<p>函数的注释应该解释该函数的作用、入参和返参的含义。命名参数可以直接在注释中引用，无需任何特殊语法（不用加上反引号）。 </p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">strconv</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="c1">// Quote returns a double-quoted Go string literal representing s.</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1">// The returned string uses Go escape sequences (\t, \n, \xFF, \u0100)</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="c1">// for control characters and non-printable characters as defined by IsPrint.</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Quote</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="p">}</span>
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>
+</span><span id="__span-26-10"><a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="kn">package</span><span class="w"> </span><span class="nx">os</span>
+</span><span id="__span-26-11"><a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>
+</span><span id="__span-26-12"><a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="c1">// Exit causes the current program to exit with the given status code.</span>
+</span><span id="__span-26-13"><a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="c1">// Conventionally, code zero indicates success, non-zero an error.</span>
+</span><span id="__span-26-14"><a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a><span class="c1">// The program terminates immediately; deferred functions are not run.</span>
+</span><span id="__span-26-15"><a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="c1">//</span>
+</span><span id="__span-26-16"><a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="c1">// For portability, the status code should be in the range [0, 125].</span>
+</span><span id="__span-26-17"><a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Exit</span><span class="p">(</span><span class="nx">code</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-18"><a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-26-19"><a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>返回布尔值的函数注释通常是 <code>reports whether</code> 格式：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">strings</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="c1">// HasPrefix reports whether the string s begins with prefix.</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="kd">func</span><span class="w"> </span><span class="nx">HasPrefix</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="w"> </span><span class="nx">prefix</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span>
+</span></code></pre></div>
+<p>给函数添加命名返回值，并在注释里进行引用，可以使注释更加清晰和容易理解，即使命名返回值在函数中未使用到。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">io</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="c1">// Copy copies from src to dst until either EOF is reached</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="c1">// on src or an error occurs. It returns the total number of bytes</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="c1">// written and the first error encountered while copying, if any.</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="c1">//</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="c1">// A successful Copy returns err == nil, not err == EOF.</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="c1">// Because Copy is defined to read from src until EOF, it does</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="c1">// not treat an EOF from Read as an error to be reported.</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Copy</span><span class="p">(</span><span class="nx">dst</span><span class="w"> </span><span class="nx">Writer</span><span class="p">,</span><span class="w"> </span><span class="nx">src</span><span class="w"> </span><span class="nx">Reader</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int64</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>默认情况下假设函数和方法都不支持并发操作，如果支持，最好在注释里说明:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>package sql
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>// Close returns the connection to the connection pool.
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>// All operations after a Close will return with ErrConnDone.
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>// Close is safe to call concurrently with other operations and will
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>// block until all other operations finish. It may be useful to first
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>// cancel any used context and then call Close directly after.
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>func (c *Conn) Close() error {
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>    ...
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>}
+</span></code></pre></div>
+<p>给函数或方法添加 Locked 后缀表示该函数或方法是并发安全的或者调用该函数或方法时需要加锁。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="c1">// prepareOnConnLocked prepares the query in Stmt s on dc and adds it to the list of</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="c1">// open connStmt on the statement. It assumes the caller is holding the lock on dc.</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">Stmt</span><span class="p">)</span><span class="w"> </span><span class="nx">prepareOnConnLocked</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">dc</span><span class="w"> </span><span class="o">*</span><span class="nx">driverConn</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">driverStmt</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="nx">si</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">dc</span><span class="p">.</span><span class="nx">prepareLocked</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">cg</span><span class="p">,</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">query</span><span class="p">)</span>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-6"><a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+</span><span id="__span-30-7"><a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-30-8"><a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">    </span><span class="nx">cs</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connStmt</span><span class="p">{</span><span class="nx">dc</span><span class="p">,</span><span class="w"> </span><span class="nx">si</span><span class="p">}</span>
+</span><span id="__span-30-9"><a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">    </span><span class="nx">s</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
+</span><span id="__span-30-10"><a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="w">    </span><span class="nx">s</span><span class="p">.</span><span class="nx">css</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">css</span><span class="p">,</span><span class="w"> </span><span class="nx">cs</span><span class="p">)</span>
+</span><span id="__span-30-11"><a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">    </span><span class="nx">s</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+</span><span id="__span-30-12"><a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">cs</span><span class="p">.</span><span class="nx">ds</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+</span><span id="__span-30-13"><a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="p">}</span>
+</span><span id="__span-30-14"><a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a>
+</span><span id="__span-30-15"><a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="c1">// lasterrOrErrLocked returns either lasterr or the provided err.</span>
+</span><span id="__span-30-16"><a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="c1">// rs.closemu must be read-locked.</span>
+</span><span id="__span-30-17"><a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">rs</span><span class="w"> </span><span class="o">*</span><span class="nx">Rows</span><span class="p">)</span><span class="w"> </span><span class="nx">lasterrOrErrLocked</span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-18"><a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">rs</span><span class="p">.</span><span class="nx">lasterr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">rs</span><span class="p">.</span><span class="nx">lasterr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-19"><a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">rs</span><span class="p">.</span><span class="nx">lasterr</span>
+</span><span id="__span-30-20"><a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-30-21"><a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+</span><span id="__span-30-22"><a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>函数或方法的特殊情况需要在注释里说明</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">math</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="c1">// Sqrt returns the square root of x.</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="c1">//</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="c1">// Special cases are:</span>
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="c1">//</span>
+</span><span id="__span-31-7"><a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="c1">//  Sqrt(+Inf) = +Inf</span>
+</span><span id="__span-31-8"><a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="c1">//  Sqrt(±0) = ±0</span>
+</span><span id="__span-31-9"><a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="c1">//  Sqrt(x &lt; 0) = NaN</span>
+</span><span id="__span-31-10"><a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="c1">//  Sqrt(NaN) = NaN</span>
+</span><span id="__span-31-11"><a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Sqrt</span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="kt">float64</span><span class="w"> </span><span class="p">{</span>
+</span></code></pre></div>
+<p>函数或方法的注释通常不需要解释内部的详细实现，详细实现的注释应该在函数或方法体内。而且将来改变内部实现时不用修改函数或方法的文档。</p>
+<h4 id="_20"><strong>常量注释</strong></h4>
+<p>Go 语法允许对声明进行分组，通过一段注释就可以描述一组相关的常量，也可以单独注释不同的常量。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">scanner</span><span class="w"> </span><span class="c1">// import &quot;text/scanner&quot;</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="c1">// The result of Scan is one of these tokens or a Unicode character.</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="nx">EOF</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="o">-</span><span class="p">(</span><span class="kc">iota</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">    </span><span class="nx">Ident</span>
+</span><span id="__span-32-7"><a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">    </span><span class="nx">Int</span>
+</span><span id="__span-32-8"><a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">    </span><span class="nx">Float</span>
+</span><span id="__span-32-9"><a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">    </span><span class="nx">Char</span>
+</span><span id="__span-32-10"><a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-32-11"><a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="p">)</span>
+</span><span id="__span-32-12"><a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a>
+</span><span id="__span-32-13"><a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a>
+</span><span id="__span-32-14"><a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="kn">package</span><span class="w"> </span><span class="nx">unicode</span><span class="w"> </span><span class="c1">// import &quot;unicode&quot;</span>
+</span><span id="__span-32-15"><a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a>
+</span><span id="__span-32-16"><a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-32-17"><a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a><span class="w">    </span><span class="nx">MaxRune</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;\U0010FFFF&#39;</span><span class="w"> </span><span class="c1">// maximum valid Unicode code point.</span>
+</span><span id="__span-32-18"><a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a><span class="w">    </span><span class="nx">ReplacementChar</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;\uFFFD&#39;</span><span class="w">     </span><span class="c1">// represents invalid code points.</span>
+</span><span id="__span-32-19"><a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a><span class="w">    </span><span class="nx">MaxASCII</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;\u007F&#39;</span><span class="w">     </span><span class="c1">// maximum ASCII value.</span>
+</span><span id="__span-32-20"><a id="__codelineno-32-20" name="__codelineno-32-20" href="#__codelineno-32-20"></a><span class="w">    </span><span class="nx">MaxLatin1</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;\u00FF&#39;</span><span class="w">     </span><span class="c1">// maximum Latin-1 value.</span>
+</span><span id="__span-32-21"><a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>未分组的常量需要添加以常量名开头的注释</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">unicode</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="c1">// Version is the Unicode edition from which the tables are derived.</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">Version</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;13.0.0&quot;</span>
+</span></code></pre></div>
+<p>类型常量的声明通常放在类型常量的类型定义之后，这种情况一般省略类型常量或类型常量组的注释，直接使用常量类型的注释。</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">syntax</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="c1">// An Op is a single regular expression operator.</span>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Op</span><span class="w"> </span><span class="kt">uint8</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>
+</span><span id="__span-34-6"><a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-34-7"><a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="w">    </span><span class="nx">OpNoMatch</span><span class="w">        </span><span class="nx">Op</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="kc">iota</span><span class="w"> </span><span class="c1">// matches no strings</span>
+</span><span id="__span-34-8"><a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="w">    </span><span class="nx">OpEmptyMatch</span><span class="w">                   </span><span class="c1">// matches empty string</span>
+</span><span id="__span-34-9"><a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">    </span><span class="nx">OpLiteral</span><span class="w">                      </span><span class="c1">// matches Runes sequence</span>
+</span><span id="__span-34-10"><a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">    </span><span class="nx">OpCharClass</span><span class="w">                    </span><span class="c1">// matches Runes interpreted as range pair list</span>
+</span><span id="__span-34-11"><a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="w">    </span><span class="nx">OpAnyCharNotNL</span><span class="w">                 </span><span class="c1">// matches any character except newline</span>
+</span><span id="__span-34-12"><a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-34-13"><a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>变量注释</strong></p>
+<p>变量注释和常量注释格式相同，以下是组变量和单个变量的注释格式：</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">fs</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="c1">// Generic file system errors.</span>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="c1">// Errors returned by file systems can be tested against these errors</span>
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="c1">// using errors.Is.</span>
+</span><span id="__span-35-6"><a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="kd">var</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-35-7"><a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="w">    </span><span class="nx">ErrInvalid</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="nx">errInvalid</span><span class="p">()</span><span class="w">    </span><span class="c1">// &quot;invalid argument&quot;</span>
+</span><span id="__span-35-8"><a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">    </span><span class="nx">ErrPermission</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">errPermission</span><span class="p">()</span><span class="w"> </span><span class="c1">// &quot;permission denied&quot;</span>
+</span><span id="__span-35-9"><a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="w">    </span><span class="nx">ErrExist</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="nx">errExist</span><span class="p">()</span><span class="w">      </span><span class="c1">// &quot;file already exists&quot;</span>
+</span><span id="__span-35-10"><a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="w">    </span><span class="nx">ErrNotExist</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="nx">errNotExist</span><span class="p">()</span><span class="w">   </span><span class="c1">// &quot;file does not exist&quot;</span>
+</span><span id="__span-35-11"><a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a><span class="w">    </span><span class="nx">ErrClosed</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="nx">errClosed</span><span class="p">()</span><span class="w">     </span><span class="c1">// &quot;file already closed&quot;</span>
+</span><span id="__span-35-12"><a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a><span class="p">)</span>
+</span><span id="__span-35-13"><a id="__codelineno-35-13" name="__codelineno-35-13" href="#__codelineno-35-13"></a>
+</span><span id="__span-35-14"><a id="__codelineno-35-14" name="__codelineno-35-14" href="#__codelineno-35-14"></a><span class="kn">package</span><span class="w"> </span><span class="nx">unicode</span>
+</span><span id="__span-35-15"><a id="__codelineno-35-15" name="__codelineno-35-15" href="#__codelineno-35-15"></a>
+</span><span id="__span-35-16"><a id="__codelineno-35-16" name="__codelineno-35-16" href="#__codelineno-35-16"></a><span class="c1">// Scripts is the set of Unicode script tables.</span>
+</span><span id="__span-35-17"><a id="__codelineno-35-17" name="__codelineno-35-17" href="#__codelineno-35-17"></a><span class="kd">var</span><span class="w"> </span><span class="nx">Scripts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="nx">RangeTable</span><span class="p">{</span>
+</span><span id="__span-35-18"><a id="__codelineno-35-18" name="__codelineno-35-18" href="#__codelineno-35-18"></a><span class="w">    </span><span class="s">&quot;Adlam&quot;</span><span class="p">:</span><span class="w">                  </span><span class="nx">Adlam</span><span class="p">,</span>
+</span><span id="__span-35-19"><a id="__codelineno-35-19" name="__codelineno-35-19" href="#__codelineno-35-19"></a><span class="w">    </span><span class="s">&quot;Ahom&quot;</span><span class="p">:</span><span class="w">                   </span><span class="nx">Ahom</span><span class="p">,</span>
+</span><span id="__span-35-20"><a id="__codelineno-35-20" name="__codelineno-35-20" href="#__codelineno-35-20"></a><span class="w">    </span><span class="s">&quot;Anatolian_Hieroglyphs&quot;</span><span class="p">:</span><span class="w">  </span><span class="nx">Anatolian_Hieroglyphs</span><span class="p">,</span>
+</span><span id="__span-35-21"><a id="__codelineno-35-21" name="__codelineno-35-21" href="#__codelineno-35-21"></a><span class="w">    </span><span class="s">&quot;Arabic&quot;</span><span class="p">:</span><span class="w">                 </span><span class="nx">Arabic</span><span class="p">,</span>
+</span><span id="__span-35-22"><a id="__codelineno-35-22" name="__codelineno-35-22" href="#__codelineno-35-22"></a><span class="w">    </span><span class="s">&quot;Armenian&quot;</span><span class="p">:</span><span class="w">               </span><span class="nx">Armenian</span><span class="p">,</span>
+</span><span id="__span-35-23"><a id="__codelineno-35-23" name="__codelineno-35-23" href="#__codelineno-35-23"></a><span class="w">    </span><span class="o">...</span>
+</span><span id="__span-35-24"><a id="__codelineno-35-24" name="__codelineno-35-24" href="#__codelineno-35-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="_21">注释标记</h3>
+<h3 id="bug">Bug标记</h3>
+<p><code>BUG(r)</code>：该标记记录一个确认的BUG信息，<code>r</code> 是可以提供更多相关信息的人的用户名</p>
+<p>通常格式为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>// BUG(rsc): FieldByName and related functions consider struct field names to be equal
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>// BUG(rsc,mikio): On DragonFly BSD and OpenBSD, listening on the
+</span></code></pre></div>
+<p>文档生成时的匹配标记的正则表达式：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>// 匹配所有MARKER(uid)格式的注释，再过滤BUG开头的
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>var (
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>    noteMarker    = `([A-Z][A-Z]+)\(([^)]+)\):?`                // MARKER(uid), MARKER at least 2 chars, uid at least 1 char
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>    noteMarkerRx  = lazyregexp.New(`^[ \t]*` + noteMarker)      // MARKER(uid) at text start
+</span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a>    noteCommentRx = lazyregexp.New(`^/[/*][ \t]*` + noteMarker) // MARKER(uid) at comment start
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>)
+</span></code></pre></div>
+<p>必须以 <code>BUG(xxx)</code> 格式开头 ，冒号 <code>:</code> 及其之后的格式没要求</p>
+<h3 id="deprecated">Deprecated标记</h3>
+<p><code>Deprecated:</code> 该标记记录结构体成员字段、函数、类型或者包已被弃用，但是保留下来保持向后兼容。</p>
+<p>通常格式为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>// Title treats s as UTF-8-encoded bytes and returns a copy with all Unicode letters that begin
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>// words mapped to their title case.
+</span><span id="__span-38-3"><a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>//
+</span><span id="__span-38-4"><a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>// Deprecated: The rule Title uses for word boundaries does not handle Unicode
+</span><span id="__span-38-5"><a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>// punctuation properly. Use golang.org/x/text/cases instead.
+</span><span id="__span-38-6"><a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a>func Title(s []byte) []byte {
+</span><span id="__span-38-7"><a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a>    // Use a closure here to remember state.
+</span><span id="__span-38-8"><a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a>    // Hackish but effective. Depends on Map scanning in order and calling
+</span><span id="__span-38-9"><a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a>    // the closure once per rune.
+</span><span id="__span-38-10"><a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a>    prev := &#39; &#39;
+</span><span id="__span-38-11"><a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a>    return Map(
+</span><span id="__span-38-12"><a id="__codelineno-38-12" name="__codelineno-38-12" href="#__codelineno-38-12"></a>        func(r rune) rune {
+</span><span id="__span-38-13"><a id="__codelineno-38-13" name="__codelineno-38-13" href="#__codelineno-38-13"></a>            if isSeparator(prev) {
+</span><span id="__span-38-14"><a id="__codelineno-38-14" name="__codelineno-38-14" href="#__codelineno-38-14"></a>                prev = r
+</span><span id="__span-38-15"><a id="__codelineno-38-15" name="__codelineno-38-15" href="#__codelineno-38-15"></a>                return unicode.ToTitle(r)
+</span><span id="__span-38-16"><a id="__codelineno-38-16" name="__codelineno-38-16" href="#__codelineno-38-16"></a>            }
+</span><span id="__span-38-17"><a id="__codelineno-38-17" name="__codelineno-38-17" href="#__codelineno-38-17"></a>            prev = r
+</span><span id="__span-38-18"><a id="__codelineno-38-18" name="__codelineno-38-18" href="#__codelineno-38-18"></a>            return r
+</span><span id="__span-38-19"><a id="__codelineno-38-19" name="__codelineno-38-19" href="#__codelineno-38-19"></a>        },
+</span><span id="__span-38-20"><a id="__codelineno-38-20" name="__codelineno-38-20" href="#__codelineno-38-20"></a>        s)
+</span><span id="__span-38-21"><a id="__codelineno-38-21" name="__codelineno-38-21" href="#__codelineno-38-21"></a>}
+</span></code></pre></div>
+<p>文档生成时的匹配标记的正则表达式：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>var deprecatedRx = regexp.MustCompile(`(^|\n\s*\n)\s*Deprecated:`)
+</span></code></pre></div>
+<h2 id="example">Example函数</h2>
+<p><code>Example</code> 函数的注释会和注释的标识符的文档显示在一起，包级别的 <code>Example</code> 函数会显示在包注释后面。如 <a href="https://pkg.go.dev/archive/tar@go1.22.6">tar package - archive/tar - Go Packages</a></p>
+<p><code>Example</code> 函数必须定义在后缀为 <code>_test.go</code> 文件中，函数名以 <code>Example</code> 开头，并且不需要任何参数。</p>
+<p>godoc 通过实例函数的函数名命名约定将示例函数与包级标识符相关联。</p>
+<p>类型或者方法的示例函数会和该类型或方法的文档显示在一起。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>func ExampleFoo()     // Foo函数或者Foo类型的示例
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>func ExampleBar_Qux() // Bar类型的Qux方法的示例 
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>func Example()        // 包级别的示例
+</span></code></pre></div>
+<p>可以通过在函数名后面添加后缀的方式为指定的标识符提供多个示例，后缀以 <code>_</code> 开头后面跟小写字母组成的字符串。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>func ExampleString()
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>func ExampleString_second()
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>func ExampleString_third()
+</span><span id="__span-41-4"><a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>func ExampleBar_Qux_one()
+</span><span id="__span-41-5"><a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>func ExampleBar_Qux_two() 
+</span></code></pre></div>
+<h2 id="readme">隐藏README文件</h2>
+<p><code>git</code> 托管网站通常会把 <code>README</code> 文件作为仓库的文档展示。<code>godoc</code> 或 <code>pkgsite</code> 生成文档时，把 <code>README</code> 文件放在包文档页面的顶部。如果不希望展示 <code>README</code> 文件，可以把 <code>README</code> 文件放在子目录下，如 <code>docs//README.md</code>。</p>
+<h1 id="go-doc">go doc</h1>
+<p>与 <code>godoc</code> 命令不同，该命令用于在命令行上查看源码的文档</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>go doc              // 输出当前目录下的包文档
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>go doc fmt          // 查看fmt包的文档
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a>go doc fmt Printf   // 查看fmt包里的Printf函数的文档
+</span><span id="__span-42-4"><a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>godoc os File       // 查看os包里File结构的文档
+</span><span id="__span-42-5"><a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a>go doc fmt Printf Println // 查看包内多个标识符
+</span></code></pre></div>
+<h1 id="_22">参考资料</h1>
+<blockquote>
+<p><a href="https://go.dev/blog/godoc">Godoc: documenting Go code - The Go Programming Language</a>
+<a href="https://tip.golang.org/doc/comment">Go Doc Comments - The Go Programming Language (golang.org)</a>
+<a href="https://pkg.go.dev/golang.org/x/tools/cmd/godoc">godoc command - golang.org/x/tools/cmd/godoc - Go Packages</a>
+<a href="https://go.dev/blog/examples">Testable Examples in Go - The Go Programming Language</a>
+<a href="https://pkg.go.dev/golang.org/x/pkgsite/cmd/pkgsite">pkgsite command - golang.org/x/pkgsite/cmd/pkgsite - Go Packages</a>
+<a href="https://tonybai.com/2020/12/15/how-to-see-the-manual-of-go-history-version/">如何查看历史版本的Go文档？嘘！答案我只告诉你！ | Tony Bai</a>
+<a href="https://tonybai.com/2023/03/20/godoc-vs-go-doc-vs-pkgsite/">聊聊godoc、go doc与pkgsite | Tony Bai</a></p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../use-windows-as-linux/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 听说你想把windows当作linux用？">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                听说你想把windows当作linux用？
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../prometheus-guide/" class="md-footer__link md-footer__link--next" aria-label="下一页: 基于 Prometheus 的微服务监控指南">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                基于 Prometheus 的微服务监控指南
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/windzhu0514" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "navigation.indexes", "navigation.instant", "navigation.instant.progress", "search.suggest", "search.highlight", "content.code.select", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>

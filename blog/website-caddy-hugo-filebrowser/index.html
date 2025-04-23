@@ -1,0 +1,2020 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ljc.space/blog/website-caddy-hugo-filebrowser/">
+      
+      
+        <link rel="prev" href="../go-vscode-remote-development/">
+      
+      
+        <link rel="next" href="../go-time-rate/">
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>caddy-hugo-filebrowser搭建个人网站和后台管理 - 一蓑烟雨任平生</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hugo" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-header__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            一蓑烟雨任平生
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              caddy-hugo-filebrowser搭建个人网站和后台管理
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于我
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-nav__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    一蓑烟雨任平生
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    主页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    博客
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            博客
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    归档
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            归档
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2018
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    分类
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            分类
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/caddy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    caddy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    devops
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/filebrowser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    filebrowser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/golang/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    golang
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/hugo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    hugo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/markdown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    markdown
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%A5%BD%E6%96%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    好文
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    开发环境
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E6%9E%B6%E6%9E%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于我
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hugo" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装 hugo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caddy" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装caddy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="安装caddy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      自动安装
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      手动安装
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caddy_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      配置caddy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="配置caddy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      添加用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Caddyfile
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssl" class="md-nav__link">
+    <span class="md-ellipsis">
+      ssl配置信息
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      日志文件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      配置网站
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="配置网站">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      网站根目录
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caddy_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装caddy为系统服务
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="安装caddy为系统服务">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caddy-hookservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      caddy hook.service 插件安装
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      upstart 模式安装
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="upstart 模式安装">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装步骤
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      启动运行
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#systemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      systemd 模式安装
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="systemd 模式安装">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装步骤
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      启动运行
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sysvinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sysvinit 模式安装
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filebrowser" class="md-nav__link">
+    <span class="md-ellipsis">
+      filebrowser实现文件浏览和后台管理
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="filebrowser实现文件浏览和后台管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filebrowser_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      filebrowser配置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toml" class="md-nav__link">
+    <span class="md-ellipsis">
+      toml配置 物理机部署使用
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      json配置 docker使用
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web" class="md-nav__link">
+    <span class="md-ellipsis">
+      web配置
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="web配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      配置事件命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      系统服务
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker部署
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="docker部署">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caddyhugo" class="md-nav__link">
+    <span class="md-ellipsis">
+      caddy+hugo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filebrowser_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      filebrowser
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      代理网站
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="代理网站">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      为什么要代理
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      代理配置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      代理服务开机启动
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    回到主页
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    元数据
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2019-09-06 17:40:56+08:00" class="md-ellipsis">2019年9月6日星期五</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            分类于
+                            
+                              <a href="../category/golang/">golang</a>, 
+                              <a href="../category/caddy/">caddy</a>, 
+                              <a href="../category/hugo/">hugo</a>, 
+                              <a href="../category/filebrowser/">filebrowser</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              需要 7 分钟阅读时间
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+  <h1>caddy-hugo-filebrowser搭建个人网站和后台管理</h1>
+
+<p>使用caddy和hugo搭建个人网站</p>
+<p>功能：</p>
+<ul>
+<li>自动https</li>
+<li>自动响应git hook，运行hugo编译markdown</li>
+<li>开机启动服务</li>
+<li>docker部署</li>
+<li>网站后台管理</li>
+</ul>
+<p><em>假定安装过程在非root用户下</em> </p>
+<!-- more -->
+
+<h2 id="hugo">安装 hugo</h2>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 链接修改为自己需要的版本</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>wget<span class="w"> </span>https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mkdir<span class="w"> </span>hugo
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>tar<span class="w"> </span>xvfz<span class="w"> </span>hugo_0.56.3_Linux-64bit.tar.gz<span class="w"> </span>-C<span class="w"> </span>hugo
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>cp<span class="w"> </span>hugo<span class="w"> </span>/usr/local/bin/
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># 解压后的hugo默认权限为755，如果不是，修改一下权限</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">755</span><span class="w"> </span>/usr/local/bin/hugo
+</span></code></pre></div>
+<h2 id="caddy">安装caddy</h2>
+<p>caddy<a href="https://caddyserver.com/download">下载页面</a></p>
+<p>[官方文档]https://caddyserver.com/docs</p>
+<p>选择git插件让caddy响应github的webhook</p>
+<h3 id="_1">自动安装</h3>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 自动安装caddy</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>https://getcaddy.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash<span class="w"> </span>-s<span class="w"> </span>personal<span class="w"> </span>http.git
+</span></code></pre></div>
+<h3 id="_2">手动安装</h3>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>wget<span class="w"> </span>https://caddyserver.com/download/linux/amd64?plugins<span class="o">=</span>http.git<span class="p">&amp;</span><span class="nv">license</span><span class="o">=</span>personal<span class="p">&amp;</span><span class="nv">telemetry</span><span class="o">=</span>off
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/path/to/caddy<span class="w"> </span>/usr/local/bin
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w"> </span>/usr/local/bin/caddy
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">755</span><span class="w"> </span>/usr/local/bin/caddy
+</span></code></pre></div>
+<h2 id="caddy_1">配置caddy</h2>
+<p>不需要把caddy配置为服务的，请参考<a href="https://caddyserver.com/tutorial">Quick Start</a>、<a href="https://caddyserver.com/tutorial/beginner">Beginner Tutorial</a>或<a href="https://github.com/caddyserver/caddy">https://github.com/caddyserver/caddy</a>，简单快速启动网站服务</p>
+<p>linux下使用以下命令允许在非root用户下caddy绑定系统特权端口（e.g. 80, 443）
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>setcap<span class="w"> </span><span class="s1">&#39;cap_net_bind_service=+ep&#39;</span><span class="w"> </span>/usr/local/bin/caddy
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>或
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>sudo<span class="w"> </span>setcap<span class="w"> </span><span class="nv">cap_net_bind_service</span><span class="o">=</span>+ep<span class="w"> </span><span class="k">$(</span>which<span class="w"> </span>caddy<span class="k">)</span>
+</span></code></pre></div></p>
+<p>为了安全考虑，caddy不推荐在root用户下运行</p>
+<h3 id="_3">添加用户</h3>
+<p>如果组id或用户id重复，可自行选择其他id</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>groupadd<span class="w"> </span>-g<span class="w"> </span><span class="m">333</span><span class="w"> </span>www-data
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>useradd<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-g<span class="w"> </span>www-data<span class="w"> </span>--no-user-group<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--home-dir<span class="w"> </span>/var/www<span class="w"> </span>--no-create-home<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--shell<span class="w"> </span>/usr/sbin/nologin<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--system<span class="w"> </span>--uid<span class="w"> </span><span class="m">333</span><span class="w"> </span>www-data
+</span></code></pre></div>
+<h3 id="caddyfile">Caddyfile</h3>
+<p>caddy可通过命令参数指定配置项启动运行，也可以通过配置文件启动，caddy的配置文件名称固定为Caddyfile，放置在网站根目录不同网站使用不同的Caddyfile或者放置在/etc/caddy/Caddyfile，多个网站共用同一个Caddyfile</p>
+<p><strong>Caddyfile放置在/etc/caddy/Caddyfile</strong></p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/etc/caddy
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>root:root<span class="w"> </span>/etc/caddy
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># 复制已有的Caddyfile或新建</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/path/to/Caddyfile<span class="w"> </span>/etc/caddy/
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>sudo<span class="w"> </span>touch<span class="w"> </span>/etc/caddy/Caddyfile
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w"> </span>/etc/caddy/Caddyfile
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>/etc/caddy/Caddyfile
+</span></code></pre></div>
+<p>Caddyfile配置信息</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>example.com<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span>root<span class="w"> </span>/var/www/website
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span>log<span class="w"> </span>/var/log/caddy/access.log<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span>rotate_size<span class="w"> </span><span class="m">50</span><span class="w">  </span><span class="c1"># 50M以后轮转</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span>errors<span class="w"> </span>/var/log/caddy/errors.log<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span>rotate_size<span class="w"> </span><span class="m">50</span><span class="w">  </span><span class="c1"># 50M以后轮转</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span>git<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="c1"># hugo网站目录托管仓库</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span>repo<span class="w"> </span>https://github.com/githubusername/mysite
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="c1"># 使用key 托管仓库可以设置为私有但是要修改key的权限</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="c1"># key $HOME/.ssh/id_rsa</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="c1"># --recurse-submodules 目录包含有子模块</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span>clone_args<span class="w"> </span>--recurse-submodules
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">        </span>pull_args<span class="w"> </span>--recurse-submodules
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">        </span><span class="c1"># 放置仓库的路径，相对于网站根目录，默认是网站根目录</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">        </span>path<span class="w"> </span>/var/www/mysite
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">        </span><span class="c1"># git web hook 路径 口令</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">        </span>hook<span class="w"> </span>/webhook<span class="w"> </span>xxxxxx
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">        </span><span class="c1"># 成功拉取后执行的命令</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">        </span><span class="k">then</span><span class="w"> </span>hugo<span class="w"> </span>-s<span class="w"> </span>/var/www/mysite<span class="w"> </span>-d<span class="w"> </span>/var/www/website<span class="w"> </span>--logFile<span class="w"> </span>/var/log/hugo/hugo.log
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="o">}</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="c1"># 重定向www到example.com</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>www.example.com<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span>redir<span class="w"> </span>https://example.com<span class="o">{</span>uri<span class="o">}</span>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="o">}</span>
+</span></code></pre></div>
+<h3 id="ssl">ssl配置信息</h3>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/etc/ssl/caddy
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>root:www-data<span class="w"> </span>/etc/ssl/caddy
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">0770</span><span class="w"> </span>/etc/ssl/caddy
+</span></code></pre></div>
+<h3 id="_4">日志文件</h3>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/var/log/caddy
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>touch<span class="w"> </span>/var/log/caddy/caddy.log
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>sudo<span class="w"> </span>touch<span class="w"> </span>/var/log/caddy/access.log
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/var/log/hugo
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>sudo<span class="w"> </span>touch<span class="w"> </span>/var/log/hugo/hugo.log
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>www-data:www-data<span class="w"> </span>/var/log/caddy
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>-R<span class="w"> </span><span class="m">0775</span><span class="w"> </span>/var/log/caddy
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>www-data<span class="w"> </span>:www-data<span class="w"> </span>/var/log/caddy
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>-R<span class="w"> </span><span class="m">0775</span><span class="w"> </span>/var/log/hugo
+</span></code></pre></div>
+<h2 id="_5">配置网站</h2>
+<h3 id="_6">网站根目录</h3>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/var/www
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>www-data:www-data<span class="w"> </span>/var/www
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">555</span><span class="w"> </span>/var/www
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># caddy不会自动创建网站根目录 复制已有网站目录到/var/www/或者新建一个根目录</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-R<span class="w"> </span>example.com<span class="w"> </span>/var/www/
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>或
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/var/www/example.com
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>www-data:www-data<span class="w"> </span>/var/www/example.com
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>-R<span class="w"> </span><span class="m">555</span><span class="w"> </span>/var/www/example.com
+</span></code></pre></div>
+<h2 id="caddy_2">安装caddy为系统服务</h2>
+<p><strong>检查系统自启动控制方式</strong>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 检查系统自启动方式</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Linux系统目前存在的三种系统初始化控制方式，对应的配置文件目录分别为
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>/usr/lib/systemd<span class="w"> </span>systemd方式
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>/usr/share/upstart<span class="w"> </span>Upstart方式
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>/etc/init.d<span class="w"> </span>SysVinit方式（sysvinit<span class="w"> </span>就是<span class="w"> </span>system<span class="w"> </span>V<span class="w"> </span>风格的<span class="w"> </span>init<span class="w"> </span>系统）
+</span></code></pre></div>
+详细介绍三个体系：Sysvinit、Upstart、Systemd</p>
+<p>Sysvinit：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html</p>
+<p>Upstart：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html</p>
+<p>Systemd：https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html</p>
+<h3 id="caddy-hookservice">caddy hook.service 插件安装</h3>
+<p>下载页面选择hook.service插件，该插件没有经过完整的测试，可能存在某些问题。
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>https://getcaddy.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash<span class="w"> </span>-s<span class="w"> </span>personal<span class="w"> </span>hook.service,http.git
+</span></code></pre></div>
+hook.service的<a href="https://github.com/hacdias/caddy-service/blob/master/README.md">使用方法</a>：</p>
+<p>-name 项指定服务的名称，默认是caddy，如果指定了名字，每次运行<code>caddy -service</code>命令时，需要指定服务的名字</p>
+<p>使用<code>caddy -service install</code>安装会根据不同系统类型自动创建启动配置</p>
+<p><strong>Install a Caddy service:</strong>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>caddy<span class="w"> </span>-service<span class="w"> </span>install<span class="w"> </span>-agree<span class="w"> </span>-email<span class="w"> </span>myemail@email.com<span class="w"> </span>-conf<span class="w"> </span>/path/to/Caddyfile<span class="w"> </span><span class="o">[</span>-name<span class="w"> </span>optionalServiceName<span class="o">]</span><span class="w"> </span><span class="o">[</span>-option<span class="w"> </span>optionValue<span class="o">]</span>
+</span></code></pre></div>
+<strong>Uninstall a Caddy service:</strong>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>caddy<span class="w"> </span>-service<span class="w"> </span>uninstall<span class="w"> </span><span class="o">[</span>-name<span class="w"> </span>optionalName<span class="o">]</span>
+</span></code></pre></div>
+<strong>Start a Caddy service:</strong>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>caddy<span class="w"> </span>-service<span class="w"> </span>start<span class="w"> </span><span class="o">[</span>-name<span class="w"> </span>optionalName<span class="o">]</span>
+</span></code></pre></div>
+<strong>Stop a Caddy service:</strong>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>caddy<span class="w"> </span>-service<span class="w"> </span>stop<span class="w"> </span><span class="o">[</span>-name<span class="w"> </span>optionalName<span class="o">]</span>
+</span></code></pre></div>
+<strong>Restart a Caddy service:</strong>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>caddy<span class="w"> </span>-service<span class="w"> </span>restart<span class="w"> </span><span class="o">[</span>-name<span class="w"> </span>optionalName<span class="o">]</span>
+</span></code></pre></div></p>
+<h3 id="upstart">upstart 模式安装</h3>
+<p>CentOS release 6.10 只支持Sysvinit</p>
+<h4 id="_7">安装步骤</h4>
+<p><a href="https://github.com/caddyserver/caddy/tree/master/dist/init/linux-upstart">Upstart conf for Caddy</a></p>
+<p><a href="https://denbeke.be/blog/servers/running-caddy-server-as-a-service/">Running Caddy Server as a service with Upstart</a></p>
+<p>CentOS 安装问题
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="o">[</span>root@localhost<span class="w"> </span>~<span class="o">]</span><span class="c1"># service caddy start</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>Starting<span class="w"> </span>caddy
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>/etc/init.d/caddy:<span class="w"> </span>line<span class="w"> </span><span class="m">52</span>:<span class="w"> </span>start-stop-daemon:<span class="w"> </span><span class="nb">command</span><span class="w"> </span>not<span class="w"> </span>found
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>需要安装start-stop-daemon
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>https://blog.csdn.net/wh211212/article/details/53523457
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>安装<span class="w"> </span>start-stop-daemon<span class="w"> </span>又需要
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>checking<span class="w"> </span><span class="k">for</span><span class="w"> </span>perl<span class="w"> </span>&gt;<span class="o">=</span><span class="w"> </span><span class="m">5</span>.20.2...<span class="w"> </span>configure:<span class="w"> </span>error:<span class="w"> </span>cannot<span class="w"> </span>find<span class="w"> </span>perl<span class="w"> </span>&gt;<span class="o">=</span><span class="w"> </span><span class="m">5</span>.20.2
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>又需要安装perl
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>耐心已耗完
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>正在安装Centos<span class="w"> </span><span class="m">7</span><span class="w"> </span>……<span class="w"> </span>^_^
+</span></code></pre></div></p>
+<h4 id="_8">启动运行</h4>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>sudo<span class="w"> </span>service<span class="w"> </span>caddy<span class="w"> </span>start<span class="p">|</span>stop<span class="p">|</span>restart
+</span></code></pre></div>
+<h3 id="systemd">systemd 模式安装</h3>
+<h4 id="_9">安装步骤</h4>
+<p><a href="https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd">systemd Service Unit for Caddy</a></p>
+<p><a href="https://denbeke.be/blog/servers/running-caddy-server-as-a-service-with-systemd/">Running Caddy Server as a service with systemd</a></p>
+<h4 id="_10">启动运行</h4>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># 启用服务开机启动</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>caddy.service
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># 关闭服务开机启动</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>disable<span class="w"> </span>caddy.service
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># 启动服务</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>caddy.service
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="c1"># 重启服务</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>caddy.service
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="c1"># 关闭服务</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>caddy.service
+</span></code></pre></div>
+<h3 id="sysvinit">sysvinit 模式安装</h3>
+<p>暂未尝试</p>
+<p>如果启动后出现或其他错误，先使用
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>/usr/local/bin/caddy -conf /etc/caddy/Caddyfile 
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>查看错误原因
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>Nov 11 04:10:30 localhost.localdomain systemd[1]: Started Caddy HTTP/2 web server.
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>Nov 11 04:10:30 localhost.localdomain systemd[1]: caddy.service: main process exited, code=exited, status=2/INVALIDARGUMENT
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>Nov 11 04:10:30 localhost.localdomain systemd[1]: Unit caddy.service entered failed state.
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>Nov 11 04:10:30 localhost.localdomain systemd[1]: caddy.service failed.
+</span></code></pre></div></p>
+<h2 id="filebrowser">filebrowser实现文件浏览和后台管理</h2>
+<p>官方文档：https://filebrowser.xyz/</p>
+<h3 id="_11">安装</h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://filebrowser.xyz/get.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>filebrowser<span class="w"> </span>-r<span class="w"> </span>/path/to/your/files
+</span></code></pre></div>
+<h3 id="filebrowser_1">filebrowser配置</h3>
+<p>参考：https://filebrowser.xyz/cli/filebrowser</p>
+<p>filebrowser支持不使用配置直接运行</p>
+<p><strong>指定配置文件</strong></p>
+<p>配置文件的名字必须是<code>.filebrowser</code>，扩展名可以是json、toml、yaml、yml四种任意一个</p>
+<p>配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一</p>
+<h3 id="toml">toml配置 物理机部署使用</h3>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># docker filebrowser config file</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1">#log = &quot;/var/log/filebrowser/filebrowser.log&quot;</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/etc/filebrowser/filebrowser.db&quot;</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># 默认绑定地址是127.0.0.1 只能本机访问 如果外部网络访问 设置为0,0,0,0</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9000</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/filebrowser/mysite&quot;</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="n">baseurl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/manager</span>
+</span></code></pre></div>
+<h3 id="json-docker">json配置 docker使用</h3>
+<p><a href="https://filebrowser.xyz/installation#docker">官方docker镜像</a>的 Dockerfile里filebrowser的配置文件是json类型，docker启动挂载的配置文件也必须是json类型</p>
+<p>address必须是0.0.0.0 默认是localhost</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">9001</span><span class="p">,</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span><span class="nt">&quot;baseURL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/manager&quot;</span><span class="p">,</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">  </span><span class="nt">&quot;log&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stdout&quot;</span><span class="p">,</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/database.db&quot;</span><span class="p">,</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="nt">&quot;root&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/srv&quot;</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="web">web配置</h3>
+<h4 id="_12">配置事件命令</h4>
+<p>参考：https://filebrowser.xyz/configuration/command-runner</p>
+<p>filebrowser启动后可通过web页面修改密码、管理用户权限和指定某个事件后运行命令</p>
+<p>Command runner里可以指定以下四个事件发生时执行的命令（不包括Save事件，文件修改后保存执行的是Updload事件）</p>
+<p>Copy<br />
+Rename<br />
+Upload<br />
+Delete<br />
+~~Save~~  </p>
+<p>如果要使用变量，需设置一下配置</p>
+<p><strong>Global Settings -- Execute on shell</strong>：配置里指定要使用的shell<code>bash -c</code></p>
+<p>命令中可以使用filebrowser内置的以下环境变量
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>FILE<span class="w">        </span>改动文件的绝对路径
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>SCOPE<span class="w">       </span>当前用户的用户目录路径
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>TRIGGER<span class="w">     </span>事件名
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>USERNAME<span class="w">    </span>当前用户的用户名
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>DESTINATION<span class="w"> </span>目标位置的绝对路径，只在copy和rename时有效
+</span></code></pre></div></p>
+<p>修改文件后执行git推送
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>git<span class="w"> </span>pull
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>git<span class="w"> </span>add<span class="w"> </span><span class="nv">$FILE</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="s2">&quot;add or modify post&quot;</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>git<span class="w"> </span>push
+</span></code></pre></div></p>
+<p>默认命令是阻塞执行，如果需要非阻塞运行，在命令前面添加<code>&amp;</code>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="p">&amp;</span>git<span class="w"> </span>pull
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="p">&amp;</span>git<span class="w"> </span>add<span class="w"> </span><span class="nv">$FILE</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="p">&amp;</span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="s2">&quot;add or modify post&quot;</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="p">&amp;</span>git<span class="w"> </span>push
+</span></code></pre></div></p>
+<p><strong>注意：</strong></p>
+<p>filebrowser命令执行时的当前目录是程序启动的目录</p>
+<p>如果在docker里运行，工作目录是<code>/</code>，需要在<a href="https://github.com/filebrowser/filebrowser/blob/master/Dockerfile">官方Dockerfile</a>里添加<code>WORKDIR /path/to/workdir</code>指定工作目录</p>
+<p>为了方便查看修改文件，我直接在文件目录后台运行的filebrowser
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="o">(</span>filebrowser<span class="w"> </span>-c<span class="w"> </span>/home/ljc/websiteconf/filebrowser.toml<span class="w"> </span>&gt;<span class="w"> </span>/var/log/filebrowser/filebrowser.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span><span class="o">)</span>
+</span></code></pre></div></p>
+<h3 id="_13">系统服务</h3>
+<p>systemd 模式</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="o">[</span>Unit<span class="o">]</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="nv">Description</span><span class="o">=</span>File<span class="w"> </span>Browser
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="nv">After</span><span class="o">=</span>network.target
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="o">[</span>Service<span class="o">]</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="nv">ExecStart</span><span class="o">=</span>/usr/local/bin/filebrowser
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="o">[</span>Install<span class="o">]</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="nv">WantedBy</span><span class="o">=</span>multi-user.target
+</span></code></pre></div>
+<p>如果不想使用默认配置文件路径，在<code>ExecStart=/usr/local/bin/filebrowser</code>后面通过命令选项指定配置</p>
+<h2 id="docker">docker部署</h2>
+<h3 id="caddyhugo">caddy+hugo</h3>
+<p>下载caddy+hugo镜像
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>windzhu0514/caddy-hugo
+</span></code></pre></div></p>
+<p>或者从Dockerfile编译
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>FROM<span class="w"> </span>alpine
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>MAINTAINER<span class="w"> </span>ljc<span class="w"> </span>&lt;windzhu0514@163.com&gt;
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>RUN<span class="w"> </span>apk<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">    </span>apk<span class="w"> </span>add<span class="w"> </span>git<span class="w"> </span>curl<span class="w"> </span>bash<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span>curl<span class="w"> </span>https://getcaddy.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash<span class="w"> </span>-s<span class="w"> </span>personal<span class="w"> </span>http.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-7"><a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">    </span>apk<span class="w"> </span>add<span class="w"> </span>hugo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-8"><a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="w">    </span><span class="c1"># hugo not create the log dir,caddy not create access.log dir</span>
+</span><span id="__span-31-9"><a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="w">    </span>mkdir<span class="w"> </span>/var/log/hugo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-10"><a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="w">    </span>mkdir<span class="w"> </span>/var/log/caddy<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-11"><a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="w">    </span>apk<span class="w"> </span>del<span class="w"> </span>curl<span class="w"> </span>bash<span class="w"> </span>wget
+</span><span id="__span-31-12"><a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>
+</span><span id="__span-31-13"><a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>ADD<span class="w"> </span>./Caddyfile<span class="w"> </span>/etc/caddy/Caddyfile
+</span><span id="__span-31-14"><a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>
+</span><span id="__span-31-15"><a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a>EXPOSE<span class="w"> </span><span class="m">9000</span>
+</span><span id="__span-31-16"><a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a>
+</span><span id="__span-31-17"><a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a>ENTRYPOINT<span class="w"> </span><span class="o">[</span><span class="s2">&quot;caddy&quot;</span>,<span class="s2">&quot;-conf&quot;</span>,<span class="s2">&quot;/etc/caddy/Caddyfile&quot;</span><span class="o">]</span>
+</span></code></pre></div>
+启动服务
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>sudo<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">9000</span>:9000<span class="w"> </span>--name<span class="w"> </span>alpine-website-d<span class="w">  </span>windzhu0514/caddy-hugo:0.0.3
+</span></code></pre></div></p>
+<p>浏览器输入https://ip:9000访问网站，如果提示<code>404 Site [ip:port] is not served on this interface</code>
+容器里caddy监听外网无法访问 修改Caddyfile站点地址为<code>:9000</code></p>
+<h3 id="filebrowser_2">filebrowser</h3>
+<p>容器中的目录可以不必和例子相同，但是配置文件的路径必须是当前目录、$HOME目录或者/database.db三者之一（参考<a href="https://filebrowser.xyz/cli/filebrowser">.filebrowser </a>）</p>
+<p>启动filebrowser
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>sudo<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--restart<span class="o">=</span>always<span class="w"> </span>--name<span class="w"> </span>filebrowser<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>-v<span class="w"> </span>/var/filebrowser/mysite:/srv<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>-v<span class="w"> </span>/etc/filebrowser/filebrowser.db:/database.db<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>-v<span class="w"> </span>/etc/filebrowser/.filebrowser.json:/.filebrowser.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>-p<span class="w"> </span><span class="m">9001</span>:9001<span class="w">  </span>filebrowser/filebrowser
+</span></code></pre></div></p>
+<h2 id="_14">代理网站</h2>
+<h3 id="_15">为什么要代理</h3>
+<p>域名指向中国大陆境内服务器且开通Web服务时需要备案。域名指向中国大陆境外服务器（例如中国香港等大陆境外）不需要备案。首次备案时间需要一周到一个月才能完成，如果更换了服务器，需要修改备案信息。如果手里有境外服务器，域名绑定到境外服务器服务器，如果境外服务器性能较低，可以把网站部署在境内服务器，由境外服务器跳转到境内服务器。</p>
+<h3 id="_16">代理配置</h3>
+<p>境外服务器的代理依然使用强大的caddy，配置如下
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>ljc.space<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span>log<span class="w"> </span>/var/log/caddy/access.log<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">        </span>rotate_size<span class="w"> </span><span class="m">50</span><span class="w">  </span><span class="c1"># 50M以后轮转</span>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">    </span>errors<span class="w"> </span>/var/log/caddy/errors.log<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-34-6"><a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="w">        </span>rotate_size<span class="w"> </span><span class="m">50</span><span class="w">  </span><span class="c1"># 50M以后轮转</span>
+</span><span id="__span-34-7"><a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-34-8"><a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="w">    </span>proxy<span class="w"> </span>/<span class="w"> </span>https://windzhu0514.github.io
+</span><span id="__span-34-9"><a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">    </span>proxy<span class="w"> </span>/elf<span class="w"> </span>国内ip:9200<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-34-10"><a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">        </span>without<span class="w"> </span>/elf
+</span><span id="__span-34-11"><a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-34-12"><a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a>
+</span><span id="__span-34-13"><a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="w">    </span>proxy<span class="w"> </span>/elf/ws<span class="w"> </span>国内ip:9200<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-34-14"><a id="__codelineno-34-14" name="__codelineno-34-14" href="#__codelineno-34-14"></a><span class="w">        </span>without<span class="w"> </span>/elf
+</span><span id="__span-34-15"><a id="__codelineno-34-15" name="__codelineno-34-15" href="#__codelineno-34-15"></a><span class="w">        </span>websocket
+</span><span id="__span-34-16"><a id="__codelineno-34-16" name="__codelineno-34-16" href="#__codelineno-34-16"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-34-17"><a id="__codelineno-34-17" name="__codelineno-34-17" href="#__codelineno-34-17"></a><span class="o">}</span>
+</span><span id="__span-34-18"><a id="__codelineno-34-18" name="__codelineno-34-18" href="#__codelineno-34-18"></a>
+</span><span id="__span-34-19"><a id="__codelineno-34-19" name="__codelineno-34-19" href="#__codelineno-34-19"></a>www.ljc.space<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-34-20"><a id="__codelineno-34-20" name="__codelineno-34-20" href="#__codelineno-34-20"></a><span class="w">    </span>redir<span class="w"> </span>https://ljc.space<span class="o">{</span>uri<span class="o">}</span>
+</span><span id="__span-34-21"><a id="__codelineno-34-21" name="__codelineno-34-21" href="#__codelineno-34-21"></a><span class="o">}</span>
+</span></code></pre></div></p>
+<h3 id="_17">代理服务开机启动</h3>
+<p>代理服务启动脚本修改自官方systemd启动脚本：https://github.com/caddyserver/caddy/tree/master/dist/init/linux-systemd</p>
+<p>修改的内容：
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>修改
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="nv">StartLimitIntervalSec</span><span class="o">=</span><span class="m">14400</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="nv">StartLimitBurst</span><span class="o">=</span><span class="m">10</span>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>为
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="nv">StartLimitInterval</span><span class="o">=</span><span class="m">14400</span>
+</span><span id="__span-35-6"><a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="nv">StartLimitBurst</span><span class="o">=</span><span class="m">10</span>
+</span><span id="__span-35-7"><a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>并由<span class="o">[</span>Unit<span class="o">]</span>下移到<span class="o">[</span>Service<span class="o">]</span>下
+</span><span id="__span-35-8"><a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a>
+</span><span id="__span-35-9"><a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>修改
+</span><span id="__span-35-10"><a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="p">;</span><span class="w"> </span>User<span class="w"> </span>and<span class="w"> </span>group<span class="w"> </span>the<span class="w"> </span>process<span class="w"> </span>will<span class="w"> </span>run<span class="w"> </span>as.
+</span><span id="__span-35-11"><a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a><span class="nv">User</span><span class="o">=</span>www-data
+</span><span id="__span-35-12"><a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a><span class="nv">Group</span><span class="o">=</span>www-data
+</span><span id="__span-35-13"><a id="__codelineno-35-13" name="__codelineno-35-13" href="#__codelineno-35-13"></a>为
+</span><span id="__span-35-14"><a id="__codelineno-35-14" name="__codelineno-35-14" href="#__codelineno-35-14"></a><span class="p">;</span><span class="w"> </span>User<span class="w"> </span>and<span class="w"> </span>group<span class="w"> </span>the<span class="w"> </span>process<span class="w"> </span>will<span class="w"> </span>run<span class="w"> </span>as.
+</span><span id="__span-35-15"><a id="__codelineno-35-15" name="__codelineno-35-15" href="#__codelineno-35-15"></a><span class="nv">User</span><span class="o">=</span>root
+</span><span id="__span-35-16"><a id="__codelineno-35-16" name="__codelineno-35-16" href="#__codelineno-35-16"></a><span class="nv">Group</span><span class="o">=</span>root
+</span><span id="__span-35-17"><a id="__codelineno-35-17" name="__codelineno-35-17" href="#__codelineno-35-17"></a>
+</span><span id="__span-35-18"><a id="__codelineno-35-18" name="__codelineno-35-18" href="#__codelineno-35-18"></a>修改
+</span><span id="__span-35-19"><a id="__codelineno-35-19" name="__codelineno-35-19" href="#__codelineno-35-19"></a><span class="nv">ReadWritePaths</span><span class="o">=</span>/etc/ssl/caddy
+</span><span id="__span-35-20"><a id="__codelineno-35-20" name="__codelineno-35-20" href="#__codelineno-35-20"></a><span class="nv">ReadWriteDirectories</span><span class="o">=</span>/etc/ssl/caddy
+</span><span id="__span-35-21"><a id="__codelineno-35-21" name="__codelineno-35-21" href="#__codelineno-35-21"></a>为
+</span><span id="__span-35-22"><a id="__codelineno-35-22" name="__codelineno-35-22" href="#__codelineno-35-22"></a><span class="p">;</span><span class="nv">ReadWritePaths</span><span class="o">=</span>/etc/ssl/caddy
+</span><span id="__span-35-23"><a id="__codelineno-35-23" name="__codelineno-35-23" href="#__codelineno-35-23"></a><span class="nv">ReadWriteDirectories</span><span class="o">=</span>/etc/ssl/caddy
+</span></code></pre></div></p>
+<p>代理服务开机启动脚本</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="o">[</span>Unit<span class="o">]</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="nv">Description</span><span class="o">=</span>Caddy<span class="w"> </span>HTTP/2<span class="w"> </span>web<span class="w"> </span>server
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="nv">Documentation</span><span class="o">=</span>https://caddyserver.com/docs
+</span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="nv">After</span><span class="o">=</span>network-online.target
+</span><span id="__span-36-5"><a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a><span class="nv">Wants</span><span class="o">=</span>network-online.target<span class="w"> </span>systemd-networkd-wait-online.service
+</span><span id="__span-36-6"><a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>
+</span><span id="__span-36-7"><a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a><span class="o">[</span>Service<span class="o">]</span>
+</span><span id="__span-36-8"><a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="nv">Restart</span><span class="o">=</span>on-abnormal
+</span><span id="__span-36-9"><a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a>
+</span><span id="__span-36-10"><a id="__codelineno-36-10" name="__codelineno-36-10" href="#__codelineno-36-10"></a><span class="p">;</span><span class="w"> </span>Do<span class="w"> </span>not<span class="w"> </span>allow<span class="w"> </span>the<span class="w"> </span>process<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>restarted<span class="w"> </span><span class="k">in</span><span class="w"> </span>a<span class="w"> </span>tight<span class="w"> </span>loop.<span class="w"> </span>If<span class="w"> </span>the
+</span><span id="__span-36-11"><a id="__codelineno-36-11" name="__codelineno-36-11" href="#__codelineno-36-11"></a><span class="p">;</span><span class="w"> </span>process<span class="w"> </span>fails<span class="w"> </span>to<span class="w"> </span>start,<span class="w"> </span>something<span class="w"> </span>critical<span class="w"> </span>needs<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>fixed.
+</span><span id="__span-36-12"><a id="__codelineno-36-12" name="__codelineno-36-12" href="#__codelineno-36-12"></a><span class="nv">StartLimitInterval</span><span class="o">=</span><span class="m">14400</span>
+</span><span id="__span-36-13"><a id="__codelineno-36-13" name="__codelineno-36-13" href="#__codelineno-36-13"></a><span class="nv">StartLimitBurst</span><span class="o">=</span><span class="m">10</span>
+</span><span id="__span-36-14"><a id="__codelineno-36-14" name="__codelineno-36-14" href="#__codelineno-36-14"></a>
+</span><span id="__span-36-15"><a id="__codelineno-36-15" name="__codelineno-36-15" href="#__codelineno-36-15"></a><span class="p">;</span><span class="w"> </span>User<span class="w"> </span>and<span class="w"> </span>group<span class="w"> </span>the<span class="w"> </span>process<span class="w"> </span>will<span class="w"> </span>run<span class="w"> </span>as.
+</span><span id="__span-36-16"><a id="__codelineno-36-16" name="__codelineno-36-16" href="#__codelineno-36-16"></a><span class="nv">User</span><span class="o">=</span>root
+</span><span id="__span-36-17"><a id="__codelineno-36-17" name="__codelineno-36-17" href="#__codelineno-36-17"></a><span class="nv">Group</span><span class="o">=</span>root
+</span><span id="__span-36-18"><a id="__codelineno-36-18" name="__codelineno-36-18" href="#__codelineno-36-18"></a>
+</span><span id="__span-36-19"><a id="__codelineno-36-19" name="__codelineno-36-19" href="#__codelineno-36-19"></a><span class="p">;</span><span class="w"> </span>Letsencrypt-issued<span class="w"> </span>certificates<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>written<span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span>directory.
+</span><span id="__span-36-20"><a id="__codelineno-36-20" name="__codelineno-36-20" href="#__codelineno-36-20"></a><span class="nv">Environment</span><span class="o">=</span><span class="nv">CADDYPATH</span><span class="o">=</span>/etc/ssl/caddy
+</span><span id="__span-36-21"><a id="__codelineno-36-21" name="__codelineno-36-21" href="#__codelineno-36-21"></a>
+</span><span id="__span-36-22"><a id="__codelineno-36-22" name="__codelineno-36-22" href="#__codelineno-36-22"></a><span class="p">;</span><span class="w"> </span>Always<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="s2">&quot;-root&quot;</span><span class="w"> </span>to<span class="w"> </span>something<span class="w"> </span>safe<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">case</span><span class="w"> </span>it<span class="w"> </span>gets<span class="w"> </span>forgotten<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>Caddyfile.
+</span><span id="__span-36-23"><a id="__codelineno-36-23" name="__codelineno-36-23" href="#__codelineno-36-23"></a><span class="nv">ExecStart</span><span class="o">=</span>/usr/local/bin/caddy<span class="w"> </span>-log<span class="w"> </span>stdout<span class="w"> </span>-log-timestamps<span class="o">=</span><span class="nb">false</span><span class="w"> </span>-agree<span class="o">=</span><span class="nb">true</span><span class="w"> </span>-conf<span class="o">=</span>/etc/caddy/Caddyfile<span class="w"> </span>-root<span class="o">=</span>/var/tmp
+</span><span id="__span-36-24"><a id="__codelineno-36-24" name="__codelineno-36-24" href="#__codelineno-36-24"></a><span class="nv">ExecReload</span><span class="o">=</span>/bin/kill<span class="w"> </span>-USR1<span class="w"> </span><span class="nv">$MAINPID</span>
+</span><span id="__span-36-25"><a id="__codelineno-36-25" name="__codelineno-36-25" href="#__codelineno-36-25"></a>
+</span><span id="__span-36-26"><a id="__codelineno-36-26" name="__codelineno-36-26" href="#__codelineno-36-26"></a><span class="p">;</span><span class="w"> </span>Use<span class="w"> </span>graceful<span class="w"> </span>shutdown<span class="w"> </span>with<span class="w"> </span>a<span class="w"> </span>reasonable<span class="w"> </span>timeout
+</span><span id="__span-36-27"><a id="__codelineno-36-27" name="__codelineno-36-27" href="#__codelineno-36-27"></a><span class="nv">KillMode</span><span class="o">=</span>mixed
+</span><span id="__span-36-28"><a id="__codelineno-36-28" name="__codelineno-36-28" href="#__codelineno-36-28"></a><span class="nv">KillSignal</span><span class="o">=</span>SIGQUIT
+</span><span id="__span-36-29"><a id="__codelineno-36-29" name="__codelineno-36-29" href="#__codelineno-36-29"></a><span class="nv">TimeoutStopSec</span><span class="o">=</span>5s
+</span><span id="__span-36-30"><a id="__codelineno-36-30" name="__codelineno-36-30" href="#__codelineno-36-30"></a>
+</span><span id="__span-36-31"><a id="__codelineno-36-31" name="__codelineno-36-31" href="#__codelineno-36-31"></a><span class="p">;</span><span class="w"> </span>Limit<span class="w"> </span>the<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>file<span class="w"> </span>descriptors<span class="p">;</span><span class="w"> </span>see<span class="w"> </span><span class="sb">`</span>man<span class="w"> </span>systemd.exec<span class="sb">`</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>more<span class="w"> </span>limit<span class="w"> </span>settings.
+</span><span id="__span-36-32"><a id="__codelineno-36-32" name="__codelineno-36-32" href="#__codelineno-36-32"></a><span class="nv">LimitNOFILE</span><span class="o">=</span><span class="m">1048576</span>
+</span><span id="__span-36-33"><a id="__codelineno-36-33" name="__codelineno-36-33" href="#__codelineno-36-33"></a><span class="p">;</span><span class="w"> </span>Unmodified<span class="w"> </span>caddy<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>expected<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>more<span class="w"> </span>than<span class="w"> </span>that.
+</span><span id="__span-36-34"><a id="__codelineno-36-34" name="__codelineno-36-34" href="#__codelineno-36-34"></a><span class="nv">LimitNPROC</span><span class="o">=</span><span class="m">512</span>
+</span><span id="__span-36-35"><a id="__codelineno-36-35" name="__codelineno-36-35" href="#__codelineno-36-35"></a>
+</span><span id="__span-36-36"><a id="__codelineno-36-36" name="__codelineno-36-36" href="#__codelineno-36-36"></a><span class="p">;</span><span class="w"> </span>Use<span class="w"> </span>private<span class="w"> </span>/tmp<span class="w"> </span>and<span class="w"> </span>/var/tmp,<span class="w"> </span>which<span class="w"> </span>are<span class="w"> </span>discarded<span class="w"> </span>after<span class="w"> </span>caddy<span class="w"> </span>stops.
+</span><span id="__span-36-37"><a id="__codelineno-36-37" name="__codelineno-36-37" href="#__codelineno-36-37"></a><span class="nv">PrivateTmp</span><span class="o">=</span><span class="nb">true</span>
+</span><span id="__span-36-38"><a id="__codelineno-36-38" name="__codelineno-36-38" href="#__codelineno-36-38"></a><span class="p">;</span><span class="w"> </span>Use<span class="w"> </span>a<span class="w"> </span>minimal<span class="w"> </span>/dev<span class="w"> </span><span class="o">(</span>May<span class="w"> </span>bring<span class="w"> </span>additional<span class="w"> </span>security<span class="w"> </span><span class="k">if</span><span class="w"> </span>switched<span class="w"> </span>to<span class="w"> </span><span class="s1">&#39;true&#39;</span>,<span class="w"> </span>but<span class="w"> </span>it<span class="w"> </span>may<span class="w"> </span>not<span class="w"> </span>work<span class="w"> </span>on<span class="w"> </span>Raspberry<span class="w"> </span>Pi<span class="err">&#39;</span>s<span class="w"> </span>or<span class="w"> </span>other<span class="w"> </span>devices,<span class="w"> </span>so<span class="w"> </span>it<span class="w"> </span>has<span class="w"> </span>been<span class="w"> </span>disabled<span class="w"> </span><span class="k">in</span><span class="w"> </span>this<span class="w"> </span>dist.<span class="o">)</span>
+</span><span id="__span-36-39"><a id="__codelineno-36-39" name="__codelineno-36-39" href="#__codelineno-36-39"></a><span class="nv">PrivateDevices</span><span class="o">=</span><span class="nb">false</span>
+</span><span id="__span-36-40"><a id="__codelineno-36-40" name="__codelineno-36-40" href="#__codelineno-36-40"></a><span class="p">;</span><span class="w"> </span>Hide<span class="w"> </span>/home,<span class="w"> </span>/root,<span class="w"> </span>and<span class="w"> </span>/run/user.<span class="w"> </span>Nobody<span class="w"> </span>will<span class="w"> </span>steal<span class="w"> </span>your<span class="w"> </span>SSH-keys.
+</span><span id="__span-36-41"><a id="__codelineno-36-41" name="__codelineno-36-41" href="#__codelineno-36-41"></a><span class="nv">ProtectHome</span><span class="o">=</span><span class="nb">true</span>
+</span><span id="__span-36-42"><a id="__codelineno-36-42" name="__codelineno-36-42" href="#__codelineno-36-42"></a><span class="p">;</span><span class="w"> </span>Make<span class="w"> </span>/usr,<span class="w"> </span>/boot,<span class="w"> </span>/etc<span class="w"> </span>and<span class="w"> </span>possibly<span class="w"> </span>some<span class="w"> </span>more<span class="w"> </span>folders<span class="w"> </span>read-only.
+</span><span id="__span-36-43"><a id="__codelineno-36-43" name="__codelineno-36-43" href="#__codelineno-36-43"></a><span class="nv">ProtectSystem</span><span class="o">=</span>full
+</span><span id="__span-36-44"><a id="__codelineno-36-44" name="__codelineno-36-44" href="#__codelineno-36-44"></a><span class="p">;</span><span class="w"> </span>鈥?except<span class="w"> </span>/etc/ssl/caddy,<span class="w"> </span>because<span class="w"> </span>we<span class="w"> </span>want<span class="w"> </span>Letsencrypt-certificates<span class="w"> </span>there.
+</span><span id="__span-36-45"><a id="__codelineno-36-45" name="__codelineno-36-45" href="#__codelineno-36-45"></a><span class="p">;</span><span class="w">   </span>This<span class="w"> </span>merely<span class="w"> </span>retains<span class="w"> </span>r/w<span class="w"> </span>access<span class="w"> </span>rights,<span class="w"> </span>it<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>add<span class="w"> </span>any<span class="w"> </span>new.<span class="w"> </span>Must<span class="w"> </span>still<span class="w"> </span>be<span class="w"> </span>writable<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>host!
+</span><span id="__span-36-46"><a id="__codelineno-36-46" name="__codelineno-36-46" href="#__codelineno-36-46"></a><span class="p">;</span><span class="nv">ReadWritePaths</span><span class="o">=</span>/etc/ssl/caddy
+</span><span id="__span-36-47"><a id="__codelineno-36-47" name="__codelineno-36-47" href="#__codelineno-36-47"></a><span class="nv">ReadWriteDirectories</span><span class="o">=</span>/etc/ssl/caddy
+</span><span id="__span-36-48"><a id="__codelineno-36-48" name="__codelineno-36-48" href="#__codelineno-36-48"></a>
+</span><span id="__span-36-49"><a id="__codelineno-36-49" name="__codelineno-36-49" href="#__codelineno-36-49"></a><span class="p">;</span><span class="w"> </span>The<span class="w"> </span>following<span class="w"> </span>additional<span class="w"> </span>security<span class="w"> </span>directives<span class="w"> </span>only<span class="w"> </span>work<span class="w"> </span>with<span class="w"> </span>systemd<span class="w"> </span>v229<span class="w"> </span>or<span class="w"> </span>later.
+</span><span id="__span-36-50"><a id="__codelineno-36-50" name="__codelineno-36-50" href="#__codelineno-36-50"></a><span class="p">;</span><span class="w"> </span>They<span class="w"> </span>further<span class="w"> </span>restrict<span class="w"> </span>privileges<span class="w"> </span>that<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>gained<span class="w"> </span>by<span class="w"> </span>caddy.<span class="w"> </span>Uncomment<span class="w"> </span><span class="k">if</span><span class="w"> </span>you<span class="w"> </span>like.
+</span><span id="__span-36-51"><a id="__codelineno-36-51" name="__codelineno-36-51" href="#__codelineno-36-51"></a><span class="p">;</span><span class="w"> </span>Note<span class="w"> </span>that<span class="w"> </span>you<span class="w"> </span>may<span class="w"> </span>have<span class="w"> </span>to<span class="w"> </span>add<span class="w"> </span>capabilities<span class="w"> </span>required<span class="w"> </span>by<span class="w"> </span>any<span class="w"> </span>plugins<span class="w"> </span><span class="k">in</span><span class="w"> </span>use.
+</span><span id="__span-36-52"><a id="__codelineno-36-52" name="__codelineno-36-52" href="#__codelineno-36-52"></a><span class="p">;</span><span class="nv">CapabilityBoundingSet</span><span class="o">=</span>CAP_NET_BIND_SERVICE
+</span><span id="__span-36-53"><a id="__codelineno-36-53" name="__codelineno-36-53" href="#__codelineno-36-53"></a><span class="p">;</span><span class="nv">AmbientCapabilities</span><span class="o">=</span>CAP_NET_BIND_SERVICE
+</span><span id="__span-36-54"><a id="__codelineno-36-54" name="__codelineno-36-54" href="#__codelineno-36-54"></a><span class="p">;</span><span class="nv">NoNewPrivileges</span><span class="o">=</span><span class="nb">true</span>
+</span><span id="__span-36-55"><a id="__codelineno-36-55" name="__codelineno-36-55" href="#__codelineno-36-55"></a>
+</span><span id="__span-36-56"><a id="__codelineno-36-56" name="__codelineno-36-56" href="#__codelineno-36-56"></a><span class="o">[</span>Install<span class="o">]</span>
+</span><span id="__span-36-57"><a id="__codelineno-36-57" name="__codelineno-36-57" href="#__codelineno-36-57"></a><span class="nv">WantedBy</span><span class="o">=</span>multi-user.target
+</span></code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../go-vscode-remote-development/" class="md-footer__link md-footer__link--prev" aria-label="上一页: VSCode Remote Development-go开发环境搭建">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                VSCode Remote Development-go开发环境搭建
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../go-time-rate/" class="md-footer__link md-footer__link--next" aria-label="下一页: Go Rate限流器代码分析">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                Go Rate限流器代码分析
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/windzhu0514" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "navigation.indexes", "navigation.instant", "navigation.instant.progress", "search.suggest", "search.highlight", "content.code.select", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>

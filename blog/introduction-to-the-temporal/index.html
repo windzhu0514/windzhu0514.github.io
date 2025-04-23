@@ -1,0 +1,1507 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="了解 Temporal 的核心概念与特性">
+      
+      
+      
+        <link rel="canonical" href="https://ljc.space/blog/introduction-to-the-temporal/">
+      
+      
+        <link rel="prev" href="../prometheus-guide/">
+      
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Temporal 分布式应用开发平台简介 - 一蓑烟雨任平生</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#temporal" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-header__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            一蓑烟雨任平生
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Temporal 分布式应用开发平台简介
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于我
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://ljc.space" title="一蓑烟雨任平生" class="md-nav__button md-logo" aria-label="一蓑烟雨任平生" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    一蓑烟雨任平生
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    主页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    博客
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            博客
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    归档
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            归档
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../archive/2018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2018
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    分类
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            分类
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/caddy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    caddy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    devops
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/filebrowser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    filebrowser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/golang/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    golang
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/hugo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    hugo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/markdown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    markdown
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%A5%BD%E6%96%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    好文
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    开发环境
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/%E6%9E%B6%E6%9E%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于我
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      可靠的分布式应用程序
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      高效开发范式与代码结构
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      可见的分布式应用状态
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      概念
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow（工作流）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Activities 活动
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      SDK（开发工具包）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporal-servicetemporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Temporal Service（Temporal 服务）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workers（执行器）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visibility 可见性
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visibility 可见性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temporal-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      Temporal UI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporal-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Temporal CLI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      Event History（事件历史）
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      特性
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      部署
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      故障排除
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="故障排除">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#missing-csrf-token-in-request-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      missing csrf token in request header
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    回到主页
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+              <div class="md-post__authors md-typeset">
+                
+                  <div class="md-profile md-post__profile">
+                    <span class="md-author md-author--long">
+                      <img src="https://avatars.githubusercontent.com/u/5474294" alt="James Li">
+                    </span>
+                    <span class="md-profile__description">
+                      <strong>
+                        
+                          <a href="https://github.com/windzhu0514">James Li</a>
+                        
+                      </strong>
+                      <br>
+                      创作者
+                    </span>
+                  </div>
+                
+              </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    元数据
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2025-04-23 00:00:00+00:00" class="md-ellipsis">2025年4月23日星期三</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            分类于
+                            
+                              <a href="../category/golang/">golang</a>, 
+                              <a href="../category/%E6%9E%B6%E6%9E%84/">架构</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              需要 3 分钟阅读时间
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+<h1 id="temporal">Temporal 分布式应用开发平台简介</h1>
+<p>Temporal 是一个分布式应用开发平台，通过持久执行确保应用在故障时自动恢复，简化状态管理和错误处理。支持多语言SDK，提供工作流（Workflow）和活动（Activities）模型，内置可见性工具（UI/CLI）和事件历史记录。具备高可靠性、可扩展性，支持本地和云部署，适用于复杂业务流程。</p>
+<p>Temporal 解决了开发者在构建分布式应用程序时面临的许多问题。但大多数问题都围绕以下这三个主题</p>
+<!-- more -->
+
+<h2 id="_1">可靠的分布式应用程序</h2>
+<p>Temporal 让开发者能够更轻松地构建和管理可靠且可扩展的应用程序，同时不影响生产效率。这个系统的设计确保了一旦应用程序的主要功能开始执行，无论需要几分钟、几小时、几天、几周，甚至几年，它都能执行到完成。Temporal 将这种特性称为持久执行。</p>
+<p>在任何复杂系统中，故障都不可避免。软件工程师花费大量时间确保他们所构建的系统能够承受潜在的故障。Temporal 默认使您的代码执行可靠且持久。</p>
+<p>通常，如果发生崩溃，应用程序的执行状态将丢失。应用程序无法记住故障前发生的情况，需要大量的错误处理逻辑和复杂的恢复代码才能继续。这一过程既耗时又容易出错，难以确保可靠性。</p>
+<p>Temporal 跟踪应用程序的进度。如果发生意外情况，如断电，它确保应用程序可以从中断的地方继续运行——就像拥有终极自动保存功能一样（以 Activity 为重试单元）。将故障管理的责任从应用程序转移到平台，减少了对大量恢复编码、测试和维护任务的需求。</p>
+<p>Temporal 是一个持久化执行平台。持久化执行通过确保应用程序能够运行至完成，来保证其在不利条件下仍能正确运行。这一转变简化了开发过程。如果发生故障或崩溃，您的业务流程仍能无缝运行，不受干扰。开发者将注意力集中在业务逻辑而非基础设施问题上，从而创建出天生具备可扩展性和可维护性的应用程序。</p>
+<p>数千名开发者信赖 Temporal，将其用于订单处理、客户入职和支付处理等场景，因为它能帮助他们构建坚不可摧、具备弹性、持久且始终可用的应用程序。使用 Temporal，无论发生什么，您的应用程序都能持续运行。</p>
+<h2 id="_2">高效开发范式与代码结构</h2>
+<p>通过将故障处理的负担从应用程序转移到平台，应用程序开发者需要编写、测试和维护的代码就减少了。Temporal 的编程模型为开发者提供了一种将业务逻辑表达为连贯工作流的方法，这比开发分布式代码库要容易得多。</p>
+<p>选择与你偏好的编程语言最匹配的 SDK，就可以开始编写业务逻辑。在开发过程中，保持使用喜欢的IDE、库和工具。Temporal支持多语言和符合语言习惯的编程，这让开发者可以利用不同编程语言的优势，并将Temporal无缝集成到现有代码中。最棒的是，开发者无需管理队列或复杂的状态机来实现这一切。</p>
+<h2 id="_3">可见的分布式应用状态</h2>
+<p>Temporal 提供了一整套开箱即用的工具，使开发者可以随时查看应用程序的状态。Temporal CLI（命令行界面）让开发者能够有效地管理、监控和调试Temporal 应用程序。基于浏览器的Web UI（用户界面）则让你能够快速定位、调试和解决生产环境中的问题。</p>
+<p>Temporal 提供了一种构建可扩展且可靠应用程序的全新方式。</p>
+<p>Temporal 提供了轻松的持久性，使应用程序能够在底层基础设施发生故障的情况下，持续运行数天、数周甚至数年而不会中断。这就是我们所说的持久执行。Temporal 也代表了软件开发中的范式转变。它不仅仅是让现有模式更加可靠；它更是为构建复杂的分布式系统开启了全新的方法。</p>
+<p>Temporal 简化了状态管理，开发者无需编写大量额外代码来处理可能出现的各种问题。凭借内置的可扩展性，Temporal 确保您的应用程序无论规模大小或复杂程度如何，都能平稳运行。</p>
+<h2 id="_4">概念</h2>
+<h3 id="workflow">Workflow（工作流）</h3>
+<p>从概念上讲，Workflow 是一系列步骤。您可能已经在日常生活中遇到过 Workflow，无论是：</p>
+<ul>
+<li>使用移动应用程序转账</li>
+<li>预订假期</li>
+<li>提交费用报告</li>
+<li>创建新员工入职流程</li>
+<li>部署云基础设施</li>
+<li>训练 AI 模型</li>
+</ul>
+<p>Temporal Workflow 是您的业务逻辑，以代码形式定义，概述了流程中的每个步骤。</p>
+<p>Temporal 不是一个无代码工作流引擎——它是代码即工作流。你无需在可视化界面中拖放步骤，而是可以用你喜欢的编程语言、代码编辑器和其他工具编写工作流代码。无代码引擎最终会遇到其局限性，而 Temporal 则让你对业务流程拥有完全的控制和灵活性，从而能够精确构建你所需的内容。</p>
+<h3 id="activities">Activities 活动</h3>
+<p>Activities 是 Workflow 中的独立工作单元。根据编程语言的不同，Activities 被定义为函数或方法。Activities 通常涉及与外部世界的交互，例如发送电子邮件、发起网络请求、写入数据库或调用 API，这些操作容易失败。您可以直接从 Workflow 代码中调用 Activities。</p>
+<p>如果 Activity 失败，Temporal 会根据您的配置自动重试。由于 Activity 通常依赖于外部系统，可能会发生瞬态问题。这些问题包括网络故障、超时或服务中断等临时但关键的问题。您可以完全控制每个 Activity 的重试频率和次数。</p>
+<h3 id="sdk">SDK（开发工具包）</h3>
+<p>开发者通过编写代码来创建 Temporal 应用程序，就像创建任何其他软件一样。</p>
+<p>Temporal SDK（软件开发工具包）是一个开源库，开发者将其添加到应用程序中以使用 Temporal。它提供了在特定编程语言中构建工作流、活动以及各种其他 Temporal 功能所需的一切。</p>
+<p>Temporal 提供六种 SDK：Java、Go、TypeScript、.NET、Python 和 PHP。由于 Temporal 支持多种编程语言，您可以在多语言团队中混合使用这些语言。您可以轻松地将任何 Temporal SDK 添加到当前项目中，而无需更改您已经用于构建和部署的工具。Temporal 完美融入您现有的技术栈。</p>
+<h3 id="temporal-servicetemporal">Temporal Service（Temporal 服务）</h3>
+<p>Temporal 有两个主要部分：</p>
+<ul>
+<li>开发者编写的应用程序</li>
+<li>Temporal Service（一组服务和组件）</li>
+</ul>
+<p>Temporal 架构的核心是 Temporal Service，它为您的应用程序提供持久性、可扩展性和可靠性。您的应用程序与 Temporal Service 通信，Temporal Service 负责监督关键任务的执行，例如进行 API 调用，然后记录它们的完成情况。它维护每个事件的详细历史记录，并可靠地将其持久化到数据库中。</p>
+<p>Temporal Service 的最大优势之一在于其处理故障的方式。Temporal Service 会详细记录您工作流中的每一步。通过保留工作流中每一步的历史记录，它确保即使出现问题，您的工作流也可以从最后一个成功点继续。Temporal Service 确切知道从哪里恢复，而不会丢失任何工作。这使您无需自己编写复杂的错误处理代码或繁琐的恢复机制。</p>
+<p>您可以在自己的基础设施上运行 Temporal Service，或使用 Temporal Cloud，这是一种托管服务，可处理运维负担并提供可扩展性和专家支持。</p>
+<h3 id="workers">Workers（执行器）</h3>
+<p>Temporal 的真正能力源自开发者编写的应用程序与 Temporal 服务的结合。每当您的应用程序需要执行任务，如发送通知或处理支付时，Temporal 服务便会协调所需完成的工作。由 Temporal SDK 提供并作为您应用程序一部分的 Workers，随后执行在您的工作流中定义的任务。</p>
+<p>Worker 轮询 Temporal Service 以查看是否有可用任务，Temporal Service 将任务与 Worker 匹配。Worker 根据任务中指定的详细信息运行 Workflow 代码。</p>
+<p>此次合作对于构建可靠、可扩展且持久的应用程序至关重要。您可以运行多个 Workers——通常是几十个、几百个，甚至几千个——以提升应用程序的性能和可扩展性。</p>
+<p>一个常见的误解是 Temporal Service 运行你的代码。实际上，Worker 运行你的代码并直接处理你的数据。Temporal 应用程序在设计上是安全的。工作流和活动无缝部署在你的基础设施内，完全集成到你的应用程序中。你的数据也通过你的加密库和密钥得到保护。你从头到尾都完全掌控着应用程序的安全性。</p>
+<h3 id="visibility">Visibility 可见性</h3>
+<p>Temporal 提供了两种工具，让您能够深入了解幕后情况并与您的工作流进行交互。这些工具在调试方面非常强大，并能为您的应用程序提供实时监控。</p>
+<h4 id="temporal-ui">Temporal UI</h4>
+<p>Temporal UI 是一个基于浏览器的用户界面，允许您查看应用程序的进度。它也被称为 Web UI，还可以帮助您快速隔离、调试和解决生产问题。</p>
+<p>工作流页面</p>
+<p><img alt="" src="https://docs.temporal.io/img/webui/workflow-details-page-hiw.avif" /></p>
+<h4 id="temporal-cli">Temporal CLI</h4>
+<p>Temporal CLI 是一个命令行界面工具，用于管理、监控和调试 Temporal 应用程序。通过终端，您可以：</p>
+<ul>
+<li>启动工作流</li>
+<li>跟踪工作流程的进度</li>
+<li>取消或终止工作流</li>
+<li>并执行其他操作</li>
+</ul>
+<p>Temporal CLI 为开发者提供了直接访问 Temporal 服务的功能，便于本地开发使用。</p>
+<h3 id="event-history">Event History（事件历史）</h3>
+<p>借助 Temporal，您的工作流可以从崩溃中无缝恢复。这得益于事件历史记录，它完整且持久地记录了工作流执行生命周期中发生的一切，以及 Temporal 服务在重放期间持久保存事件的能力。</p>
+<p>Temporal 使用事件历史记录来记录过程中的每一步。每当您的工作流定义通过 API 调用执行活动或启动计时器时，它并不会直接执行该操作，而是向 Temporal 服务发送一个命令。</p>
+<p>Command 是 Worker 在 Workflow Task Execution 完成后向 Temporal Service 发出的请求操作。Temporal Service 将根据这些 Command 执行操作，例如调度 Activity 或设置计时器。这些 Command 随后被映射为 Event，并在发生故障时持久化。例如，如果 Worker 崩溃，Worker 会使用 Event History 重放代码并重新创建 Workflow Execution 的状态，使其恢复到崩溃前的状态。然后，它会从故障点继续执行，就像故障从未发生过一样。</p>
+<h2 id="_5">特性</h2>
+<p>通过 Temporal SDK，Temporal 提供了广泛的功能，使开发者能够构建适用于各种用例的应用程序。</p>
+<ul>
+<li><strong>核心应用原语：</strong> 使用 Workflows、Activities 和 Workers 开发和运行您的应用程序。</li>
+<li><strong>测试套件：</strong> 每个 Temporal SDK 都附带一个测试套件，使开发者能够像测试其他应用程序一样测试他们的应用。</li>
+<li><strong>可调度工作流：</strong> 在特定时间或按指定的时间间隔启动业务流程。</li>
+<li><strong>可中断工作流：</strong> 取消或终止已在进行中的业务流程（Workflow），并对已执行的步骤进行补偿。</li>
+<li><strong>运行时保障措施：</strong> 防止在运行时执行可避免的错误和问题。</li>
+<li><strong>故障检测与缓解：</strong> 通过超时机制检测故障，并配置自动重试以缓解问题。</li>
+<li><strong>Temporal Nexus：</strong> 连接跨（及内部）隔离命名空间的 Temporal 应用程序，以提升模块化、安全性、调试和故障隔离能力。Nexus 支持跨团队、跨领域和多区域的使用场景。</li>
+<li><strong>工作流消息传递：</strong> 构建响应式应用程序，在运行时对事件作出反应，并从正在进行的工作流中实现数据检索。</li>
+<li><strong>版本控制：</strong> 支持为长时间运行的业务流程提供多个版本的业务逻辑。</li>
+<li><strong>可观测性：</strong> 列出业务流程，查看其状态，并设置包含指标的仪表板。</li>
+<li><strong>调试：</strong> 发现表面错误并逐步检查代码以找到问题。</li>
+<li><strong>数据加密：</strong> 转换数据并保护应用程序用户的隐私。</li>
+<li><strong>吞吐量可组合性：</strong> 按数据流、团队所有权或其他组织因素拆分业务流程。</li>
+<li><strong>云自动化：</strong> 通过 Temporal 的云自动化简化云管理并提升安全性。</li>
+<li><strong>低延迟：</strong> 让您的应用程序更快、性能更强、效率更高。</li>
+<li><strong>多租户：</strong> 提高效率和成本效益。</li>
+</ul>
+<h2 id="_6">部署</h2>
+<p>Temporal 提供了收费的在线托管，也支持部署本地开发环境和 Docker 方式的私有部署。Temporal 有多种私有部署方式，根据使用场景和部署位置来选不同的部署方式。</p>
+<p>以 Docker Compose 方式部署举例：</p>
+<ol>
+<li>克隆 <a href="https://github.com/temporalio/docker-compose">temporalio/docker-compose</a> 仓库</li>
+<li>在仓库根目录运行 <code>docker compose up</code> 命令，后台运行请添加 <code>-d</code> 参数</li>
+</ol>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/temporalio/docker-compose.git
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>docker-compose
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span><span class="c1"># -d</span>
+</span></code></pre></div>
+<h2 id="_7">故障排除</h2>
+<h3 id="missing-csrf-token-in-request-header">missing csrf token in request header</h3>
+<p>创建调度器的时页面上显示 <code>missing csrf token in request header</code>，原因是：</p>
+<ul>
+<li>temporal 托管地址不是 localhost</li>
+<li>UI 后台通过HTTP访问，而不是HTTPS</li>
+<li>启用了安全Cookie</li>
+</ul>
+<p>在 docker-compose.yml 里添加 <code>TEMPORAL_CSRF_COOKIE_INSECURE=true</code> 配置项。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">temporal-ui</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">temporal-ui</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">temporal</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TEMPORAL_ADDRESS=temporal:7233</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TEMPORAL_CORS_ORIGINS=http://localhost:3000</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TEMPORAL_CSRF_COOKIE_INSECURE=true</span><span class="w"> </span><span class="c1"># 启用安全Cookie</span>
+</span></code></pre></div>
+<h2 id="_8">参考资料</h2>
+<ul>
+<li>
+<p><a href="https://docs.temporal.io/evaluate/why-temporal">Why Temporal? | Temporal Platform Documentation</a></p>
+</li>
+<li>
+<p><a href="https://docs.temporal.io/self-hosted-guide/deployment">Deploying a Temporal Service | Temporal Platform Documentation</a></p>
+</li>
+<li>
+<p><a href="https://github.com/temporalio/ui/issues/793">Missing CSRF token · Issue #793 · temporalio/ui</a></p>
+</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../prometheus-guide/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 基于 Prometheus 的微服务监控指南">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                基于 Prometheus 的微服务监控指南
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/windzhu0514" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "navigation.indexes", "navigation.instant", "navigation.instant.progress", "search.suggest", "search.highlight", "content.code.select", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
