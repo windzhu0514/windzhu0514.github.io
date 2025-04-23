@@ -41,7 +41,7 @@ plugins:
       post_url_format: "{file}"
   - redirects:
       redirect_maps:
-        "home.md": "home/it.md"
+        "home.md": "index.md"
 nav:
   - 主页: index.md
   - 博客:
